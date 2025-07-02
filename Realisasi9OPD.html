@@ -112,7 +112,12 @@
       max-width: 100%;
       margin-top: 10px;
     }
-
+h4 {
+  font-size: 10px;
+  font-weight: 500;
+  margin-top: 0;
+}
+    
 #divisi1_bar {
   height: 500px;
 }
@@ -356,6 +361,7 @@ function createCard(divisi) {
     ${createProgress('Realisasi Fisik (%)', divisi.dataBulan1.persFisik, '#C000C0')}
     <div class="divider"></div>
     <div class="section-title">Total Realisasi Hingga Bulan Juni</div>
+    <h4> > Tap atau klik pada grafik untuk melihat angka detailnya.</h4>
     <canvas id="${divisi.id}_bar"></canvas>
     ${createProgress('Realisasi Keuangan (%)', divisi.dataTotal.persKeu, '#00C000')}
     ${createProgress('Realisasi Fisik (%)', divisi.dataTotal.persFisik, '#C000C0')}
