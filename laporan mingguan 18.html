@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+<title>Laporan Giat Hari Ini</title>
+<title>Rekap Laporan Giat Hari Ini</title>
+
+<!-- Open Graph untuk preview di WhatsApp / Facebook -->
+  <meta property="og:title" content="Rekap Laporan Mingguan">
+  <meta property="og:description" content="Pantau progress laporan mingguan staf secara real-time.">
+  <meta property="og:image" content="https://binfraswilzulsel.my.id/thumbnail2.jpg">
+  <meta property="og:url" content="https://binfraswilzulsel.my.id/giat.html">
+  <meta property="og:type" content="website">
+  
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body { font-family: Arial, sans-serif; margin: 20px; background:#f4f6f8; }
+h1 { text-align:left; margin-bottom:20px; }
+.container { display:grid; grid-template-columns:1fr; gap:20px; }
+@media(min-width:768px){ .container { grid-template-columns:1fr 1fr; } }
+.card { background:white; padding:20px; border-radius:16px; box-shadow:0 4px 10px rgba(0,0,0,0.08); }
+.card:hover { transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,0,0,0.12); }
+
+.legend { display:flex; flex-wrap:wrap; justify-content:center; gap:18px; margin:8px 0 14px; font-size:13px; color:#333; align-items:center; padding-bottom: 15px; border-bottom: 5px solid #1976d2;}
+.legend-box { display:inline-block; width:14px; height:14px; margin-right:6px; border-radius:3px; vertical-align:middle; }
+
+.progress-row { margin-bottom:12px; }
+.progress-label { font-size:14px; margin-bottom:4px; display:flex; align-items:center; }
+.progress-bar { background:#e0e0e0; border-radius:12px; overflow:hidden; height:20px; }
+.progress-fill { height:100%; text-align:right; padding-right:5px; color:rgb(3, 3, 3); font-size:12px; line-height:20px; white-space:nowrap; width:0; transition: width 1.5s ease-in-out; border-radius:12px; }
+
+.number-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #080808;
+  color: #fff;
+  font-size: 12px;
+  margin-right: 8px;
+  font-weight: bold;
+}
+
+.header-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: 33px;
+  font-weight: bold;
+}
+
+.header-title img {
+  width: 150px;
+  height: auto;
+  margin-right: : 5px;
+  border-radius: 17px;
+}
+
+.chart-container { position:relative; max-width:100%; height:280px; margin:0 auto; }
+</style>
+</head>
+<body>
+
+<h1 class="header-title">
+  <img src="400-binfraswil.jpg" alt="Logo">
+  Rekapitulasi Laporan Giat Hari Ini
+</h1>
+
+<div class="container">
+  <!-- Kartu 1: Progress Bar -->
+  <div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <h3 style="margin:0;">Progres Laporan Mingguan | Periode 08-12 September 2025</h3>
+      <button id="toggleOrder" style="padding:4px 10px; font-size:12px; border:none; border-radius:6px; background:#1976d2; color:white; cursor:pointer;">
+        Urut: Default
+      </button>
+    </div>
+    <!-- Legend -->
+    <div class="legend">
+      <span><span class="legend-box" style="background:#f44336"></span>0 laporan</span>
+      <span><span class="legend-box" style="background:#ff9800"></span>1 laporan</span>
+      <span><span class="legend-box" style="background:#ffeb3b"></span>2 laporan</span>
+      <span><span class="legend-box" style="background:#4caf50"></span>3 laporan</span>
+      <span><span class="legend-box" style="background:#81d4fa"></span>4 laporan</span>
+      <span><span class="legend-box" style="background:#1976d2"></span>5 laporan</span>
+    </div>
+    <div id="progress-list"></div>
+  </div>
+
+  <!-- Kartu 2: Grafik Bar Vertikal -->
+  <div class="card">
+    <h3 style="margin-bottom:15px;">Total jumlah laporan & Staf yang telah membuat laporan</h3>
+    <canvas id="rekapBarChart"></canvas>
+  </div>
+</div>
+
+<script>
+// ===== Konfigurasi =====
+const spreadsheetID = "132-1solyIJzJI_MilbQ3p710KWdNHFpVQyW89K1YfBw"; 
+const sheetName = "Form Responses 1"; 
+const apiKey = "AIzaSyC4qj57-LY0HAntEuADdZKaMN7eS3csX_k"; 
+const targetMinggu = 5;
+
+// Daftar staf
+const staf = [
+"Ariany Rofaidah","Debia Arida","Anna Buana Samson","Sahruddin","Sri Agustiati Bachtiar",
+"Aryanti Sayadi","Nurwira Rahayu","Suahir","Ika Mariescha M. Tanro","Evi Silviana Putri",
+"Mohammad Nazar Akbar","Ince Abdullah Yusuf","Kamil","A. Amrul","Zulkarnain",
+"Ratu Beatris","Fikri Alqian","Abd. Kadir","Firmansyah","Kurniati",
+"Ega Yusraningsih","Ditha Hardiyanti","Rizaldi","A. Muhammad Kadir","Harbiah Tahir",
+"Fawusiah Sattar","Achmad Harry Darmawan"
+];
+
+fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetID}/values/${sheetName}?key=${apiKey}`)
+.then(res => res.json())
+.then(sheet => {
+  const rows = sheet.values.slice(1); 
+  let laporanCount = {}; 
+  staf.forEach(s=> laporanCount[s]=0);
+
+  // Hitung jumlah laporan per staf
+  rows.forEach(row=>{
+    const hadir = row[6]; 
+    if(hadir){
+      hadir.split(",").map(n=>n.trim()).forEach(n=>{
+        if(laporanCount[n]!==undefined) laporanCount[n]++;
+      });
+    }
+  });
+
+  // ===== Progress Bar =====
+  const progressList = document.getElementById("progress-list");
+  let dataStaf = staf.map(nama=>({nama, laporan: laporanCount[nama]}));
+  let urutMode = "default";
+
+  function renderProgress(){
+    progressList.innerHTML = "";
+    let sudah=0, belum=0;
+
+    let list = [...dataStaf];
+    if(urutMode==="terbanyak") list.sort((a,b)=>b.laporan-a.laporan);
+    else if(urutMode==="tersedikit") list.sort((a,b)=>a.laporan-b.laporan);
+
+    list.forEach(({nama, laporan}, i)=>{
+      let persen = (laporan/targetMinggu)*100;
+      if(laporan===targetMinggu) sudah++; else belum++;
+
+      // Tentukan warna berdasarkan jumlah laporan
+      let warna = "#f44336"; 
+      if(laporan === 1) warna = "#ff9800";
+      else if(laporan === 2) warna = "#ffeb3b";
+      else if(laporan === 3) warna = "#4caf50";
+      else if(laporan === 4) warna = "#81d4fa";
+      else if(laporan === 5) warna = "#1976d2";
+
+      progressList.innerHTML += `
+        <div class="progress-row">
+          <div class="progress-label">
+            <span class="number-circle">${i+1}</span>${nama}
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" data-width="${persen}%" style="background:${warna}">${laporan}/${targetMinggu}</div>
+          </div>
+        </div>
+      `;
+    });
+
+    document.querySelectorAll('.progress-fill').forEach(el=>{
+      let w = el.getAttribute('data-width');
+      setTimeout(()=>el.style.width=w,50);
+    });
+
+    return [sudah, belum];
+  }
+
+  let [sudah, belum] = renderProgress();
+
+  // ===== Hitung total staf per kategori (0–5 laporan) =====
+  let kategoriCount = [0,0,0,0,0,0]; // index = jumlah laporan
+  dataStaf.forEach(({laporan})=>{
+    if(laporan>=0 && laporan<=5){
+      kategoriCount[laporan]++;
+    }
+  });
+
+  // ===== Buat Chart Bar =====
+  const ctx = document.getElementById("rekapBarChart").getContext("2d");
+  new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: ["0", "1", "2", "3", "4", "5"],
+      datasets: [{
+        label: "Jumlah Staf",
+        data: kategoriCount,
+        backgroundColor: [
+          "#f44336","#ff9800","#ffeb3b","#4caf50","#81d4fa","#1976d2"
+        ],
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false }},
+      scales: {
+        y: { beginAtZero: true, ticks: { stepSize: 1 }}
+      }
+    }
+  });
+
+  // ===== Tombol Urutkan =====
+  document.getElementById("toggleOrder").addEventListener("click", ()=>{
+    if(urutMode==="default") urutMode="terbanyak";
+    else if(urutMode==="terbanyak") urutMode="tersedikit";
+    else urutMode="default";
+
+    document.getElementById("toggleOrder").innerText =
+      urutMode==="default" ? "Urut: Default" :
+      urutMode==="terbanyak" ? "Urut: Terbanyak" : "Urut: Tersedikit";
+
+    [sudah, belum] = renderProgress();
+  });
+
+})
+.catch(err=>console.error("Error fetch Sheet:", err));
+</script>
+</body>
+</html>
