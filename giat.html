@@ -69,7 +69,7 @@ h1 { text-align:left; margin-bottom:20px; }
       margin-left: -vw;
     }
 
-.chart-container { position:relative; max-width:100%; height:100%; margin:0 auto; }
+.chart-container { position:relative; max-width:100%; height:280px; margin:0 auto; }
 </style>
 </head>
 <body>
@@ -227,6 +227,7 @@ function fetchData() {
         },
         options: {
           responsive: true,
+          maintainAspectRatio: true, // pastikan ini true
           plugins: { legend: { display: false }},
           scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
         }
@@ -258,6 +259,7 @@ document.getElementById("toggleOrder").addEventListener("click", ()=>{
     </footer>
 </body>
 </html>
+
 
 
 
