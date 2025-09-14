@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rekap Laporan Giat Hari Ini</title>
+<title>Rekap Laporan Giat Bulanan</title>
 
 <!-- Open Graph untuk preview di WhatsApp / Facebook -->
-<meta property="og:title" content="Rekap Laporan Mingguan">
-<meta property="og:description" content="Pantau progress laporan mingguan staf secara real-time.">
+<meta property="og:title" content="Rekap Laporan Bulanan">
+<meta property="og:description" content="Pantau progress laporan bulanan staf secara real-time.">
 <meta property="og:image" content="https://binfraswilzulsel.my.id/thumbnail2.jpg">
 <meta property="og:url" content="https://binfraswilzulsel.my.id/giat.html">
 <meta property="og:type" content="website">
@@ -66,14 +66,14 @@ h1 { text-align:left; margin-bottom:20px; }
 
 <h1 class="header-title">
   <img src="400-binfraswil.jpg" alt="Logo">
-  Rekapitulasi Laporan Giat Hari Ini
+  Rekapitulasi Laporan Giat Bulanan
 </h1>
 
 <div class="container">
   <!-- Kartu 1: Progress Bar -->
   <div class="card">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-      <h3 id="periodeTitle" style="margin:0;">Progres Laporan Mingguan</h3>
+      <h3 id="periodeTitle" style="margin:0;">Progres Laporan Bulanan</h3>
       <button id="toggleOrder" style="padding:4px 10px; font-size:12px; border:none; border-radius:6px; background:#1976d2; color:white; cursor:pointer;">
         Urut: Default
       </button>
@@ -114,18 +114,24 @@ const staf = [
 "Fawusiah Sattar","Achmad Harry Darmawan"
 ];
 
-// ===== Fungsi periode minggu otomatis =====
-function getMingguIni() {
+// ===== Fungsi periode bulanan otomatis =====
+function getBulanIniRingkas() {
   const today = new Date();
-  const startOfWeek = new Date(today);
-  startOfWeek.setDate(today.getDate() - today.getDay() + 1); // Senin
-  const endOfWeek = new Date(startOfWeek);
-  endOfWeek.setDate(startOfWeek.getDate() + 4); // Jumat
+  const year = today.getFullYear();
+  const month = today.getMonth();
 
-  const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+
+  const optionsDay = { day: '2-digit' }; 
+  const optionsMonthYear = { month: 'long', year: 'numeric' };
+
 return `${firstDay.toLocaleDateString('id-ID', optionsDay)} - ${lastDay.toLocaleDateString('id-ID', {...optionsDay, ...optionsMonthYear})}`;
 }
-document.getElementById('periodeTitle').innerText = `Progres Laporan Mingguan | Periode ${getMingguIni()}`;
+
+// Sisipkan untuk judul periode
+document.getElementById('periodeTitle').innerText = `Progres Laporan Bulanan | Periode ${getBulanIniRingkas()}`;
+
 
 // ===== Fungsi fetch & render =====
 let urutMode = "default";
@@ -238,4 +244,3 @@ document.getElementById("toggleOrder").addEventListener("click", ()=>{
 </script>
 </body>
 </html>
-
