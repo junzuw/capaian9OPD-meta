@@ -60,6 +60,15 @@ h1 { text-align:left; margin-bottom:20px; }
 }
 
 .chart-container { position:relative; max-width:100%; height:280px; margin:0 auto; }
+
+  /* ===== FOOTER ===== */
+footer {
+  text-align: center;
+  color: rgb(12, 12, 12);
+  padding: 10px 0;
+  font-size: 11px;
+  margin-top: 20px;
+}
 </style>
 </head>
 <body>
@@ -92,7 +101,7 @@ h1 { text-align:left; margin-bottom:20px; }
 
   <!-- Kartu 2: Grafik Bar Vertikal -->
   <div class="card">
-    <h3 style="margin-bottom:3px; margin-top: 0px; text-align: center;">Total Laporan dan Staf yang Telah Mengisi Laporan</h3>
+    <h3 style="margin-bottom:3px; margin-top: 0px; text-align: center;">Total Laporan & Staf yang Telah Membuat Laporan</h3>
     <h5 style="margin-top: 0px; text-align: center; font-size: 12px; font-weight: 500;">Silakan tap/klik pada bar batang untuk melihat nilainya</h5>
 
     <canvas id="rekapBarChart"></canvas>
@@ -244,6 +253,10 @@ document.getElementById("toggleOrder").addEventListener("click", ()=>{
   fetchData();
 });
 </script>
+<footer>
+  &copy; Copyright by @zuwlend | September 2025
+</footer>
 </body>
 </html>
+
 
