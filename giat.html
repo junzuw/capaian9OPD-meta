@@ -123,7 +123,7 @@ function getMingguIni() {
   endOfWeek.setDate(startOfWeek.getDate() + 4); // Jumat
 
   const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-  return `${startOfWeek.toLocaleDateString('id-ID', options)} - ${endOfWeek.toLocaleDateString('id-ID', options)}`;
+return `${firstDay.toLocaleDateString('id-ID', optionsDay)} - ${lastDay.toLocaleDateString('id-ID', {...optionsDay, ...optionsMonthYear})}`;
 }
 document.getElementById('periodeTitle').innerText = `Progres Laporan Mingguan | Periode ${getMingguIni()}`;
 
@@ -238,3 +238,4 @@ document.getElementById("toggleOrder").addEventListener("click", ()=>{
 </script>
 </body>
 </html>
+
