@@ -161,7 +161,7 @@ function getStatusLaporan() {
 document.getElementById('periodeTitle').innerText =
   `Progres Laporan Mingguan (${getPeriodeTanggalMingguan()}) ${getStatusLaporan()}`;
 
-let urutMode = "default";
+let urutMode = "absensi";
 let barChart;
 
 // ===== Fetch & Render =====
@@ -274,12 +274,12 @@ setInterval(fetchData, 30000);
 
 // ===== Tombol Urutkan =====
 document.getElementById("toggleOrder").addEventListener("click", ()=>{
-  if(urutMode==="default") urutMode="terbanyak";
+  if(urutMode==="absensi") urutMode="terbanyak";
   else if(urutMode==="terbanyak") urutMode="tersedikit";
-  else urutMode="default";
+  else urutMode="absensi";
 
   document.getElementById("toggleOrder").innerText =
-    urutMode==="default" ? "Urut: Default" :
+    urutMode==="absensi" ? "Urut: Absensi" :
     urutMode==="terbanyak" ? "Urut: Terbanyak" : "Urut: Tersedikit";
 
   fetchData();
