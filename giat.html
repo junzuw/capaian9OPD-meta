@@ -30,6 +30,7 @@ h1 { text-align:left; margin-bottom:20px; }
 .progress-label { font-size:14px; margin-bottom:4px; display:flex; align-items:center; }
 .progress-bar { background:#e0e0e0; border-radius:12px; overflow:hidden; height:20px; }
 .progress-fill { height:100%; text-align:right; padding-right:5px; color:rgb(3, 3, 3); font-size:12px; line-height:20px; white-space:nowrap; width:0; transition: width 1.5s ease-in-out; border-radius:12px; }
+#progress-list { max-height:300px; overflow-y:auto; padding-right:6px; }
 
 .number-circle {
   display: inline-flex;
@@ -94,7 +95,7 @@ h1 { text-align:left; margin-bottom:20px; }
 
   <!-- Kartu 2: Grafik Bar Vertikal -->
   <div class="card">
-    <h3 style="margin-bottom:15px;">Total jumlah laporan & Staf yang telah membuat laporan (08-12 Sept 2025)</h3>
+    <h3 style="margin-bottom:15px;text-align: center;">Total Laporan dan Staf yang Telah Mengisi Laporan</h3>
     <canvas id="rekapBarChart"></canvas>
   </div>
 </div>
@@ -230,4 +231,5 @@ fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetID}/values/${s
 </script>
 </body>
 </html>
+
 
