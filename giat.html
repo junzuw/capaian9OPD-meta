@@ -16,9 +16,9 @@
 <style>
 body { font-family: Arial, sans-serif; margin: 20px; background:#f4f6f8; }
 h1 { text-align:left; margin-bottom:20px; }
-.container { display:grid; grid-template-columns:1fr; gap:20px; }
+.container { display:grid; grid-template-columns:1fr; gap:20px; align-items: stretch; }
 @media(min-width:768px){ .container { grid-template-columns:1fr 1fr; } }
-.card { background:white; padding:20px; border-radius:16px; box-shadow:0 4px 10px rgba(0,0,0,0.08); }
+.card { background:white; padding:20px; border-radius:16px; box-shadow:0 4px 10px rgba(0,0,0,0.08); width: 100%; min-width: 0; }
 .card:hover { transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,0,0,0.12); }
 
 .legend { display:flex; flex-wrap:wrap; justify-content:center; gap:18px; margin:8px 0 14px; font-size:13px; color:#333; align-items:center; padding-bottom: 15px; border-bottom: 5px solid #1976d2;}
@@ -258,6 +258,7 @@ document.getElementById("toggleOrder").addEventListener("click", ()=>{
     </footer>
 </body>
 </html>
+
 
 
 
