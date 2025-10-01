@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rekap Laporan Bulanan</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body { font-family: Arial, sans-serif; margin: 20px; background:#f4f6f8; }
+h1 { text-align:left; margin-bottom:20px; }
+.container { display:grid; grid-template-columns:1fr; gap:20px; align-items: start }
+@media(min-width:768px){ .container { grid-template-columns:1fr 1fr; } }
+.card { background:white; padding:20px; border-radius:16px; box-shadow:0 4px 10px rgba(0,0,0,0.08); }
+.card:hover { transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,0,0,0.12); }
+
+.legend { display:flex; flex-wrap:wrap; justify-content:left; gap:10px; margin:8px 0 14px; font-size:13px; color:#333; align-items:center; padding-bottom: 15px; border-bottom: 5px solid #1976d2;}
+.legend-box { display:inline-block; width:14px; height:14px; margin-right:6px; border-radius:3px; vertical-align:middle; }
+
+.progress-row { margin-bottom:12px; }
+.progress-label { font-size:14px; margin-bottom:4px; display:flex; align-items:center; }
+.progress-bar { background:#e0e0e0; border-radius:12px; overflow:hidden; height:20px; }
+.progress-fill { height:100%; text-align:center; padding-left: 15px; font-size:12px; line-height:20px; white-space:nowrap; width:0; transition: width 1.5s ease-in-out; border-radius:12px; }
+#progress-list { max-height:300px; overflow-y:auto; padding-right:6px; }
+
+.number-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #080808;
+  color: #fff;
+  font-size: 12px;
+  margin-right: 8px;
+  font-weight: bold;
+}
+
+.header-title { display: flex; justify-content: center; align-items: center; gap: 10px; font-size: 33px; font-weight: bold; }
+.header-title img { width: 120px; height: auto; border-radius: 17px; }
+
+.chart-container { position:relative; max-width:100%; height:280px; margin:0 auto; }
+
+.nav-buttons { display:flex; justify-content: center; gap:10px; margin:6px 0; }
+.nav-buttons button { padding:6px 20px; font-size:12px; border:none; border-radius:6px; background:#1976d2; color:white; cursor:pointer; }
+
+footer { text-align: center; color: rgb(12, 12, 12); padding: 10px 0; font-size: 11px; margin-top: 20px; }
+</style>
+</head>
+<body>
+
+<h1 class="header-title">
+  <img src="400-binfraswil.jpg" alt="Logo">
+  Rekapitulasi Laporan Giat Hari Ini
+</h1>
+
+<div class="container">
+  <!-- Kartu 1 -->
+  <div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <h3 id="periodeTitle" style="margin:0;">Progres Laporan Bulanan</h3>
+      <button id="toggleOrder" style="padding:4px 10px; font-size:12px; border:none; border-radius:6px; background:#1976d2; color:white; cursor:pointer;">
+        Urut: Absensi
+      </button>
+    </div>
+    <div class="nav-buttons">
+      <button id="prevBulan">&larr; Back</button>
+      <button id="nextBulan">Next &rarr;</button>
+    </div>
+    <div class="legend">
+      <span><span class="legend-box" style="background:#f44336"></span>0 laporan</span>
+      <span><span class="legend-box" style="background:#ff9800"></span>1–5 laporan</span>
+      <span><span class="legend-box" style="background:#ffeb3b"></span>6–10 laporan</span>
+      <span><span class="legend-box" style="background:#4caf50"></span>11–15 laporan</span>
+      <span><span class="legend-box" style="background:#81d4fa"></span>16–19 laporan</span>
+      <span><span class="legend-box" style="background:#1976d2"></span>20 laporan</span>
+      <span><span class="legend-box" style="background:#9c27b0"></span>> 20 laporan</span>
+    </div>
+    <div id="progress-list"></div>
+  </div>
+
+  <!-- Kartu 2 -->
+  <div class="card">
+    <h3 style="margin:0; text-align:center;">Total Laporan & Staf per Bulan</h3>
+    <div id="periodeTitle2" style="text-align:center; margin:4px 0; font-size:13px; font-weight:500;"></div>
+    <div class="nav-buttons">
+      <button id="prevBulan2">&larr; Back</button>
+      <button id="nextBulan2">Next &rarr;</button>
+    </div>
+    <h5 style="margin-top: 0px; text-align: center; font-size: 12px; font-weight: 500;">Tap / Klik pada bar untuk melihat nilai</h5>
+    <canvas id="rekapBarChart"></canvas>
+  </div>
+</div>
+
+<script>
+const spreadsheetID = "132-1solyIJzJI_MilbQ3p710KWdNHFpVQyW89K1YfBw"; 
+const sheetName = "Form Responses 1"; 
+const apiKey = "AIzaSyC4qj57-LY0HAntEuADdZKaMN7eS3csX_k"; 
+const targetBulanan = 20;
+
+const staf = ["Ishak Amin Rusly","Ariany Rofaidah","Debia Arida","Anna Buana Samson","Sahruddin","Sri Agustiati Bachtiar","Aryanti Sayadi","Nurwira Rahayu","Suahir","Ika Mariescha","Evi Silviana Putri","Mohammad Nazar Akbar","Ince Abdullah Yusuf","Kamil","Muhammad Taufik Akmal","A. Amrul","Zulkarnain","Ratu Beatris","Fikri Alqian","Abd. Kadir","Firmansyah","Kurniati","Ega Yusraningsih","Ditha Hardiyanti","Rizaldi","A. Muhammad Kadir","Harbiah Tahir","Fawusiah Sattar","Achmad Harry Darmawan"];
+
+let urutMode = "default";
+let barChart;
+let monthOffset = 0;
+
+function parseDateFromSheet(s){
+  if(!s && s !== 0) return null;
+  const str = String(s).trim();
+  const m = str.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})$/);
+  if(m){ return new Date(Number(m[3]), Number(m[1])-1, Number(m[2])); }
+  const y = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if(y){ return new Date(Number(y[1]), Number(y[2])-1, Number(y[3])); }
+  const d = new Date(str);
+  return isNaN(d)? null : d;
+}
+
+function fetchData() {
+  fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetID}/values/${sheetName}?key=${apiKey}`)
+  .then(res => res.json())
+  .then(sheet => {
+    const rows = (sheet.values||[]).slice(1);
+
+    const base = new Date();
+    base.setMonth(base.getMonth() + monthOffset);
+    const bulan = base.getMonth();
+    const tahun = base.getFullYear();
+    const namaBulan = base.toLocaleString('id-ID',{month:'long', year:'numeric'});
+
+    let laporanCount = {}; staf.forEach(s=> laporanCount[s]=0);
+
+    const rowsBulanIni = rows.filter(row=>{
+      const tglRow = parseDateFromSheet(row[2]);
+      if(!tglRow) return false;
+      return tglRow.getMonth()===bulan && tglRow.getFullYear()===tahun;
+    });
+
+    rowsBulanIni.forEach(row=>{
+      const hadir = row[6];
+      if(hadir){
+        hadir.split(",").map(n=>n.trim()).forEach(n=>{
+          if(laporanCount[n]!==undefined) laporanCount[n]++;
+        });
+      }
+    });
+
+    // Progress Bar
+    const progressList = document.getElementById("progress-list");
+    let dataStaf = staf.map(nama=>({nama, laporan: laporanCount[nama]}));
+    progressList.innerHTML = "";
+    let list = [...dataStaf];
+    if(urutMode==="terbanyak") list.sort((a,b)=>b.laporan-a.laporan);
+    else if(urutMode==="tersedikit") list.sort((a,b)=>a.laporan-b.laporan);
+    list.forEach(({nama, laporan}, i) => {
+      let persen = Math.min((laporan / targetBulanan) * 100, 100);
+      let warna = "#f44336"; // default merah
+      if(laporan >= 1 && laporan <= 5) warna = "#ff9800";
+      else if(laporan >= 6 && laporan <= 10) warna = "#ffeb3b";
+      else if(laporan >= 11 && laporan <= 15) warna = "#4caf50";
+      else if(laporan >= 16 && laporan <= 19) warna = "#81d4fa";
+      else if(laporan === 20) warna = "#1976d2";
+      else if(laporan > 20) warna = "#9c27b0";
+      const teks = (laporan > 20) ? `> ${targetBulanan} laporan` : `${laporan}/${targetBulanan}`;
+      const warnaTeks = (warna === "#ffeb3b") ? "black" : "white";
+      progressList.innerHTML += `
+        <div class="progress-row">
+          <div class="progress-label"><span class="number-circle">${i+1}</span>${nama}</div>
+          <div class="progress-bar"><div class="progress-fill" data-width="${persen}%" style="background:${warna}; display:flex; align-items:center; justify-content:center; color:${warnaTeks}; font-weight:bold;">${teks}</div></div>
+        </div>`;
+    });
+    document.querySelectorAll('.progress-fill').forEach(el=>{let w=el.getAttribute('data-width'); setTimeout(()=>el.style.width=w,50);});
+
+    // Chart Bar (Kartu 2)
+    let kategoriCount = [0,0,0,0,0,0,0];
+    dataStaf.forEach(({laporan})=>{
+      if(laporan === 0) kategoriCount[0]++;
+      else if(laporan >= 1 && laporan <= 5) kategoriCount[1]++;
+      else if(laporan >= 6 && laporan <= 10) kategoriCount[2]++;
+      else if(laporan >= 11 && laporan <= 15) kategoriCount[3]++;
+      else if(laporan >= 16 && laporan <= 19) kategoriCount[4]++;
+      else if(laporan === 20) kategoriCount[5]++;
+      else if(laporan > 20) kategoriCount[6]++;
+    });
+    if(barChart){ barChart.data.datasets[0].data=kategoriCount; barChart.update(); }
+    else{
+      const ctx = document.getElementById("rekapBarChart").getContext("2d");
+      barChart = new Chart(ctx,{
+        type:"bar",
+        data:{labels:["0","1–5","6–10","11–15","16–19","20",">20"], datasets:[{label:"Jumlah Staf",data:kategoriCount,backgroundColor:["#f44336","#ff9800","#ffeb3b","#4caf50","#81d4fa","#1976d2","#9c27b0"], borderRadius:6}]},
+        options:{responsive:true, plugins:{legend:{display:false}}, scales:{
+          x:{title:{display:true,text:"Jumlah Laporan"}},
+          y:{beginAtZero:true, ticks:{stepSize:1}, title:{display:true,text:"Jumlah Staf"}}
+        }}
+      });
+    }
+
+    document.getElementById('periodeTitle').innerText=`Progres Laporan Bulanan (${namaBulan})`;
+    document.getElementById('periodeTitle2').innerText=`Periode Bulan ${namaBulan}`;
+  })
+  .catch(err=>console.error("Error fetch Sheet:", err));
+}
+
+fetchData(); setInterval(fetchData, 3600000);
+
+document.getElementById("toggleOrder").addEventListener("click", ()=>{
+  urutMode = urutMode==="default"?"terbanyak":urutMode==="terbanyak"?"tersedikit":"default";
+  document.getElementById("toggleOrder").innerText=urutMode==="default"?"Urut: Default":urutMode==="terbanyak"?"Urut: Terbanyak":"Urut: Tersedikit";
+  fetchData();
+});
+
+document.getElementById("prevBulan").addEventListener("click", ()=>{ monthOffset--; fetchData(); });
+document.getElementById("nextBulan").addEventListener("click", ()=>{ monthOffset++; fetchData(); });
+document.getElementById("prevBulan2").addEventListener("click", ()=>{ monthOffset--; fetchData(); });
+document.getElementById("nextBulan2").addEventListener("click", ()=>{ monthOffset++; fetchData(); });
+</script>
+
+<footer>&copy; Copyright by @zuwlend | Beta Version | September 2025</footer>
+</body>
+</html>
