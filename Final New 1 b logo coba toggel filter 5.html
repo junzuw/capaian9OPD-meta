@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Strong Point Progres</title>
+
+  <!-- Meta Tags untuk Open Graph -->
+  <meta property="og:title" content="Strong Point 2025">
+  <meta property="og:description" content="Lihat progres kegiatan Strong Point secara interaktif Infraswil 2025 (best view via HP).">
+  <meta property="og:image" content="https://binfraswilzulsel.my.id/sp2.jpg" />
+  <meta property="og:url" content="binfraswilzulsel.my.id/" />
+  <meta property="og:type" content="website" />
+
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        /* Gaya Dasar */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #0740aa;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            background-color: #0740aa;
+            color: white;
+            padding: 15px 20px;
+            font-weight: bold;
+            font-size: 1.5em;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: left;
+        }
+
+        .header-logo {
+            width:130px;
+            height: auto;
+            margin-right: 10px;
+            margin-left: 2px;
+            object-fit: contain;
+            border-radius: 20px;
+            
+        }
+        .header-title {
+            margin: 0;
+            line-height: 1; 
+        }
+        
+        /* Kontainer Utama (Card OPD) - Memastikan jarak tepi di HP dan max-width di Desktop */
+        .container {
+            padding: 20px 15px; 
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            transition: opacity 0.3s; 
+            max-width: 900px; 
+            margin: 0 auto; 
+            box-sizing: border-box; 
+
+        }
+        
+        /* Bagian Filter */
+        .filter-section {
+            padding: 0 15px; 
+            margin-bottom: 1px;
+            position: relative;
+        }
+
+        .filter-toggle-btn {
+            background-color: #f7f9fc00;
+            color: #02c2fc;
+            border: 1px solid #02cafc;
+            padding: 5px 10px; 
+            border-radius: 25px; 
+            cursor: pointer;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+        
+        .filter-toggle-btn:hover {
+            background-color: #0ac7f7;
+            color: white;
+        }
+
+        .filter-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 15px; 
+            background-color: #0740aa; 
+            border-radius: 23px;
+            padding: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            z-index: 500;
+            display: none; 
+            flex-direction: column;
+            gap: 8px; 
+            min-width: 180px;
+            margin-top: 10px;
+            animation: fadeIn 0.3s ease-out; 
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .filter-dropdown.show {
+            display: flex;
+        }
+
+        .filter-btn {
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px; 
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+            text-align: left;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 0.9em;
+            background-color: #3f51b5; /* Warna default tombol filter */
+        }
+        
+        /* Perubahan: Gaya Tombol Filter Aktif (Memanfaatkan Warna Status) */
+        .filter-btn.active.status-red {
+             background-color: #d32f2f !important;
+             box-shadow: 0 0 0 3px white, 0 0 0 5px #d32f2f;
+        }
+        .filter-btn.active.status-green {
+             background-color: #388e3c !important;
+             box-shadow: 0 0 0 3px white, 0 0 0 5px #388e3c;
+        }
+        .filter-btn.active.status-yellow {
+             background-color: #ffa000 !important;
+             box-shadow: 0 0 0 3px white, 0 0 0 5px #ffa000;
+        }
+        .filter-btn.active.status-blue {
+             background-color: #1976d2 !important;
+             box-shadow: 0 0 0 3px white, 0 0 0 5px #1976d2;
+        }
+        
+        .filter-btn:not(.active):hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        
+        .filter-btn-reset {
+            background-color: #6c757d !important; 
+            margin-top: 5px;
+        }
+        
+        /* Kontainer Hasil Filter Kegiatan */
+        #filtered-results-container {
+            padding: 20px 15px; 
+            background-color: #f7f9fc;
+            min-height: auto;
+            border-radius: 20px;
+            display: none; 
+            flex-direction: column;
+            gap: 15px;
+            max-width: 900px; 
+            margin: 20px; 
+            box-sizing: border-box; 
+        }
+        
+        /* Perubahan: Header Kontainer Filter dengan Warna Latar Belakang */
+        .filtered-header {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: white; /* Teks putih agar kontras dengan latar belakang warna */
+            padding: 8px 15px;
+            margin: -20px -15px 10px -15px; /* Margin negatif agar memenuhi padding kontainer */
+            border-bottom: none;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+        
+        /* Kelas untuk mengubah warna header filter */
+        .header-red { background-color: red; }
+        .header-green { background-color: #388e3c; }
+        .header-yellow { background-color: #ffa000; color: #333; } /* Teks hitam untuk kontras di kuning */
+        .header-blue { background-color: #1976d2; }
+        
+        .filtered-header #currentFilterStatus {
+            font-style: italic;
+            font-weight: normal;
+        }
+        
+        /* Gaya Khusus untuk Kartu Kegiatan Hasil Filter */
+        .filtered-kegiatan-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer; 
+            margin-bottom: 15px;
+        }
+
+        /* Kelas untuk menyembunyikan/menampilkan konten utama */
+        .hide-main-content {
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        /* Gaya Card OPD dan Kegiatan */
+        .card {
+            background-color: white;
+            border-radius: 20px;
+            border: 1px solid rgb(8, 229, 245);
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 7px 20px rgb(1, 196, 255);
+            transition: box-shadow 0.3s ease;
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(200, 243, 8, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 5px 0;
+            cursor: pointer; 
+            justify-content: space-between; 
+        }
+        
+        .opd-info-group {
+            display: flex;
+            align-items: center;
+            flex: 1; 
+        }
+        
+        .opd-toggle-btn {
+            font-size: 30px; 
+            color: #0740aa;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+            padding: 5px;
+        }
+
+        .card.expanded .opd-toggle-btn {
+            transform: rotate(360deg);
+        }
+
+        .icon {
+            font-size: 48px;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .card-content {
+            flex: 1;
+        }
+
+        .card-title {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .card-info {
+            font-size: 0.95em;
+            color: #333;
+        }
+
+        /* Gaya Kontainer Kegiatan */
+        .kegiatan-container {
+            width: 100%;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            display: none;
+            transition: max-height 0.5s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .kegiatan-container.show {
+            display: flex;
+            max-height: 10000px;
+        }
+
+        /* Gaya Card Kegiatan */
+        .kegiatan-card, .filtered-kegiatan-card { 
+            background-color: #eef3fc;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: inset 0 5px 10px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        /* Tambahan: Pastikan detail kegiatan di hasil filter dapat disembunyikan */
+        .filtered-kegiatan-card .kegiatan-detail {
+            display: none;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+        .filtered-kegiatan-card.expanded .kegiatan-detail {
+            display: block;
+        }
+        .filtered-kegiatan-card:hover {
+             background-color: #eef1f5;
+        }
+        
+        /* Container untuk Title dan Icon di dalam Kegiatan Card */
+        .kegiatan-card-head {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Tombol Toggle (Ikon Panah) */
+        .toggle-btn {
+            font-size: 24px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: transform 0.3s ease; 
+            flex-shrink: 0; 
+            color: #555;
+        }
+
+        /* Rotasi ikon saat kegiatan terbuka */
+        .kegiatan-card.expanded .toggle-btn, .filtered-kegiatan-card.expanded .toggle-btn {
+            transform: rotate(180deg);
+            color: #0740aa; 
+        }
+
+        .kegiatan-title {
+            font-weight: bold;
+            font-size: 1em;
+            color: #0740aa;
+            margin-bottom: 5px; 
+        }
+
+        .kegiatan-info {
+            font-size: 1em;
+            color: #555;
+            margin-bottom: 0;
+            font-style: italic;
+        }
+
+        /* Gaya Detail Kegiatan */
+        .kegiatan-detail {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            display: none;
+        }
+
+        .kegiatan-detail.show {
+            display: block;
+        }
+
+        .detail-row {
+            margin-bottom: 8px;
+            font-size: 1em;
+            line-height: 1.3;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #0740aa;
+            display: block;
+            margin-bottom: 3px;
+        }
+        
+        /* Progress Bar */
+        .progress-bar-container {
+            height: 15px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.4s ease-in-out;
+            text-align: right;
+            line-height: 15px;
+            color: white;
+            font-size: 10px;
+            padding-right: 5px;
+            box-sizing: border-box;
+        }
+
+        .progress-keuangan {
+            background-color: #4CAF50; 
+        }
+
+        .progress-fisik {
+            background-color: #FF9800; 
+        }
+        
+        /* Tombol PDF */
+        .pdf-button {
+            display: inline-block;
+            background-color: #0740aa; 
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: background-color 0.2s;
+            text-align: center;
+            font-size: 0.9em; 
+        }
+
+        .pdf-button:hover {
+            background-color: red;
+        }
+        
+        /* Status Pelaksanaan Color */
+        .status-red { background-color: red !important; }
+        .status-green { background-color: #388e3c !important; } 
+        .status-yellow { background-color: #ff7300 !important; }
+        .status-blue { background-color: #1976d2 !important; }
+
+        .status-text {
+            color: white; 
+            padding: 2px 8px; 
+            border-radius: 4px; 
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        /* Responsif untuk tampilan HP */
+        @media (max-width: 600px) {
+            /* header perlu disamakan padding-nya agar simetris dengan konten */
+            header {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+        }
+        
+        /* Aturan untuk memusatkan header/footer di layar besar (Di atas 900px) */
+        @media (min-width: 900px) {
+            header {
+                max-width: 900px;
+                margin: 0 auto;
+                padding-left: 20px; 
+                padding-right: 20px;
+            }
+            .filter-section {
+                max-width: 900px;
+                margin: 0 auto;
+                padding-left: 15px; 
+                padding-right: 15px;
+            }
+            .filter-dropdown {
+                left: 15px; 
+            }
+            footer {
+                max-width: 900px;
+                margin: 0 auto;
+                width: 100%; 
+            }
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            padding: 0px 0;
+            font-size: 11px;
+            width: 93vw;
+            position: relative;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="400-binfraswil.jpg" alt="Logo" class="header-logo">
+        <span class="header-title">Progres Strong Point Mitra Bidang Infraswil Tahun 2025</span></header>
+
+    <div class="filter-section">
+        <button class="filter-toggle-btn" onclick="toggleFilterDropdown()">
+            <span class="material-icons">filter_list</span>
+            Filter Status
+        </button>
+        <div id="filterDropdown" class="filter-dropdown">
+            <button class="filter-btn status-red" onclick="filterByStatus('Belum Terlaksana', 'header-red', this)">Belum Terlaksana</button>
+            <button class="filter-btn status-green" onclick="filterByStatus('On Progres', 'header-green', this)">On Progres</button>
+            <button class="filter-btn status-yellow" onclick="filterByStatus('Berproses', 'header-yellow', this)">Berproses</button>
+            <button class="filter-btn status-blue" onclick="filterByStatus('Selesai', 'header-blue', this)">Selesai</button>
+            <button class="filter-btn filter-btn-reset" onclick="resetFilter(this)">Tampilkan Semua OPD</button>
+        </div>
+    </div>
+    <div id="filtered-results-container">
+        <div id="filteredHeader" class="filtered-header">Kegiatan dengan Status: <span id="currentFilterStatus">Semua OPD</span></div>
+        <div id="filtered-kegiatan-list">
+            </div>
+    </div>
+    <div class="container" id="opd-container">
+    </div>
+
+    <script>
+        // --- DATA JAVASCRIPT DARI TABEL ANDA (TIDAK BERUBAH) ---
+        const progressData = [
+            {
+                opd: "BM & BK",
+                pagu_opd: "417.382.258.930",
+                icon: "🏗️",
+                kegiatan: [
+                    {
+                        nama: "Rekonstruksi Jalan",
+                        pagu_kegiatan: "393.233.458.930",
+                        bobot: "72,62",
+                        pelaksanaan: "Belum Terlaksana",
+                        realisasi_keuangan: "0,00",
+                        realisasi_fisik: "19,00",
+                        keterangan: "Keterlambatan proses, (1)Untuk paket MK, seluruh paket telah terdapat pemenang, (2)Untuk paket fisik masih tender.",
+                        rencana_aksi: "Melanjutkan proses tender.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "red",
+                    },
+                    {
+                        nama: "Pembangunan Jembatan",
+                        pagu_kegiatan: "24.148.800.000",
+                        bobot: "4,46",
+                        pelaksanaan: "On Progres",
+                        realisasi_keuangan: "7,44",
+                        realisasi_fisik: "49,02",
+                        keterangan: "On track, 3 paket telah terkontrak.",
+                        rencana_aksi: "Pelaksanaan Fisik berjalan.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                ],
+            },
+            {
+                opd: "SDA & CKTR",
+                pagu_opd: "161.808.109.180",
+                icon: "💧",
+                kegiatan: [
+                    {
+                        nama: "Rehabilitasi Daerah Irigasi (D.I)",
+                        pagu_kegiatan: "82.304.109.180",
+                        bobot: "29,62",
+                        pelaksanaan: "Belum Terlaksana",
+                        realisasi_keuangan: "17,11",
+                        realisasi_fisik: "33,93",
+                        keterangan: "Proses Reviu/ PBI untuk 4 Paket pekerjaan Desain and Build.",
+                        rencana_aksi: "Proses Reviu/ PBI untuk 4 Paket pekerjaan Desain and Build.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "red",
+                    },
+                    {
+                        nama: "Pembangunan Spam",
+                        pagu_kegiatan: "79.504.000.000",
+                        bobot: "28,61",
+                        pelaksanaan: "On Progres",
+                        realisasi_keuangan: "0,00",
+                        realisasi_fisik: "32,50",
+                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
+                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                ],
+            },
+            {
+                opd: "PERKIMTAN",
+                pagu_opd: "18.050.781.300",
+                icon: "🏡",
+                kegiatan: [
+                    {
+                        nama: "Program Pengadaan Tanah untuk Kepentingan Umum (Pembebasan Lahan Sekolah Menengah Atas di Kabupaten Bone)",
+                        pagu_kegiatan: "14.850.781.300",
+                        bobot: "57,52",
+                        pelaksanaan: "Belum Terlaksana",
+                        realisasi_keuangan: "0,00",
+                        realisasi_fisik: "43,00",
+                        keterangan: "Konsultan mencetak dokumen perencanaan untuk diajukan kepada Kadis Perkimtan untuk dilakukan penetapan DPPT.",
+                        rencana_aksi: "Konsultan mencetak/print DPPT untuk diajukan kepada Kadis Perkimtan untuk dilakukan penetapan DPPT.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "red",
+                    },
+                    {
+                        nama: "Pembangunan Dan Pengadaan Air Siap Minum Dengan Teknologi SWRO Kab. Kepulauan Selayar",
+                        pagu_kegiatan: "3.200.000.000",
+                        bobot: "12,39",
+                        pelaksanaan: "Berproses",
+                        realisasi_keuangan: "0,00",
+                        realisasi_fisik: "0,43",
+                        keterangan: "1. Pengadaan beberapa material ARSINUM yang indent oleh penyedia 2. Persiapan penyediaan material bangunan pelindung di Makassar dan Selayar.",
+                        rencana_aksi: "Persiapan pengangkutan material bangunan pelindung ARSINUM di Makassar dan Selayar.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "yellow",
+                    },
+                    {
+                        nama: "Pembangunan Dan Pengadaan Air Siap Minum Dengan Teknologi SWRO Kab. Soppeng",
+                        pagu_kegiatan: "3.200.000.000",
+                        bobot: "12,39",
+                        pelaksanaan: "Selesai",
+                        realisasi_keuangan: "89,00",
+                        realisasi_fisik: "99,00",
+                        keterangan: "1. Pengadaan beberapa material ARSINUM yang indent oleh penyedia 2. Persiapan penyediaan material bangunan pelindung di Makassar dan Selayar.",
+                        rencana_aksi: "Persiapan pengangkutan material bangunan pelindung ARSINUM di Makassar dan Selayar.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "blue",
+                    },
+                ],
+            },
+            {
+                opd: "DISHUB",
+                pagu_opd: "22.724.254.644", 
+                icon: "🚍",
+                kegiatan: [
+                    {
+                        nama: "Angkutan Perkotaan",
+                        pagu_kegiatan: "17.996.843.344",
+                        bobot: "74,29%",
+                        pelaksanaan: "Berproses",
+                        realisasi_keuangan: "92,00",
+                        realisasi_fisik: "10,65",
+                        keterangan: "Pengoperasian Trans Sulsel di 2 Koridor", 
+                        rencana_aksi: "Operasional Trans Sulsel & Monitoring Pelaksnaaan",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "yellow",
+                    },
+                    {
+                        nama: "Keselamatan Jalan ( Rambu ,Pju)",
+                        pagu_kegiatan: "1.530.011.300",
+                        bobot: "6,32",
+                        pelaksanaan: "Berproses",
+                        realisasi_keuangan: "55,00",
+                        realisasi_fisik: "0,00",
+                        keterangan: "Telah dilaksanakan Launching / Uiji coba Pendaratan Pesawat SEA PLANE sebagai bagian dari kegiatan Kelayakan Operasuonal di CPI.",
+                        rencana_aksi: "Rencana minggu ini pju memasuki tahap pekerjaan pondasi angkur.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "yellow",
+                    },
+                    {
+                        nama: "Perizinan Bandara Perairan (Water Aerodrome) Andalan CPI.",
+                        pagu_kegiatan: "1.500.780.000",
+                        bobot: "6,20",
+                        pelaksanaan: "Berproses",
+                        realisasi_keuangan: "60,00",
+                        realisasi_fisik: "0,00",
+                        keterangan: "Penyusunan Laporan Akhir dan Perijinan.",
+                        rencana_aksi: "Penyusunan Laporan ( 75 % )",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "yellow",
+                    },                          
+                ],
+            },
+            {
+                opd: "KOMINFO",
+                pagu_opd: "11.150.397.480",
+                icon: "📡",
+                kegiatan: [
+                    {
+                        nama: "Firewall Untuk Pengamanan Jaringan Dan Informasi",
+                        pagu_kegiatan: "3.971.353.920",
+                        bobot: "35,62",
+                        pelaksanaan: "Berproses",
+                        realisasi_keuangan: "87,00",
+                        realisasi_fisik: "00,00",
+                        keterangan: "Sudah berkontrak",
+                        rencana_aksi: "Firewall sudah terpasang dan terimplementasi saat ini masih proses konfigurasi dengan data center dan proses administrasi disiapkan.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "yellow",
+                    },
+                    {
+                        nama: "Bandwith",
+                        pagu_kegiatan: "2.629.997.000",
+                        bobot: "123,59",
+                        pelaksanaan: "Berproses",
+                        realisasi_keuangan: "0,00",
+                        realisasi_fisik: "0,43",
+                        keterangan: "Telah dilakukan distribusi jaringan internet bandwidth ke seluruh perangkat daerah.",
+                        rencana_aksi: "Permintaan SPD  untuk pembayaran bulan 7 8 dan 9.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "yellow",
+                    },                  
+                ],
+            },
+            {
+                opd: "DISPORA",
+                pagu_opd: "3.500.000.000",
+                icon: "⚽",
+                kegiatan: [
+                    {
+                        nama: "Pemasangan Rumput Sintetis Lapangan Bola",
+                        pagu_kegiatan: "3.500.000.000",
+                        bobot: "39,68",
+                        pelaksanaan: "On Progres",
+                        realisasi_keuangan: "18,00",
+                        realisasi_fisik: "8,00",
+                        keterangan: "Proses pengadaan fisik.",
+                        rencana_aksi: "Proses Penyedia Fisik Konstruksi.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                    {
+                        nama: "Anti Mager",
+                        pagu_kegiatan: "900.000.000",
+                        bobot: "10,20",
+                        pelaksanaan: "On Progres",
+                        realisasi_keuangan: "81,00",
+                        realisasi_fisik: "63,00",
+                        keterangan: "Paket 1 Anti Mager Luwu Timur  Telah terlaksana tanggal 18 Mei dan Paket 2 Anti Mager Makassar tanggal 27 Juni. Paket 3 Anti Mager Luwu tanggal 3 Juli dan paket 4 Anti mager Palopo telah dilaksanakan tanggal 5 Juli 2025, paket 5 Anti mager bone  telah dilaksanakan  pada tanggal 14 september dan Paket Anti Mager  selanjutnya menunggu tempat pelaksanaan.",
+                        rencana_aksi: "Menyusun administrasi pencairan paket Anti Mager Bone.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "yellow",
+                    },                  
+                ],
+            },
+            {
+                opd: "BAPPELITBANGDA",
+                pagu_opd: "2.400.000.000",
+                icon: "📈",
+                kegiatan: [
+                    {
+                        nama: "Honorarium Tim Ahli Gubernur)",
+                        pagu_kegiatan: "2.400.000.000",
+                        bobot: "47,52",
+                        pelaksanaan: "On Progres",
+                        realisasi_keuangan: "0,00",
+                        realisasi_fisik: "10,00",
+                        keterangan: "Pembuatan SK Hak Keuangan sesuai Nilai hasil Appraisal telah selesai  dan Penyesuaian nama-nama tambahan untuk SK Tim Ahli Kegiatan Perangkat daerah.",
+                        rencana_aksi: "Melakukan koordinasi penyesuaian nama-nama tambahan untuk SK Tim Ahli kegiatan perangkat daerah sesuai dengan arahan pimpinan.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                    {
+                        nama: "Kajian Mitigasi Bencana",
+                        pagu_kegiatan: "950.000.000",
+                        bobot: "18,81",
+                        pelaksanaan: "On Progres",
+                        realisasi_keuangan: "30,00",
+                        realisasi_fisik: "0,00",
+                        keterangan: "Pelaksanaan TPM 1 telah dilaksanakan selanjutnya proses realisasi termin pertama (1).",
+                        rencana_aksi: "Peneliti telah melakukan pengambilan data di lapangan (data sekunder) - Penyusunan bahan untuk pemaparan output penelitian kepada pimpinan - Penyiapan administrasi pertanggungjawab termin pertama (1). - Melaksanakan rapat lanjutan bersama tim peneliti berdasarkan hasil penelitian awal yang telah dilakukan.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },                  
+                ],
+            },
+            
+        ];
+        
+        // Helper untuk format mata uang
+        function formatRupiah(number) {
+            return "Rp " + number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+        
+        // Helper untuk mendapatkan kelas status 
+        function getStatusClass(status) {
+            switch (status.toLowerCase().trim()) {
+                case 'belum terlaksana':
+                    return 'status-red';
+                case 'on progres':
+                    return 'status-green'; 
+                case 'berproses':
+                    return 'status-yellow';
+                case 'selesai':
+                    return 'status-blue';
+                default:
+                    return '';
+            }
+        }
+        
+        // Helper untuk membuat HTML Card Kegiatan yang disaring (Mirip Card Kegiatan Biasa)
+        function createFilteredKegiatanCard(kegiatan, opd, index) {
+            const realisasiKeuangan = parseFloat(kegiatan.realisasi_keuangan.replace(',', '.'));
+            const realisasiFisik = parseFloat(kegiatan.realisasi_fisik.replace(',', '.'));
+            const statusClass = getStatusClass(kegiatan.pelaksanaan);
+            
+            return `
+                <div class="filtered-kegiatan-card" onclick="toggleKegiatanDetail(this)">
+                    <div class="kegiatan-card-head"> 
+                        <div>
+                            <div class="kegiatan-title">${index + 1}. [${opd.opd}] - ${kegiatan.nama}</div>
+                            <div class="kegiatan-info">Anggaran: ${formatRupiah(kegiatan.pagu_kegiatan)}</div>
+                        </div>
+                        <span class="material-icons toggle-btn">expand_more</span> 
+                    </div>
+                    
+                    <div class="kegiatan-detail">
+                        <div class="detail-row">
+                            <span class="detail-label">Bobot:</span> ${kegiatan.bobot}%
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Pelaksanaan:</span> <span class="status-text ${statusClass}">${kegiatan.pelaksanaan}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Realisasi Keuangan:</span> ${realisasiKeuangan.toFixed(2).replace('.', ',')}%
+                            <div class="progress-bar-container">
+                                <div class="progress-bar progress-keuangan" style="width: ${realisasiKeuangan}%">${realisasiKeuangan.toFixed(0)}%</div>
+                            </div>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Realisasi Fisik:</span> ${realisasiFisik.toFixed(2).replace('.', ',')}%
+                            <div class="progress-bar-container">
+                                <div class="progress-bar progress-fisik" style="width: ${realisasiFisik}%">${realisasiFisik.toFixed(0)}%</div>
+                            </div>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Keterangan:</span> ${kegiatan.keterangan}
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Rencana Aksi:</span> ${kegiatan.rencana_aksi}
+                        </div>
+                        <a href="${kegiatan.link_pdf}" target="_blank" class="pdf-button">LIHAT LAPORAN PDF</a>
+                    </div>
+                </div>
+            `;
+        }
+
+
+        // --- FUNGSI FILTER UTAMA ---
+
+        // 1. Fungsi Toggle Dropdown Filter
+        function toggleFilterDropdown() {
+            document.getElementById('filterDropdown').classList.toggle('show');
+        }
+
+        // 2. Fungsi Logika Pemfilteran berdasarkan Status Kegiatan (DIPERBAIKI)
+        function filterByStatus(statusFilter, headerClass, clickedButton) {
+            const resultsContainer = document.getElementById('filtered-kegiatan-list');
+            const mainContainer = document.getElementById('opd-container');
+            const filteredSection = document.getElementById('filtered-results-container');
+            const filteredHeader = document.getElementById('filteredHeader');
+            
+            let filteredHTML = '';
+            let count = 0;
+
+            // 1. Reset status active pada semua tombol filter
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // 2. Set tombol yang diklik menjadi active
+            clickedButton.classList.add('active');
+
+            // 3. Atur warna header hasil filter
+            filteredHeader.className = 'filtered-header ' + headerClass; 
+            
+            // Tutup dropdown setelah memilih filter
+            toggleFilterDropdown(); 
+            
+            // Logika Filter: Kumpulkan semua kegiatan yang statusnya cocok
+            progressData.forEach(opd => {
+                opd.kegiatan.forEach(keg => {
+                    if (keg.pelaksanaan.trim() === statusFilter.trim()) {
+                        count++;
+                        filteredHTML += createFilteredKegiatanCard(keg, opd, count); 
+                    }
+                });
+            });
+
+            // Sembunyikan konten OPD utama dan tampilkan hasil filter
+            mainContainer.classList.add('hide-main-content');
+            filteredSection.style.display = 'flex';
+            
+            document.getElementById('currentFilterStatus').textContent = statusFilter + ` (${count} Kegiatan)`;
+
+            if (count > 0) {
+                resultsContainer.innerHTML = filteredHTML;
+                // Scroll ke bagian hasil filter
+                filteredSection.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                resultsContainer.innerHTML = `<p style="text-align: center; color: #666; padding: 30px; background-color: white; border-radius: 10px;">Tidak ditemukan kegiatan dengan status "${statusFilter}"</p>`;
+            }
+        }
+        
+        // 3. Fungsi Reset Filter (Menampilkan Kembali Kartu OPD)
+        function resetFilter(clickedButton) {
+            const mainContainer = document.getElementById('opd-container');
+            const filteredSection = document.getElementById('filtered-results-container');
+            const filteredHeader = document.getElementById('filteredHeader');
+            
+            // Reset status active pada semua tombol filter
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Hapus kelas warna dari header
+            filteredHeader.className = 'filtered-header'; 
+            document.getElementById('currentFilterStatus').textContent = "Semua OPD";
+
+            // Tampilkan kembali konten OPD utama dan sembunyikan hasil filter
+            filteredSection.style.display = 'none';
+            mainContainer.classList.remove('hide-main-content');
+            
+            // Tutup dropdown
+            toggleFilterDropdown();
+        }
+        
+        // --- FUNGSI CARD (Dipertahankan) ---
+        
+        // Fungsi untuk membuat HTML Card Kegiatan (digunakan di kartu OPD)
+        function createKegiatanCard(kegiatan, index) {
+            const realisasiKeuangan = parseFloat(kegiatan.realisasi_keuangan.replace(',', '.'));
+            const realisasiFisik = parseFloat(kegiatan.realisasi_fisik.replace(',', '.'));
+            const statusClass = getStatusClass(kegiatan.pelaksanaan);
+
+            return `
+                <div class="kegiatan-card" onclick="toggleKegiatanDetail(this)">
+                    <div class="kegiatan-card-head"> 
+                        <div>
+                            <div class="kegiatan-title">${index + 1}. ${kegiatan.nama}</div>
+                            <div class="kegiatan-info">Anggaran: ${formatRupiah(kegiatan.pagu_kegiatan)}</div>
+                        </div>
+                        <span class="material-icons toggle-btn">expand_more</span> 
+                    </div>
+                    
+                    <div class="kegiatan-detail">
+                        <div class="detail-row">
+                            <span class="detail-label">Bobot:</span> ${kegiatan.bobot}%
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Pelaksanaan:</span> <span class="status-text ${statusClass}">${kegiatan.pelaksanaan}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Realisasi Keuangan:</span> ${realisasiKeuangan.toFixed(2).replace('.', ',')}%
+                            <div class="progress-bar-container">
+                                <div class="progress-bar progress-keuangan" style="width: ${realisasiKeuangan}%">${realisasiKeuangan.toFixed(0)}%</div>
+                            </div>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Realisasi Fisik:</span> ${realisasiFisik.toFixed(2).replace('.', ',')}%
+                            <div class="progress-bar-container">
+                                <div class="progress-bar progress-fisik" style="width: ${realisasiFisik}%">${realisasiFisik.toFixed(0)}%</div>
+                            </div>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Keterangan:</span> ${kegiatan.keterangan}
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Rencana Aksi:</span> ${kegiatan.rencana_aksi}
+                        </div>
+                        <a href="${kegiatan.link_pdf}" target="_blank" class="pdf-button">LIHAT LAPORAN PDF</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createOPDCard(opd) {
+            const totalKegiatan = opd.kegiatan.length;
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.setAttribute('data-opd', opd.opd);
+
+            card.innerHTML = `
+                <div class="card-header">
+                    <div class="opd-info-group">
+                        <div class="icon">${opd.icon}</div>
+                        <div class="card-content">
+                            <div class="card-title">${opd.opd}</div>
+                            <div class="card-info"><strong>Total Anggaran : </strong> ${formatRupiah(opd.pagu_opd)}</div>
+                            <div class="card-info"><strong>Jumlah Kegiatan : </strong> ${totalKegiatan}</div>
+                        </div>
+                    </div>
+                    <span class="material-icons opd-toggle-btn">expand_more</span>
+                </div>
+                <div class="kegiatan-container">
+                </div>
+            `;
+            
+            const kegiatanContainer = card.querySelector('.kegiatan-container');
+            opd.kegiatan.forEach((keg, index) => {
+                kegiatanContainer.innerHTML += createKegiatanCard(keg, index);
+            });
+
+            card.querySelector('.card-header').addEventListener('click', (event) => {
+                if (!event.target.closest('.pdf-button') && !event.target.closest('.kegiatan-card-head')) {
+                    toggleKegiatanContainer(card);
+                }
+            });
+
+            return card;
+        }
+
+        // FUNGSI TOGGLE DETAIL (DIGUNAKAN UNTUK KARTU OPD DAN KARTU FILTER)
+        function toggleKegiatanDetail(kegiatanCard) {
+            const detail = kegiatanCard.querySelector('.kegiatan-detail');
+            const toggleBtn = kegiatanCard.querySelector('.toggle-btn');
+            
+            // Menutup semua detail kegiatan lain dalam container yang sama (baik di OPD maupun di Filter)
+            kegiatanCard.parentElement.querySelectorAll('.kegiatan-card, .filtered-kegiatan-card').forEach(card => {
+                const det = card.querySelector('.kegiatan-detail');
+                const otherToggle = card.querySelector('.toggle-btn');
+                
+                if (det !== detail && card.classList.contains('expanded')) {
+                    card.classList.remove('expanded'); 
+                    if (det) det.style.display = 'none';
+                    if (otherToggle) otherToggle.textContent = 'expand_more';
+                }
+            });
+
+            // Menampilkan/menyembunyikan detail kegiatan yang diklik
+            kegiatanCard.classList.toggle('expanded'); 
+            if (kegiatanCard.classList.contains('expanded')) {
+                detail.style.display = 'block';
+                toggleBtn.textContent = 'expand_less';
+            } else {
+                detail.style.display = 'none';
+                toggleBtn.textContent = 'expand_more';
+            }
+        }
+        
+        // FUNGSI TOGGLE CONTAINER (KHUSUS UNTUK KARTU OPD)
+        function toggleKegiatanContainer(opdCard) {
+            const container = opdCard.querySelector('.kegiatan-container');
+            const opdToggleBtn = opdCard.querySelector('.opd-toggle-btn');
+            
+            // Tutup container OPD lain
+            document.querySelectorAll('.card').forEach(card => {
+                const cont = card.querySelector('.kegiatan-container');
+                const btn = card.querySelector('.opd-toggle-btn');
+                if (card !== opdCard && card.classList.contains('expanded')) {
+                    cont.classList.remove('show');
+                    card.classList.remove('expanded');
+                    if(btn) btn.textContent = 'expand_more';
+                }
+            });
+            
+            // Reset semua detail kegiatan dan ikonnya
+            document.querySelectorAll('.kegiatan-card').forEach(card => {
+                const det = card.querySelector('.kegiatan-detail');
+                const activityToggle = card.querySelector('.toggle-btn');
+                card.classList.remove('expanded');
+                if (det) det.style.display = 'none';
+                if (activityToggle) activityToggle.textContent = 'expand_more';
+            });
+            
+            // Tampilkan/sembunyikan container yang diklik
+            container.classList.toggle('show');
+            opdCard.classList.toggle('expanded'); 
+            
+            // Ganti icon OPD yang diklik
+            if (opdCard.classList.contains('expanded')) {
+                opdToggleBtn.textContent = 'expand_less';
+            } else {
+                opdToggleBtn.textContent = 'expand_more';
+            }
+        }
+
+        // Memuat semua kartu OPD saat DOM selesai dimuat
+        document.addEventListener('DOMContentLoaded', () => {
+            const opdContainer = document.getElementById('opd-container');
+            progressData.forEach(opd => {
+                opdContainer.appendChild(createOPDCard(opd));
+            });
+            // Mulai dengan menyembunyikan kontainer hasil filter
+            document.getElementById('filtered-results-container').style.display = 'none';
+        });
+    </script>
+    <footer id="footer">
+      Strong Point 2025 | &copy; Copyright by @zuwlend.
+    </footer>
+</body>
+</html>
