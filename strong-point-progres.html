@@ -7,7 +7,7 @@
 
   <!-- Meta Tags untuk Open Graph -->
   <meta property="og:title" content="Progres Strong Point 2025">
-  <meta property="og:description" content="Lihat progres kegiatan Strong Point Infraswil 2025 secara interaktif (best view via smartphone/tablet).">
+  <meta property="og:description" content="Lihat progres kegiatan Strong Point Infraswil 2025 secara interaktif (best view via HP/tablet).">
   <meta property="og:image" content="https://binfraswilzulsel.my.id/sp2.jpg" />
   <meta property="og:url" content="binfraswilzulsel.my.id/" />
   <meta property="og:type" content="website" />
@@ -1072,46 +1072,48 @@
             });
             // Mulai dengan menyembunyikan kontainer hasil filter
             document.getElementById('filtered-results-container').style.display = 'none';
+ /* === Fitur Suara Tap — tidak double & tidak aktif saat scroll === */
+        const tapSound = new Audio("tap_sound.mp3"); // ganti dengan file suara kamu
+        tapSound.preload = "auto";
+        tapSound.volume = 0.3; // opsional: biar suaranya lembut
 
-            function playTapSound() {
-    // 1. Dapatkan elemen audio
-    const audio = document.getElementById('tapAudio');
-    
-    // 2. Jika audio ditemukan
-    if (audio) {
-        // Reset waktu putar ke awal (penting agar suara bisa diputar berulang kali dengan cepat)
-        audio.currentTime = 0;
-        
-        // Coba putar suara
-        audio.play().catch(error => {
-            // Handle error jika browser melarang pemutaran (biasanya karena belum ada interaksi user)
-            console.log("Gagal memutar suara:", error);
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchMoved = false;
+        let lastPlayTime = 0;
+
+        document.addEventListener("touchstart", (e) => {
+            const t = e.touches[0];
+            touchStartX = t.clientX;
+            touchStartY = t.clientY;
+            touchMoved = false;
         });
-    }
-}
 
-// 3. Tambahkan event listener ke body saat DOM selesai dimuat
-document.addEventListener('DOMContentLoaded', () => {
-    // ... kode yang sudah ada untuk memuat OPD ...
-    
-    // PENTING: Tambahkan event listener ini ke <body>
-    document.body.addEventListener('click', playTapSound);
-    // Tambahkan juga 'touchstart' untuk memastikan respons yang cepat pada perangkat sentuh
-    document.body.addEventListener('touchstart', playTapSound); 
-});
-
-    </script>
-
-<audio id="tapAudio" preload="auto">
-    <source src="tap_sound.mp3" type="audio/mpeg">
-    Browser Anda tidak mendukung elemen audio.
-            
+        document.addEventListener("touchmove", (e) => {
+            const t = e.touches[0];
+            const dx = Math.abs(t.clientX - touchStartX);
+            const dy = Math.abs(t.clientY - touchStartY);
+            if (dx > 10 || dy > 10) touchMoved = true; // dianggap scroll
         });
+
+        document.addEventListener("touchend", (e) => {
+            if (!touchMoved) playTapSound();
+        });
+
+        document.addEventListener("click", (e) => {
+            // untuk pengguna desktop
+            if (e.pointerType !== "touch") playTapSound();
+        });
+        function playTapSound() {
+            const now = Date.now();
+            if (now - lastPlayTime < 200) return; // cegah suara double
+            lastPlayTime = now;
+            tapSound.currentTime = 0;
+            tapSound.play().catch(() => {});
+        }
     </script>
     <footer id="footer">
       Strong Point 2025 | &copy; Copyright by @zuwlend.
     </footer>
 </body>
 </html>
-
-
