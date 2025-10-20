@@ -6,8 +6,8 @@
     <title>Strong Point Progres</title>
 
   <!-- Meta Tags untuk Open Graph -->
-  <meta property="og:title" content="Progres Strong Point 2025">
-  <meta property="og:description" content="Lihat progres kegiatan Strong Point Infraswil 2025 secara interaktif (best view via HP/tablet).">
+  <meta property="og:title" content="Strong Point 2025">
+  <meta property="og:description" content="Lihat progres kegiatan Strong Point Infraswil 2025 secara interkatif (best view via smartphone/tablet).">
   <meta property="og:image" content="https://binfraswilzulsel.my.id/sp2.jpg" />
   <meta property="og:url" content="binfraswilzulsel.my.id/" />
   <meta property="og:type" content="website" />
@@ -147,6 +147,11 @@
              background-color: #1976d2 !important;
              box-shadow: 0 0 0 3px white, 0 0 0 5px #1976d2;
         }
+
+        .filter-btn.active.status-purple {
+             background-color: purple !important;
+             box-shadow: 0 0 0 3px white, 0 0 0 5px purple;
+        }
         
         .filter-btn:not(.active):hover {
             opacity: 0.9;
@@ -154,7 +159,7 @@
         }
         
         .filter-btn-reset {
-            background-color: #6c757d !important; 
+            background-color: black !important; 
             margin-top: 5px;
         }
         
@@ -164,12 +169,13 @@
             background-color: #f7f9fc;
             min-height: auto;
             border-radius: 20px;
-            display: none; 
+            display: grid; 
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
             max-width: 900px; 
-            margin: 20px; 
+            margin: 20px  auto; 
             box-sizing: border-box; 
+            grid-template-columns: 1fr;
         }
         
         /* Perubahan: Header Kontainer Filter dengan Warna Latar Belakang */
@@ -177,13 +183,14 @@
             font-size: 1.2em;
             font-weight: bold;
             color: white; /* Teks putih agar kontras dengan latar belakang warna */
-            padding: 8px 15px;
-            margin: -20px -15px 10px -15px; /* Margin negatif agar memenuhi padding kontainer */
+            padding: 10px 15px;
+            margin: -20px -15px 0px -15px; /* Margin negatif agar memenuhi padding kontainer */
             border-bottom: none;
             border-top-left-radius: 20px;
             border-top-right-radius: 20px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s ease;
+            text-align: center;
         }
         
         /* Kelas untuk mengubah warna header filter */
@@ -191,6 +198,8 @@
         .header-green { background-color: #388e3c; }
         .header-yellow { background-color: #ffa000; color: #333; } /* Teks hitam untuk kontras di kuning */
         .header-blue { background-color: #1976d2; }
+        .header-purple { background-color: purple; }
+        
         
         .filtered-header #currentFilterStatus {
             font-style: italic;
@@ -439,6 +448,7 @@
         .status-green { background-color: #388e3c !important; } 
         .status-yellow { background-color: #ff7300 !important; }
         .status-blue { background-color: #1976d2 !important; }
+        .status-purple { background-color: purple !important; }
 
         .status-text {
             color: white; 
@@ -484,16 +494,21 @@
         footer {
             text-align: center;
             color: white;
-            padding: 0px 0;
             font-size: 11px;
             width: 93vw;
             position: relative;
             margin-bottom: 20px;
+            line-height: 1.2;
+
+        }footer p{
+            margin: 2px 0;
         }
     </style>
 </head>
 <body>
     <header>
+
+        
         <img src="400-binfraswil.jpg" alt="Logo" class="header-logo">
         <span class="header-title">Progres Strong Point Mitra Bidang Infraswil Tahun 2025</span></header>
 
@@ -507,6 +522,7 @@
             <button class="filter-btn status-green" onclick="filterByStatus('On Progres', 'header-green', this)">On Progres</button>
             <button class="filter-btn status-yellow" onclick="filterByStatus('Berproses', 'header-yellow', this)">Berproses</button>
             <button class="filter-btn status-blue" onclick="filterByStatus('Selesai', 'header-blue', this)">Selesai</button>
+            <button class="filter-btn status-purple" onclick="filterByStatus('Tidak Diperlukan', 'header-purple', this)">Tidak Diperlukan</button>
             <button class="filter-btn filter-btn-reset" onclick="resetFilter(this)">Tampilkan Semua OPD</button>
         </div>
     </div>
@@ -519,11 +535,13 @@
     </div>
 
     <script>
-        // --- DATA JAVASCRIPT DARI TABEL ANDA (TIDAK BERUBAH) ---
+          
+              
+       // --- DATA JAVASCRIPT DARI TABEL ANDA (TIDAK BERUBAH) ---
         const progressData = [
             {
                 opd: "BM & BK",
-                pagu_opd: "417.382.258.930",
+                pagu_opd: "541.466.172.300",
                 icon: "🏗️",
                 kegiatan: [
                     {
@@ -539,9 +557,93 @@
                         status_color: "red",
                     },
                     {
+                        nama: "Pembangunan Jalan",
+                        pagu_kegiatan: "54.958.796.220",
+                        bobot: "10,15",
+                        pelaksanaan: "On Progres",
+                        realisasi_keuangan: "72,62",
+                        realisasi_fisik: "49,02",
+                        keterangan: "On track, 3 paket telah terkontrak.",
+                        rencana_aksi: "Pelaksanaan Fisik berjalan.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },                  
+                    {
                         nama: "Pembangunan Jembatan",
                         pagu_kegiatan: "24.148.800.000",
                         bobot: "4,46",
+                        pelaksanaan: "On Progres",
+                        realisasi_keuangan: "7,44",
+                        realisasi_fisik: "49,02",
+                        keterangan: "On track, 3 paket telah terkontrak.",
+                        rencana_aksi: "Pelaksanaan Fisik berjalan.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                    {
+                        nama: "Perencanaan Jalan & Jembatan",
+                        pagu_kegiatan: "22.401.860.000",
+                        bobot: "4,14",
+                        pelaksanaan: "On Progres",
+                        realisasi_keuangan: "7,44",
+                        realisasi_fisik: "49,02",
+                        keterangan: "On track, 3 paket telah terkontrak.",
+                        rencana_aksi: "Pelaksanaan Fisik berjalan.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                    {
+                        nama: "Pemeliharaan Rutin Jalan",
+                        pagu_kegiatan: "17.806.121.350",
+                        bobot: "3,29",
+                        pelaksanaan: "On Progres",
+                        realisasi_keuangan: "7,44",
+                        realisasi_fisik: "49,02",
+                        keterangan: "On track, 3 paket telah terkontrak.",
+                        rencana_aksi: "Pelaksanaan Fisik berjalan.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                    {
+                        nama: "Pengawasan Penyelenggaraan Jalan & Jembatan",
+                        pagu_kegiatan: "14.479.000.000",
+                        bobot: "2,67",
+                        pelaksanaan: "On Progres",
+                        realisasi_keuangan: "7,44",
+                        realisasi_fisik: "49,02",
+                        keterangan: "On track, 3 paket telah terkontrak.",
+                        rencana_aksi: "Pelaksanaan Fisik berjalan.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                    {
+                        nama: "Penyediaan Bahan/Material",                     
+                        pagu_kegiatan: "10.092.039.000",
+                        bobot: "1,86",
+                        pelaksanaan: "On Progres",
+                        realisasi_keuangan: "7,44",
+                        realisasi_fisik: "49,02",
+                        keterangan: "On track, 3 paket telah terkontrak.",
+                        rencana_aksi: "Pelaksanaan Fisik berjalan.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                    {
+                        nama: "Dbh Sawit",                    
+                        pagu_kegiatan: "2.940.776.800",
+                        bobot: "0,54",
+                        pelaksanaan: "On Progres",
+                        realisasi_keuangan: "7,44",
+                        realisasi_fisik: "49,02",
+                        keterangan: "On track, 3 paket telah terkontrak.",
+                        rencana_aksi: "Pelaksanaan Fisik berjalan.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                    {
+                        nama: "Rehablitiasi Jembatan",                    
+                        pagu_kegiatan: "1.405.320.000",
+                        bobot: "0,26",
                         pelaksanaan: "On Progres",
                         realisasi_keuangan: "7,44",
                         realisasi_fisik: "49,02",
@@ -555,7 +657,7 @@
             },
             {
                 opd: "SDA & CKTR",
-                pagu_opd: "161.808.109.180",
+                pagu_opd: "277.884.623.520",
                 icon: "💧",
                 kegiatan: [
                     {
@@ -582,6 +684,214 @@
                         link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
                         status_color: "green",
                     },
+                    {
+                        nama: "Normalisasi Sungai",
+                        pagu_kegiatan: "28.650.612.000",
+                        bobot: "10,31",
+                        pelaksanaan: "Belum Terlaksana",
+                        realisasi_keuangan: "0,00",
+                        realisasi_fisik: "32,50",
+                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
+                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                    {
+                        nama: "Belanja Modal Bangunan Pengaman Sungai/Pantai Dan Penanggulangan Bencana Alam Lainnya",
+                        pagu_kegiatan: "18.956.407.240",
+                        bobot: "6,82",
+                        pelaksanaan: "On Progres",
+                        realisasi_keuangan: "0,00",
+                        realisasi_fisik: "32,50",
+                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
+                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                    {
+                        nama: "Perencanaan Embung",
+                        pagu_kegiatan: "14.400.000.000",
+                        bobot: "5,18%",
+                        pelaksanaan: "On Progres",
+                        realisasi_keuangan: "0,00",
+                        realisasi_fisik: "32,50",
+                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
+                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                    {
+                        nama: "Pembangunan Rth Taman Andalan Kawasan Center Point Of Indonesia Di Kota Makassar Tahap Iii (Lanjutan)",
+                        pagu_kegiatan: "12.726.191.400",
+                        bobot: "4,58",
+                        pelaksanaan: "Belum Terlaksana",
+                        realisasi_keuangan: "0,00",
+                        realisasi_fisik: "32,50",
+                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
+                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                    {
+                        nama: "Penyediaan Jasa Dan Pemeliharaan Sarana Dan Prasarana Yang Terintegrasi Di Kawasan CPI Kota Makassar",
+                        pagu_kegiatan: "9.237.882.000",
+                        bobot: "3,32",
+                        pelaksanaan: "Belum Terlaksana",
+                        realisasi_keuangan: "0,00",
+                        realisasi_fisik: "32,50",
+                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
+                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                    {
+                        nama: "Pembangunan Rest Area Jeneponto Tahap Iv (Lanjutan)",
+                        pagu_kegiatan: "5.881.430.000",
+                        bobot: "2,12%",
+                        pelaksanaan: "On Progres",
+                        realisasi_keuangan: "0,00",
+                        realisasi_fisik: "32,50",
+                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
+                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                    {
+                        nama: "Rehabilitasi Masjid Kubah 99",
+                        pagu_kegiatan: "4.801.420.000",
+                        bobot: "1,73",
+                        pelaksanaan: "On Progres",
+                        realisasi_keuangan: "0,00",
+                        realisasi_fisik: "32,50",
+                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
+                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                    {
+                        nama: "Lanjutan Pembangunan Taman Al-Markaz Di Kota Makassar",
+                        pagu_kegiatan: "3.917.308.200",
+                        bobot: "1,41",
+                        pelaksanaan: "On Progres",
+                        realisasi_keuangan: "0,00",
+                        realisasi_fisik: "32,50",
+                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
+                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                    {
+                        nama: "Jasa Konsultansi Perencanaan (Cipta Karya)",
+                        pagu_kegiatan: "3.695.706.000",
+                        bobot: "1,33",
+                        pelaksanaan: "On Progres",
+                        realisasi_keuangan: "0,00",
+                        realisasi_fisik: "32,50",
+                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
+                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                    {
+                        nama: "Rehabilitasi Gedung Wisma Negara Di Kota Makassar",
+                        pagu_kegiatan: "2.832.024.000",
+                        bobot: "1,02",
+                        pelaksanaan: "On Progres",
+                        realisasi_keuangan: "0,00",
+                        realisasi_fisik: "32,50",
+                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
+                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                    {
+                        nama: "Jasa Konsultansi Pengawasan Rehabilitasi Daerah Irigasi",
+                        pagu_kegiatan: "2.376.681.000",
+                        bobot: "0,86",
+                        pelaksanaan: "Belum Terlaksana",
+                        realisasi_keuangan: "0,00",
+                        realisasi_fisik: "32,50",
+                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
+                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                    {
+                        nama: "Jasa Konsultansi Perencanaan (SDA)",
+                        pagu_kegiatan: "2.001.361.000",
+                        bobot: "0,72",
+                        pelaksanaan: "On Progres",
+                        realisasi_keuangan: "0,00",
+                        realisasi_fisik: "32,50",
+                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
+                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                    {
+                        nama: "Rehabilitasi Di. Cilellang Kab. Wajo (Lanjutan Dak 2024)",
+                        pagu_kegiatan: "1.584.684.000",
+                        bobot: "0,57",
+                        pelaksanaan: "On Progres",
+                        realisasi_keuangan: "0,00",
+                        realisasi_fisik: "32,50",
+                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
+                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                    {
+                        nama: "Jasa Konsultansi Supervisi (Cipta Karya)",
+                        pagu_kegiatan: "1.541.595.000",
+                        bobot: "0,55",
+                        pelaksanaan: "On Progres",
+                        realisasi_keuangan: "0,00",
+                        realisasi_fisik: "32,50",
+                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
+                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                    {
+                        nama: "Rehabilitasi Ruang Klinik Pada Dinas Perhubungan",
+                        pagu_kegiatan: "1.173.906.500",
+                        bobot: "0,42",
+                        pelaksanaan: "On Progres",
+                        realisasi_keuangan: "0,00",
+                        realisasi_fisik: "32,50",
+                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
+                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                    {
+                        nama: "Lanjutan Rehabiiitasi Gedung Kantor PerwakilanDi Bali",
+                        pagu_kegiatan: "1.163.200.000",
+                        bobot: "0,42",
+                        pelaksanaan: "On Progres",
+                        realisasi_keuangan: "0,00",
+                        realisasi_fisik: "32,50",
+                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
+                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+                     {
+                        nama: "Jasa Konsultansi Pengawasan Normalisasi Sungai",
+                        pagu_kegiatan: "1.136.106.000",
+                        bobot: "0,41",
+                        pelaksanaan: "Tidak Diperlukan",
+                        realisasi_keuangan: "0,00",
+                        realisasi_fisik: "32,50",
+                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
+                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
+                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
+                        status_color: "green",
+                    },
+
+
+
+
                 ],
             },
             {
@@ -782,8 +1092,10 @@
                     return 'status-yellow';
                 case 'selesai':
                     return 'status-blue';
+                case 'tidak diperlukan':
+                    return 'status-purple';
                 default:
-                    return '';
+                    return 'black';
             }
         }
         
@@ -1072,7 +1384,9 @@
             });
             // Mulai dengan menyembunyikan kontainer hasil filter
             document.getElementById('filtered-results-container').style.display = 'none';
- /* === Fitur Suara Tap — tidak double & tidak aktif saat scroll === */
+        });
+
+      /* === Fitur Suara Tap — tidak double & tidak aktif saat scroll === */
         const tapSound = new Audio("tap_sound.mp3"); // ganti dengan file suara kamu
         tapSound.preload = "auto";
         tapSound.volume = 0.3; // opsional: biar suaranya lembut
@@ -1104,6 +1418,7 @@
             // untuk pengguna desktop
             if (e.pointerType !== "touch") playTapSound();
         });
+
         function playTapSound() {
             const now = Date.now();
             if (now - lastPlayTime < 200) return; // cegah suara double
@@ -1111,9 +1426,10 @@
             tapSound.currentTime = 0;
             tapSound.play().catch(() => {});
         }
+        
     </script>
     <footer id="footer">
-      Strong Point 2025 | &copy; Copyright by @zuwlend.
+     Strong Point &copy; 2025. All rights reserved @zuwlend<p>(Best view via Smartphone/Tablet).</p>
     </footer>
 </body>
 </html>
