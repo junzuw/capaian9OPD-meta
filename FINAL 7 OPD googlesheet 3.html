@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Strong Point Progres</title>
+
+  <!-- Meta Tags untuk Open Graph -->
+  <meta property="og:title" content="Strong Point 2025">
+  <meta property="og:description" content="Lihat progres kegiatan Strong Point Infraswil 2025 secara interkatif (best view via smartphone/tablet).">
+  <meta property="og:image" content="https://binfraswilzulsel.my.id/sp2.jpg" />
+  <meta property="og:url" content="binfraswilzulsel.my.id/" />
+  <meta property="og:type" content="website" />
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        /* Gaya Dasar */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #0740aa;
+        }
+
+        header {
+            background-color: #0740aa;
+            color: white;
+            padding: 15px 20px;
+            font-weight: bold;
+            font-size: 1.5em;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: left;
+        }
+
+        .header-logo {
+            width:130px;
+            height: auto;
+            margin-right: 10px;
+            margin-left: 2px;
+            object-fit: contain;
+            border-radius: 20px;
+            
+        }
+        .header-title {
+            margin: 0;
+            line-height: 1; 
+        }
+        
+        /* Kontainer Utama (Card OPD) - Memastikan jarak tepi di HP dan max-width di Desktop */
+        .container {
+            padding: 20px 15px; 
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            transition: opacity 0.3s; 
+            max-width: 900px; 
+            margin: 0 auto; 
+            box-sizing: border-box; 
+
+        }
+        
+        /* Bagian Filter */
+        .filter-section {
+padding: 10px 15px; /* Tambahkan padding-top dan bottom */
+    position: sticky; /* Membuat tombol filter sticky */
+    top: 0; /* Menempel di bagian paling atas viewport */
+    z-index: 1001; /* PENTING: Harus lebih tinggi dari header (jika header sticky) dan konten lainnya */
+    background-color: #0740aa; /* Menyesuaikan dengan warna header */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Tambahkan shadow agar terlihat terangkat */
+}
+
+        .filter-toggle-btn {
+            background-color: #f7f9fc00;
+            color: #02c2fc;
+            border: 1px solid #02cafc;
+            padding: 5px 10px; 
+            border-radius: 25px; 
+            cursor: pointer;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+        
+        .filter-toggle-btn:hover {
+            background-color: #0ac7f7;
+            color: #0740aa;
+        }
+
+        .filter-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 15px; 
+            background-color: #0740aa; 
+            border-radius: 23px;
+            padding: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            z-index: 500;
+            display: none; 
+            flex-direction: column;
+            gap: 8px; 
+            min-width: 180px;
+            margin-top: 10px;
+            animation: fadeIn 0.3s ease-out; 
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .filter-dropdown.show {
+            display: flex;
+        }
+
+        .filter-btn {
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px; 
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+            text-align: left;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 0.9em;
+            background-color: #3f51b5; /* Warna default tombol filter */
+        }
+        
+        /* Perubahan: Gaya Tombol Filter Aktif (Memanfaatkan Warna Status) */
+        .filter-btn.active.status-red {
+             background-color: #d32f2f !important;
+             box-shadow: 0 0 0 3px white, 0 0 0 5px #d32f2f;
+        }
+        .filter-btn.active.status-green {
+             background-color: #388e3c !important;
+             box-shadow: 0 0 0 3px white, 0 0 0 5px #388e3c;
+        }
+        .filter-btn.active.status-yellow {
+             background-color: #ffa000 !important;
+             box-shadow: 0 0 0 3px white, 0 0 0 5px #ffa000;
+        }
+        .filter-btn.active.status-blue {
+             background-color: #1976d2 !important;
+             box-shadow: 0 0 0 3px white, 0 0 0 5px #1976d2;
+        }
+
+        .filter-btn.active.status-purple {
+             background-color: purple !important;
+             box-shadow: 0 0 0 3px white, 0 0 0 5px purple;
+        }
+        
+        .filter-btn:not(.active):hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        
+        .filter-btn-reset {
+            background-color: rgba(213, 240, 140, 0) !important; 
+            margin-top: 10px;
+            border: #02c2fc, 1px;
+        }
+        
+        /* Kontainer Hasil Filter Kegiatan */
+        #filtered-results-container {
+            padding: 20px 15px; 
+            background-color: #f7f9fc;
+            min-height: auto;
+            border-radius: 20px;
+            display: grid; 
+            flex-direction: column;
+            gap: 20px;
+            max-width: 900px; 
+            margin: 20px  auto; 
+            box-sizing: border-box; 
+            grid-template-columns: 1fr;
+        }
+        
+        /* Perubahan: Header Kontainer Filter dengan Warna Latar Belakang */
+        .filtered-header {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: white; /* Teks putih agar kontras dengan latar belakang warna */
+            padding: 10px 15px;
+            margin: -20px -15px 0px -15px; /* Margin negatif agar memenuhi padding kontainer */
+            border-bottom: none;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+            text-align: center;
+            /* Logic Sticky Baru */
+    position: sticky; 
+    /* Hitung tinggi filter-section. Karena filter-section punya padding atas/bawah, 
+       sekitar 45px adalah perkiraan tinggi tombol + padding. */
+    top: 45px; 
+    z-index: 900;
+        }
+        
+        /* Kelas untuk mengubah warna header filter */
+        .header-red { background-color: red; }
+        .header-green { background-color: #388e3c; }
+        .header-yellow { background-color: #ffa000; color: #333; } /* Teks hitam untuk kontras di kuning */
+        .header-blue { background-color: #1976d2; }
+        .header-purple { background-color: purple; }
+        
+        
+        .filtered-header #currentFilterStatus {
+            font-style: italic;
+            font-weight: normal;
+        }
+        
+        /* Gaya Khusus untuk Kartu Kegiatan Hasil Filter */
+        .filtered-kegiatan-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer; 
+            margin-bottom: 15px;
+        }
+
+        /* Kelas untuk menyembunyikan/menampilkan konten utama */
+        .hide-main-content {
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        /* Gaya Card OPD dan Kegiatan */
+        .card {
+            background-color: white;
+            border-radius: 20px;
+            border: 1px solid rgb(8, 229, 245);
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 1px 20px rgb(1, 196, 255);
+            transition: box-shadow 0.3s ease;
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(200, 243, 8, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 5px 0;
+            cursor: pointer; 
+            justify-content: space-between; 
+        }
+        
+        .opd-info-group {
+            display: flex;
+            align-items: center;
+            flex: 1; 
+        }
+        
+        .opd-toggle-btn {
+            font-size: 30px; 
+            color: #0740aa;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+            padding: 5px;
+        }
+
+        .card.expanded .opd-toggle-btn {
+            transform: rotate(360deg);
+        }
+
+        .icon {
+            font-size: 48px;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .card-content {
+            flex: 1;
+        }
+
+        .card-title {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .card-info {
+            font-size: 0.95em;
+            color: #333;
+        }
+
+        /* Gaya Kontainer Kegiatan */
+        .kegiatan-container {
+            width: 100%;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            display: none;
+            transition: max-height 0.5s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .kegiatan-container.show {
+            display: flex;
+            max-height: 10000px;
+        }
+
+        /* Gaya Card Kegiatan */
+        .kegiatan-card, .filtered-kegiatan-card { 
+            background-color: #eef3fc;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: inset 0 5px 10px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        /* Tambahan: Pastikan detail kegiatan di hasil filter dapat disembunyikan */
+        .filtered-kegiatan-card .kegiatan-detail {
+            display: none;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+        .filtered-kegiatan-card.expanded .kegiatan-detail {
+            display: block;
+        }
+        .filtered-kegiatan-card:hover {
+             background-color: #eef1f5;
+        }
+        
+        /* Container untuk Title dan Icon di dalam Kegiatan Card */
+        .kegiatan-card-head {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Tombol Toggle (Ikon Panah) */
+        .toggle-btn {
+            font-size: 24px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: transform 0.3s ease; 
+            flex-shrink: 0; 
+            color: #555;
+        }
+
+        /* Rotasi ikon saat kegiatan terbuka */
+        .kegiatan-card.expanded .toggle-btn, .filtered-kegiatan-card.expanded .toggle-btn {
+            transform: rotate(180deg);
+            color: #0740aa; 
+        }
+
+        .kegiatan-title {
+            font-weight: bold;
+            font-size: 1em;
+            color: #0740aa;
+            margin-bottom: 5px; 
+        }
+
+        .kegiatan-info {
+            font-size: 1em;
+            color: #555;
+            margin-bottom: 0;
+            font-style: italic;
+        }
+
+        /* Gaya Detail Kegiatan */
+        .kegiatan-detail {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            display: none;
+        }
+
+        .kegiatan-detail.show {
+            display: block;
+        }
+
+        .detail-row {
+            margin-bottom: 8px;
+            font-size: 1em;
+            line-height: 1.3;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #0740aa;
+            display: block;
+            margin-bottom: 3px;
+        }
+        
+        /* Progress Bar */
+        .progress-bar-container {
+            height: 15px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.4s ease-in-out;
+            text-align: right;
+            line-height: 15px;
+            color: white;
+            font-size: 10px;
+            padding-right: 5px;
+            box-sizing: border-box;
+        }
+
+        .progress-keuangan {
+            background-color: #4CAF50; 
+        }
+
+        .progress-fisik {
+            background-color: #FF9800; 
+        }
+        
+        /* Tombol PDF */
+        .pdf-button {
+            display: inline-block;
+            background-color: #0740aa; 
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: background-color 0.2s;
+            text-align: center;
+            font-size: 0.9em; 
+        }
+
+        .pdf-button:hover {
+            background-color: red;
+        }
+        
+        /* Status Pelaksanaan Color */
+        .status-red { background-color: red !important; }
+        .status-green { background-color: #388e3c !important; } 
+        .status-yellow { background-color: #ff7300 !important; }
+        .status-blue { background-color: #1976d2 !important; }
+        .status-purple { background-color: purple !important; }
+
+        .status-text {
+            color: white; 
+            padding: 2px 8px; 
+            border-radius: 4px; 
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        /* Responsif untuk tampilan HP */
+        @media (max-width: 600px) {
+            /* header perlu disamakan padding-nya agar simetris dengan konten */
+            header {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+        }
+        
+        /* Aturan untuk memusatkan header/footer di layar besar (Di atas 900px) */
+        @media (min-width: 900px) {
+            header {
+                max-width: 900px;
+                margin: 0 auto;
+                padding-left: 20px; 
+                padding-right: 20px;
+            }
+            .filter-section {
+                max-width: 900px;
+                margin: 0 auto;
+                padding-left: 15px; 
+                padding-right: 15px;
+            }
+            .filter-dropdown {
+                left: 15px; 
+            }
+            footer {
+                max-width: 900px;
+                margin: 0 auto;
+                width: 100%; 
+            }
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            font-size: 11px;
+            width: 93vw;
+            position: relative;
+            margin-bottom: 20px;
+            line-height: 1.2;
+
+        }footer p{
+            margin: 2px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+
+        
+        <img src="400-binfraswil.jpg" alt="Logo" class="header-logo">
+        <span class="header-title">Progres Strong Point Mitra Bidang Infraswil Tahun 2025</span></header>
+
+    <div class="filter-section">
+        <button class="filter-toggle-btn" onclick="toggleFilterDropdown()">
+            <span class="material-icons">filter_list</span>
+            Filter Status
+        </button>
+        <div id="filterDropdown" class="filter-dropdown">
+            <button class="filter-btn status-red" onclick="filterByStatus('Belum Terlaksana', 'header-red', this)">Belum Terlaksana</button>
+            <button class="filter-btn status-yellow" onclick="filterByStatus('Berproses', 'header-yellow', this)">Berproses</button>
+            <button class="filter-btn status-green" onclick="filterByStatus('On Progres', 'header-green', this)">On Progres</button>
+            <button class="filter-btn status-blue" onclick="filterByStatus('Selesai', 'header-blue', this)">Selesai</button>
+            <button class="filter-btn status-purple" onclick="filterByStatus('Tidak Diperlukan', 'header-purple', this)">Tidak Diperlukan</button>
+            <button class="filter-btn filter-btn-reset" onclick="resetFilter(this)">Tampilkan Semua OPD</button>
+        </div>
+    </div>
+    <div id="filtered-results-container">
+        <div id="filteredHeader" class="filtered-header">Kegiatan dengan Status: <span id="currentFilterStatus">Semua OPD</span></div>
+        <div id="filtered-kegiatan-list">
+            </div>
+    </div>
+    <div class="container" id="opd-container">
+    </div>
+
+ <script>
+    
+    // --- 1. CONFIGURASI DATA API GOOGLE SHEET ---
+    
+    // VARIABEL INI AKAN MENAMPUNG DATA YANG DIAMBIL DARI GOOGLE SHEET
+    let progressData = []; 
+    
+    // !!! GANTI DENGAN URL APPS SCRIPT ANDA YANG BERHASIL !!!
+    const DATA_API_URL = 'https://script.google.com/macros/s/AKfycbzwMW5eZOnjuFQBOZQ6ksMLnTCeTnefZsJ-tohyoqwXzgQezvZuDIm_ByIqZqr88bGp/exec'; 
+    
+    
+    // Fungsi untuk memuat semua kartu OPD saat data berhasil diambil
+    function loadOPDCards() {
+        const opdContainer = document.getElementById('opd-container');
+        opdContainer.innerHTML = ''; 
+    
+        if (progressData.length > 0) {
+            progressData.forEach(opd => {
+                opdContainer.appendChild(createOPDCard(opd));
+            });
+        } else {
+            opdContainer.innerHTML = `<p style="text-align: center; color: white; padding: 30px; background-color: #0740aa;">
+                Data kosong atau sedang menunggu pembaruan.
+            </p>`;
+        }
+    
+        document.getElementById('filtered-results-container').style.display = 'none';
+    }
+    
+    // FUNGSI BARU UNTUK MENGAMBIL DATA
+    function fetchAndLoadData() {
+        fetch(DATA_API_URL) 
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (JSON.stringify(progressData) !== JSON.stringify(data)) {
+                    progressData = data; 
+                    loadOPDCards();      
+                    console.log('Data diperbarui dari Google Sheet.');
+                } else {
+                    console.log('Data tidak berubah, tidak ada rendering ulang.');
+                }
+            })
+            .catch(error => {
+                console.error('Error saat mengambil data dari Google Sheet:', error);
+                if (progressData.length === 0) {
+                    document.getElementById('opd-container').innerHTML = 
+                        `<p style="text-align: center; color: red; padding: 30px;">
+                            Error saat memuat data: ${error.message}. (Kemungkinan masalah koneksi atau Apps Script deployment).
+                        </p>`;
+                }
+            });
+    }
+    
+    // FUNGSI UTAMA (Menjalankan Polling)
+    document.addEventListener('DOMContentLoaded', () => {
+        
+        fetchAndLoadData();
+        
+        setInterval(fetchAndLoadData, 10000); 
+    });
+    
+    // --- 2. FUNGSI HELPER & LOGIC ---
+    
+    function formatRupiah(number) {
+        return "Rp " + number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+    
+    function getStatusClass(status) {
+        switch (status.toLowerCase().trim()) {
+            case 'belum terlaksana':
+                return 'status-red';
+            case 'on progres':
+                return 'status-green'; 
+            case 'berproses':
+                return 'status-yellow';
+            case 'selesai':
+            case 'sudah selesai': 
+                return 'status-blue';
+            case 'tidak diperlukan':
+                return 'status-purple';
+            default:
+                return 'black';
+        }
+    }
+    
+    function createFilteredKegiatanCard(kegiatan, opd, index) {
+        const realisasiKeuangan = parseFloat(kegiatan.realisasi_keuangan.replace(',', '.'));
+        const realisasiFisik = parseFloat(kegiatan.realisasi_fisik.replace(',', '.'));
+        const statusClass = getStatusClass(kegiatan.pelaksanaan);
+        
+        return `
+            <div class="filtered-kegiatan-card" onclick="toggleKegiatanDetail(this)">
+                <div class="kegiatan-card-head"> 
+                    <div>
+                        <div class="kegiatan-title">${index}. [${opd.opd}] - ${kegiatan.nama}</div>
+                        <div class="kegiatan-info">Anggaran: ${formatRupiah(kegiatan.pagu_kegiatan)}</div>
+                    </div>
+                    <span class="material-icons toggle-btn">expand_more</span> 
+                </div>
+                
+                <div class="kegiatan-detail">
+                    <div class="detail-row">
+                        <span class="detail-label">Bobot:</span> ${kegiatan.bobot}%
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Pelaksanaan:</span> <span class="status-text ${statusClass}">${kegiatan.pelaksanaan}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Realisasi Keuangan:</span> ${realisasiKeuangan.toFixed(2).replace('.', ',')}%
+                        <div class="progress-bar-container">
+                            <div class="progress-bar progress-keuangan" style="width: ${realisasiKeuangan}%">${realisasiKeuangan.toFixed(0)}%</div>
+                        </div>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Realisasi Fisik:</span> ${realisasiFisik.toFixed(2).replace('.', ',')}%
+                        <div class="progress-bar-container">
+                            <div class="progress-bar progress-fisik" style="width: ${realisasiFisik}%">${realisasiFisik.toFixed(0)}%</div>
+                        </div>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Keterangan:</span> ${kegiatan.keterangan}
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rencana Aksi:</span> ${kegiatan.rencana_aksi}
+                    </div>
+                    <a href="${kegiatan.link_pdf}" target="_blank" class="pdf-button">LIHAT LAPORAN PDF</a>
+                </div>
+            </div>
+        `;
+    }
+    
+    
+    // --- FUNGSI FILTER UTAMA ---
+    
+    function toggleFilterDropdown() {
+        document.getElementById('filterDropdown').classList.toggle('show');
+    }
+    
+    function filterByStatus(statusFilter, headerClass, clickedButton) {
+        const resultsContainer = document.getElementById('filtered-kegiatan-list');
+        const mainContainer = document.getElementById('opd-container');
+        const filteredSection = document.getElementById('filtered-results-container');
+        const filteredHeader = document.getElementById('filteredHeader');
+        
+        let filteredHTML = '';
+        let count = 0;
+    
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+    
+        clickedButton.classList.add('active');
+        filteredHeader.className = 'filtered-header ' + headerClass; 
+        
+        toggleFilterDropdown(); 
+        
+        progressData.forEach(opd => {
+            opd.kegiatan.forEach((keg, index) => {
+                if (keg.pelaksanaan.trim().toLowerCase() === statusFilter.trim().toLowerCase()) {
+                    count++;
+                    filteredHTML += createFilteredKegiatanCard(keg, opd, count); 
+                }
+            });
+        });
+    
+        closeAllOPDCards();
+        mainContainer.classList.add('hide-main-content');
+        filteredSection.style.display = 'flex';
+        
+        document.getElementById('currentFilterStatus').textContent = statusFilter + ` (${count} Kegiatan)`;
+    
+        if (count > 0) {
+            resultsContainer.innerHTML = filteredHTML;
+            // Scroll ke posisi atas agar header sticky terlihat
+            window.scrollTo({
+                top: 10, 
+                behavior: 'smooth'
+            });
+        } else {
+            resultsContainer.innerHTML = `<p style="text-align: center; color: #666; padding: 30px; background-color: white; border-radius: 10px;">Tidak ditemukan kegiatan dengan status "${statusFilter}"</p>`;
+        }
+    }
+    
+    /**
+     * FUNGSI MODIFIKASI: Reset Filter (Menampilkan Kembali Kartu OPD)
+     * closeAllOPDCards() dikembalikan
+     */
+    function resetFilter(clickedButton) {
+        const mainContainer = document.getElementById('opd-container');
+        const filteredSection = document.getElementById('filtered-results-container');
+        const filteredHeader = document.getElementById('filteredHeader');
+        
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        filteredHeader.className = 'filtered-header'; 
+        document.getElementById('currentFilterStatus').textContent = "Semua OPD";
+    
+        // 1. PASTIKAN SEMUA KARTU OPD TERTUTUP! (Perbaikan Bug)
+        closeAllOPDCards(); 
+    
+        // Tampilkan kembali konten OPD utama
+        filteredSection.style.display = 'none';
+        setTimeout(() => {
+            mainContainer.classList.remove('hide-main-content');
+            // Scroll ke posisi atas agar header sticky terlihat
+            window.scrollTo({
+                top: 10, 
+                behavior: 'smooth'
+            });
+        }, 300); 
+        
+        toggleFilterDropdown();
+    }
+
+    /**
+     * FUNGSI PENTING: Menutup Semua Kartu OPD dan Detail Kegiatan
+     */
+    function closeAllOPDCards() {
+        // Tutup semua container OPD utama
+        document.querySelectorAll('.card').forEach(card => {
+            const cont = card.querySelector('.kegiatan-container');
+            const btn = card.querySelector('.opd-toggle-btn');
+
+            card.classList.remove('expanded');
+            if (cont) cont.classList.remove('show');
+            if (btn) btn.textContent = 'expand_more';
+        });
+
+        // Tutup semua detail kegiatan (baik di OPD maupun di filter)
+        document.querySelectorAll('.kegiatan-card, .filtered-kegiatan-card').forEach(card => {
+            const det = card.querySelector('.kegiatan-detail');
+            const activityToggle = card.querySelector('.toggle-btn');
+            
+            card.classList.remove('expanded');
+            if (det) det.style.display = 'none';
+            if (activityToggle) activityToggle.textContent = 'expand_more';
+        });
+    }
+    
+    // --- FUNGSI CARD (Sisanya) ---
+    
+    function createKegiatanCard(kegiatan, index) {
+        const realisasiKeuangan = parseFloat(kegiatan.realisasi_keuangan.replace(',', '.'));
+        const realisasiFisik = parseFloat(kegiatan.realisasi_fisik.replace(',', '.'));
+        const statusClass = getStatusClass(kegiatan.pelaksanaan);
+
+        return `
+            <div class="kegiatan-card" onclick="toggleKegiatanDetail(this)">
+                <div class="kegiatan-card-head"> 
+                    <div>
+                        <div class="kegiatan-title">${index + 1}. ${kegiatan.nama}</div>
+                        <div class="kegiatan-info">Anggaran: ${formatRupiah(kegiatan.pagu_kegiatan)}</div>
+                    </div>
+                    <span class="material-icons toggle-btn">expand_more</span> 
+                </div>
+                
+                <div class="kegiatan-detail">
+                    <div class="detail-row">
+                        <span class="detail-label">Bobot:</span> ${kegiatan.bobot}%
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Pelaksanaan:</span> <span class="status-text ${statusClass}">${kegiatan.pelaksanaan}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Realisasi Keuangan:</span> ${realisasiKeuangan.toFixed(2).replace('.', ',')}%
+                        <div class="progress-bar-container">
+                            <div class="progress-bar progress-keuangan" style="width: ${realisasiKeuangan}%">${realisasiKeuangan.toFixed(0)}%</div>
+                        </div>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Realisasi Fisik:</span> ${realisasiFisik.toFixed(2).replace('.', ',')}%
+                        <div class="progress-bar-container">
+                            <div class="progress-bar progress-fisik" style="width: ${realisasiFisik}%">${realisasiFisik.toFixed(0)}%</div>
+                        </div>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Keterangan:</span> ${kegiatan.keterangan}
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rencana Aksi:</span> ${kegiatan.rencana_aksi}
+                    </div>
+                    <a href="${kegiatan.link_pdf}" target="_blank" class="pdf-button">LIHAT LAPORAN PDF</a>
+                </div>
+            </div>
+        `;
+    }
+
+    function createOPDCard(opd) {
+        const totalKegiatan = opd.kegiatan.length;
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.setAttribute('data-opd', opd.opd);
+
+        card.innerHTML = `
+            <div class="card-header">
+                <div class="opd-info-group">
+                    <div class="icon">${opd.icon}</div>
+                    <div class="card-content">
+                        <div class="card-title">${opd.opd}</div>
+                        <div class="card-info"><strong>Total Anggaran : </strong> ${formatRupiah(opd.pagu_opd)}</div>
+                        <div class="card-info"><strong>Jumlah Kegiatan : </strong> ${totalKegiatan}</div>
+                    </div>
+                </div>
+                <span class="material-icons opd-toggle-btn">expand_more</span>
+            </div>
+            <div class="kegiatan-container">
+            </div>
+        `;
+        
+        const kegiatanContainer = card.querySelector('.kegiatan-container');
+        opd.kegiatan.forEach((keg, index) => {
+            kegiatanContainer.innerHTML += createKegiatanCard(keg, index);
+        });
+
+        card.querySelector('.card-header').addEventListener('click', (event) => {
+            if (!event.target.closest('.pdf-button') && !event.target.closest('.kegiatan-card-head')) {
+                toggleKegiatanContainer(card);
+            }
+        });
+
+        return card;
+    }
+
+    function toggleKegiatanDetail(kegiatanCard) {
+        const detail = kegiatanCard.querySelector('.kegiatan-detail');
+        const toggleBtn = kegiatanCard.querySelector('.toggle-btn');
+        
+        kegiatanCard.parentElement.querySelectorAll('.kegiatan-card, .filtered-kegiatan-card').forEach(card => {
+            const det = card.querySelector('.kegiatan-detail');
+            const otherToggle = card.querySelector('.toggle-btn');
+            
+            if (det !== detail && card.classList.contains('expanded')) {
+                card.classList.remove('expanded'); 
+                if (det) det.style.display = 'none';
+                if (otherToggle) otherToggle.textContent = 'expand_more';
+            }
+        });
+
+        kegiatanCard.classList.toggle('expanded'); 
+        if (kegiatanCard.classList.contains('expanded')) {
+            detail.style.display = 'block';
+            toggleBtn.textContent = 'expand_less';
+        } else {
+            detail.style.display = 'none';
+            toggleBtn.textContent = 'expand_more';
+        }
+    }
+
+    function toggleKegiatanContainer(opdCard) {
+        const container = opdCard.querySelector('.kegiatan-container');
+        const opdToggleBtn = opdCard.querySelector('.opd-toggle-btn');
+        
+        document.querySelectorAll('.card').forEach(card => {
+            const cont = card.querySelector('.kegiatan-container');
+            const btn = card.querySelector('.opd-toggle-btn');
+            if (card !== opdCard && card.classList.contains('expanded')) {
+                card.querySelectorAll('.kegiatan-card').forEach(kegCard => {
+                    kegCard.classList.remove('expanded');
+                    kegCard.querySelector('.kegiatan-detail').style.display = 'none';
+                    kegCard.querySelector('.toggle-btn').textContent = 'expand_more';
+                });
+
+                cont.classList.remove('show');
+                card.classList.remove('expanded');
+                if(btn) btn.textContent = 'expand_more';
+            }
+        });
+        
+        container.classList.toggle('show');
+        opdCard.classList.toggle('expanded'); 
+        
+        if (opdCard.classList.contains('expanded')) {
+            opdToggleBtn.textContent = 'expand_less';
+        } else {
+            opdToggleBtn.textContent = 'expand_more';
+        }
+
+        if (!opdCard.classList.contains('expanded')) {
+             opdCard.querySelectorAll('.kegiatan-card').forEach(kegCard => {
+                kegCard.classList.remove('expanded');
+                kegCard.querySelector('.kegiatan-detail').style.display = 'none';
+                kegCard.querySelector('.toggle-btn').textContent = 'expand_more';
+            });
+        }
+    }
+
+    // --- 3. FITUR SUARA (Dipertahankan) ---
+    
+    const tapSound = new Audio("tap_sound.mp3"); 
+    tapSound.preload = "auto";
+    tapSound.volume = 0.3; 
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchMoved = false;
+    let lastPlayTime = 0;
+
+    document.addEventListener("touchstart", (e) => {
+        const t = e.touches[0];
+        touchStartX = t.clientX;
+        touchStartY = t.clientY;
+        touchMoved = false;
+    });
+
+    document.addEventListener("touchmove", (e) => {
+        const t = e.touches[0];
+        const dx = Math.abs(t.clientX - touchStartX);
+        const dy = Math.abs(t.clientY - touchStartY);
+        if (dx > 10 || dy > 10) touchMoved = true; 
+    });
+
+    document.addEventListener("touchend", (e) => {
+        if (!touchMoved) playTapSound();
+    });
+
+    document.addEventListener("click", (e) => {
+        if (e.pointerType !== "touch") playTapSound();
+    });
+
+    function playTapSound() {
+        const now = Date.now();
+        if (now - lastPlayTime < 200) return; 
+        lastPlayTime = now;
+        tapSound.currentTime = 0;
+        tapSound.play().catch(() => {});
+    }
+    
+</script>
+    
+    <footer id="footer">
+     Strong Point 2025. All rights reserved <p>(Best view via Smartphone/Tablet).</p>
+    </footer>
+</body>
+</html>
