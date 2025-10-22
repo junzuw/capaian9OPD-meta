@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Progres Strong Point 2025</title>
+    <title>Strong Point Progres</title>
 
   <!-- Meta Tags untuk Open Graph -->
   <meta property="og:title" content="Progres Strong Point 2025">
@@ -12,9 +12,9 @@
   <meta property="og:url" content="binfraswilzulsel.my.id/" />
   <meta property="og:type" content="website" />
 
-
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
+
         /* Gaya Dasar */
         body {
             margin: 0;
@@ -159,8 +159,9 @@
         }
         
         .filter-btn-reset {
-            background-color: black !important; 
-            margin-top: 5px;
+            background-color: rgba(213, 240, 140, 0) !important; 
+            margin-top: 10px;
+            border: #02c2fc, 1px;
         }
         
         /* Kontainer Hasil Filter Kegiatan */
@@ -535,904 +536,429 @@
     </div>
 
     <script>
-          
-       // --- DATA JAVASCRIPT DARI TABEL ANDA (TIDAK BERUBAH) ---
-        const progressData = [
-            {
-                opd: "BM & BK",
-                pagu_opd: "541.466.172.300",
-                icon: "🏗️",
-                kegiatan: [
-                    {
-                        nama: "Rekonstruksi Jalan",
-                        pagu_kegiatan: "393.233.458.930",
-                        bobot: "72,62",
-                        pelaksanaan: "Belum Terlaksana",
-                        realisasi_keuangan: "0,00",
-                        realisasi_fisik: "19,00",
-                        keterangan: "Keterlambatan proses, (1)Untuk paket MK, seluruh paket telah terdapat pemenang, (2)Untuk paket fisik masih tender.",
-                        rencana_aksi: "Melanjutkan proses tender.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "red",
-                    },
-                    {
-                        nama: "Pembangunan Jalan",
-                        pagu_kegiatan: "54.958.796.220",
-                        bobot: "10,15",
-                        pelaksanaan: "On Progres",
-                        realisasi_keuangan: "72,62",
-                        realisasi_fisik: "49,02",
-                        keterangan: "On track, 3 paket telah terkontrak.",
-                        rencana_aksi: "Pelaksanaan Fisik berjalan.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },                  
-                    {
-                        nama: "Pembangunan Jembatan",
-                        pagu_kegiatan: "24.148.800.000",
-                        bobot: "4,46",
-                        pelaksanaan: "On Progres",
-                        realisasi_keuangan: "7,44",
-                        realisasi_fisik: "49,02",
-                        keterangan: "On track, 3 paket telah terkontrak.",
-                        rencana_aksi: "Pelaksanaan Fisik berjalan.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-                    {
-                        nama: "Perencanaan Jalan & Jembatan",
-                        pagu_kegiatan: "22.401.860.000",
-                        bobot: "4,14",
-                        pelaksanaan: "On Progres",
-                        realisasi_keuangan: "7,44",
-                        realisasi_fisik: "49,02",
-                        keterangan: "On track, 3 paket telah terkontrak.",
-                        rencana_aksi: "Pelaksanaan Fisik berjalan.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-                    {
-                        nama: "Pemeliharaan Rutin Jalan",
-                        pagu_kegiatan: "17.806.121.350",
-                        bobot: "3,29",
-                        pelaksanaan: "On Progres",
-                        realisasi_keuangan: "7,44",
-                        realisasi_fisik: "49,02",
-                        keterangan: "On track, 3 paket telah terkontrak.",
-                        rencana_aksi: "Pelaksanaan Fisik berjalan.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-                    {
-                        nama: "Pengawasan Penyelenggaraan Jalan & Jembatan",
-                        pagu_kegiatan: "14.479.000.000",
-                        bobot: "2,67",
-                        pelaksanaan: "On Progres",
-                        realisasi_keuangan: "7,44",
-                        realisasi_fisik: "49,02",
-                        keterangan: "On track, 3 paket telah terkontrak.",
-                        rencana_aksi: "Pelaksanaan Fisik berjalan.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-                    {
-                        nama: "Penyediaan Bahan/Material",                     
-                        pagu_kegiatan: "10.092.039.000",
-                        bobot: "1,86",
-                        pelaksanaan: "On Progres",
-                        realisasi_keuangan: "7,44",
-                        realisasi_fisik: "49,02",
-                        keterangan: "On track, 3 paket telah terkontrak.",
-                        rencana_aksi: "Pelaksanaan Fisik berjalan.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-                    {
-                        nama: "Dbh Sawit",                    
-                        pagu_kegiatan: "2.940.776.800",
-                        bobot: "0,54",
-                        pelaksanaan: "On Progres",
-                        realisasi_keuangan: "7,44",
-                        realisasi_fisik: "49,02",
-                        keterangan: "On track, 3 paket telah terkontrak.",
-                        rencana_aksi: "Pelaksanaan Fisik berjalan.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-                    {
-                        nama: "Rehablitiasi Jembatan",                    
-                        pagu_kegiatan: "1.405.320.000",
-                        bobot: "0,26",
-                        pelaksanaan: "On Progres",
-                        realisasi_keuangan: "7,44",
-                        realisasi_fisik: "49,02",
-                        keterangan: "On track, 3 paket telah terkontrak.",
-                        rencana_aksi: "Pelaksanaan Fisik berjalan.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-     
-                ],
-            },
-            {
-                opd: "SDA & CKTR",
-                pagu_opd: "277.884.623.520",
-                icon: "💧",
-                kegiatan: [
-                    {
-                        nama: "Rehabilitasi Daerah Irigasi (D.I)",
-                        pagu_kegiatan: "82.304.109.180",
-                        bobot: "29,62",
-                        pelaksanaan: "Belum Terlaksana",
-                        realisasi_keuangan: "17,11",
-                        realisasi_fisik: "33,93",
-                        keterangan: "Proses Reviu/ PBI untuk 4 Paket pekerjaan Desain and Build.",
-                        rencana_aksi: "Proses Reviu/ PBI untuk 4 Paket pekerjaan Desain and Build.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "red",
-                    },
-                    {
-                        nama: "Pembangunan Spam",
-                        pagu_kegiatan: "79.504.000.000",
-                        bobot: "28,61",
-                        pelaksanaan: "On Progres",
-                        realisasi_keuangan: "0,00",
-                        realisasi_fisik: "32,50",
-                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
-                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-                    {
-                        nama: "Normalisasi Sungai",
-                        pagu_kegiatan: "28.650.612.000",
-                        bobot: "10,31",
-                        pelaksanaan: "Belum Terlaksana",
-                        realisasi_keuangan: "0,00",
-                        realisasi_fisik: "32,50",
-                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
-                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-                    {
-                        nama: "Belanja Modal Bangunan Pengaman Sungai/Pantai Dan Penanggulangan Bencana Alam Lainnya",
-                        pagu_kegiatan: "18.956.407.240",
-                        bobot: "6,82",
-                        pelaksanaan: "On Progres",
-                        realisasi_keuangan: "0,00",
-                        realisasi_fisik: "32,50",
-                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
-                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-                    {
-                        nama: "Perencanaan Embung",
-                        pagu_kegiatan: "14.400.000.000",
-                        bobot: "5,18%",
-                        pelaksanaan: "On Progres",
-                        realisasi_keuangan: "0,00",
-                        realisasi_fisik: "32,50",
-                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
-                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-                    {
-                        nama: "Pembangunan Rth Taman Andalan Kawasan Center Point Of Indonesia Di Kota Makassar Tahap Iii (Lanjutan)",
-                        pagu_kegiatan: "12.726.191.400",
-                        bobot: "4,58",
-                        pelaksanaan: "Belum Terlaksana",
-                        realisasi_keuangan: "0,00",
-                        realisasi_fisik: "32,50",
-                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
-                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-                    {
-                        nama: "Penyediaan Jasa Dan Pemeliharaan Sarana Dan Prasarana Yang Terintegrasi Di Kawasan CPI Kota Makassar",
-                        pagu_kegiatan: "9.237.882.000",
-                        bobot: "3,32",
-                        pelaksanaan: "Belum Terlaksana",
-                        realisasi_keuangan: "0,00",
-                        realisasi_fisik: "32,50",
-                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
-                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-                    {
-                        nama: "Pembangunan Rest Area Jeneponto Tahap Iv (Lanjutan)",
-                        pagu_kegiatan: "5.881.430.000",
-                        bobot: "2,12%",
-                        pelaksanaan: "On Progres",
-                        realisasi_keuangan: "0,00",
-                        realisasi_fisik: "32,50",
-                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
-                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-                    {
-                        nama: "Rehabilitasi Masjid Kubah 99",
-                        pagu_kegiatan: "4.801.420.000",
-                        bobot: "1,73",
-                        pelaksanaan: "On Progres",
-                        realisasi_keuangan: "0,00",
-                        realisasi_fisik: "32,50",
-                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
-                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-                    {
-                        nama: "Lanjutan Pembangunan Taman Al-Markaz Di Kota Makassar",
-                        pagu_kegiatan: "3.917.308.200",
-                        bobot: "1,41",
-                        pelaksanaan: "On Progres",
-                        realisasi_keuangan: "0,00",
-                        realisasi_fisik: "32,50",
-                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
-                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-                    {
-                        nama: "Jasa Konsultansi Perencanaan (Cipta Karya)",
-                        pagu_kegiatan: "3.695.706.000",
-                        bobot: "1,33",
-                        pelaksanaan: "On Progres",
-                        realisasi_keuangan: "0,00",
-                        realisasi_fisik: "32,50",
-                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
-                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-                    {
-                        nama: "Rehabilitasi Gedung Wisma Negara Di Kota Makassar",
-                        pagu_kegiatan: "2.832.024.000",
-                        bobot: "1,02",
-                        pelaksanaan: "On Progres",
-                        realisasi_keuangan: "0,00",
-                        realisasi_fisik: "32,50",
-                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
-                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-                    {
-                        nama: "Jasa Konsultansi Pengawasan Rehabilitasi Daerah Irigasi",
-                        pagu_kegiatan: "2.376.681.000",
-                        bobot: "0,86",
-                        pelaksanaan: "Belum Terlaksana",
-                        realisasi_keuangan: "0,00",
-                        realisasi_fisik: "32,50",
-                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
-                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-                    {
-                        nama: "Jasa Konsultansi Perencanaan (SDA)",
-                        pagu_kegiatan: "2.001.361.000",
-                        bobot: "0,72",
-                        pelaksanaan: "On Progres",
-                        realisasi_keuangan: "0,00",
-                        realisasi_fisik: "32,50",
-                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
-                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-                    {
-                        nama: "Rehabilitasi Di. Cilellang Kab. Wajo (Lanjutan Dak 2024)",
-                        pagu_kegiatan: "1.584.684.000",
-                        bobot: "0,57",
-                        pelaksanaan: "On Progres",
-                        realisasi_keuangan: "0,00",
-                        realisasi_fisik: "32,50",
-                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
-                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-                    {
-                        nama: "Jasa Konsultansi Supervisi (Cipta Karya)",
-                        pagu_kegiatan: "1.541.595.000",
-                        bobot: "0,55",
-                        pelaksanaan: "On Progres",
-                        realisasi_keuangan: "0,00",
-                        realisasi_fisik: "32,50",
-                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
-                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-                    {
-                        nama: "Rehabilitasi Ruang Klinik Pada Dinas Perhubungan",
-                        pagu_kegiatan: "1.173.906.500",
-                        bobot: "0,42",
-                        pelaksanaan: "On Progres",
-                        realisasi_keuangan: "0,00",
-                        realisasi_fisik: "32,50",
-                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
-                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-                    {
-                        nama: "Lanjutan Rehabiiitasi Gedung Kantor PerwakilanDi Bali",
-                        pagu_kegiatan: "1.163.200.000",
-                        bobot: "0,42",
-                        pelaksanaan: "On Progres",
-                        realisasi_keuangan: "0,00",
-                        realisasi_fisik: "32,50",
-                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
-                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-                     {
-                        nama: "Jasa Konsultansi Pengawasan Normalisasi Sungai",
-                        pagu_kegiatan: "1.136.106.000",
-                        bobot: "0,41",
-                        pelaksanaan: "Tidak Diperlukan",
-                        realisasi_keuangan: "0,00",
-                        realisasi_fisik: "32,50",
-                        keterangan: "Tahap Pelaksanaan Pekerjaan Pemasangan Pipa dan Accesories.",
-                        rencana_aksi: "Lanjutan Pemasangan Pipa STO selanjutnya.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-
-
-
-
-                ],
-            },
-            {
-                opd: "PERKIMTAN",
-                pagu_opd: "18.050.781.300",
-                icon: "🏡",
-                kegiatan: [
-                    {
-                        nama: "Program Pengadaan Tanah untuk Kepentingan Umum (Pembebasan Lahan Sekolah Menengah Atas di Kabupaten Bone)",
-                        pagu_kegiatan: "14.850.781.300",
-                        bobot: "57,52",
-                        pelaksanaan: "Belum Terlaksana",
-                        realisasi_keuangan: "0,00",
-                        realisasi_fisik: "43,00",
-                        keterangan: "Konsultan mencetak dokumen perencanaan untuk diajukan kepada Kadis Perkimtan untuk dilakukan penetapan DPPT.",
-                        rencana_aksi: "Konsultan mencetak/print DPPT untuk diajukan kepada Kadis Perkimtan untuk dilakukan penetapan DPPT.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "red",
-                    },
-                    {
-                        nama: "Pembangunan Dan Pengadaan Air Siap Minum Dengan Teknologi SWRO Kab. Kepulauan Selayar",
-                        pagu_kegiatan: "3.200.000.000",
-                        bobot: "12,39",
-                        pelaksanaan: "Berproses",
-                        realisasi_keuangan: "0,00",
-                        realisasi_fisik: "0,43",
-                        keterangan: "1. Pengadaan beberapa material ARSINUM yang indent oleh penyedia 2. Persiapan penyediaan material bangunan pelindung di Makassar dan Selayar.",
-                        rencana_aksi: "Persiapan pengangkutan material bangunan pelindung ARSINUM di Makassar dan Selayar.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "yellow",
-                    },
-                    {
-                        nama: "Pembangunan Dan Pengadaan Air Siap Minum Dengan Teknologi SWRO Kab. Soppeng",
-                        pagu_kegiatan: "3.200.000.000",
-                        bobot: "12,39",
-                        pelaksanaan: "Selesai",
-                        realisasi_keuangan: "89,00",
-                        realisasi_fisik: "99,00",
-                        keterangan: "1. Pengadaan beberapa material ARSINUM yang indent oleh penyedia 2. Persiapan penyediaan material bangunan pelindung di Makassar dan Selayar.",
-                        rencana_aksi: "Persiapan pengangkutan material bangunan pelindung ARSINUM di Makassar dan Selayar.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "blue",
-                    },
-                ],
-            },
-            {
-                opd: "DISHUB",
-                pagu_opd: "22.724.254.644", 
-                icon: "🚍",
-                kegiatan: [
-                    {
-                        nama: "Angkutan Perkotaan",
-                        pagu_kegiatan: "17.996.843.344",
-                        bobot: "74,29%",
-                        pelaksanaan: "Berproses",
-                        realisasi_keuangan: "92,00",
-                        realisasi_fisik: "10,65",
-                        keterangan: "Pengoperasian Trans Sulsel di 2 Koridor", 
-                        rencana_aksi: "Operasional Trans Sulsel & Monitoring Pelaksnaaan",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "yellow",
-                    },
-                    {
-                        nama: "Keselamatan Jalan ( Rambu ,Pju)",
-                        pagu_kegiatan: "1.530.011.300",
-                        bobot: "6,32",
-                        pelaksanaan: "Berproses",
-                        realisasi_keuangan: "55,00",
-                        realisasi_fisik: "0,00",
-                        keterangan: "Telah dilaksanakan Launching / Uiji coba Pendaratan Pesawat SEA PLANE sebagai bagian dari kegiatan Kelayakan Operasuonal di CPI.",
-                        rencana_aksi: "Rencana minggu ini pju memasuki tahap pekerjaan pondasi angkur.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "yellow",
-                    },
-                    {
-                        nama: "Perizinan Bandara Perairan (Water Aerodrome) Andalan CPI.",
-                        pagu_kegiatan: "1.500.780.000",
-                        bobot: "6,20",
-                        pelaksanaan: "Berproses",
-                        realisasi_keuangan: "60,00",
-                        realisasi_fisik: "0,00",
-                        keterangan: "Penyusunan Laporan Akhir dan Perijinan.",
-                        rencana_aksi: "Penyusunan Laporan ( 75 % )",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "yellow",
-                    },                          
-                ],
-            },
-            {
-                opd: "KOMINFO",
-                pagu_opd: "11.150.397.480",
-                icon: "📡",
-                kegiatan: [
-                    {
-                        nama: "Firewall Untuk Pengamanan Jaringan Dan Informasi",
-                        pagu_kegiatan: "3.971.353.920",
-                        bobot: "35,62",
-                        pelaksanaan: "Berproses",
-                        realisasi_keuangan: "87,00",
-                        realisasi_fisik: "00,00",
-                        keterangan: "Sudah berkontrak",
-                        rencana_aksi: "Firewall sudah terpasang dan terimplementasi saat ini masih proses konfigurasi dengan data center dan proses administrasi disiapkan.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "yellow",
-                    },
-                    {
-                        nama: "Bandwith",
-                        pagu_kegiatan: "2.629.997.000",
-                        bobot: "123,59",
-                        pelaksanaan: "Berproses",
-                        realisasi_keuangan: "0,00",
-                        realisasi_fisik: "0,43",
-                        keterangan: "Telah dilakukan distribusi jaringan internet bandwidth ke seluruh perangkat daerah.",
-                        rencana_aksi: "Permintaan SPD  untuk pembayaran bulan 7 8 dan 9.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "yellow",
-                    },                  
-                ],
-            },
-            {
-                opd: "DISPORA",
-                pagu_opd: "3.500.000.000",
-                icon: "⚽",
-                kegiatan: [
-                    {
-                        nama: "Pemasangan Rumput Sintetis Lapangan Bola",
-                        pagu_kegiatan: "3.500.000.000",
-                        bobot: "39,68",
-                        pelaksanaan: "On Progres",
-                        realisasi_keuangan: "18,00",
-                        realisasi_fisik: "8,00",
-                        keterangan: "Proses pengadaan fisik.",
-                        rencana_aksi: "Proses Penyedia Fisik Konstruksi.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-                    {
-                        nama: "Anti Mager",
-                        pagu_kegiatan: "900.000.000",
-                        bobot: "10,20",
-                        pelaksanaan: "On Progres",
-                        realisasi_keuangan: "81,00",
-                        realisasi_fisik: "63,00",
-                        keterangan: "Paket 1 Anti Mager Luwu Timur  Telah terlaksana tanggal 18 Mei dan Paket 2 Anti Mager Makassar tanggal 27 Juni. Paket 3 Anti Mager Luwu tanggal 3 Juli dan paket 4 Anti mager Palopo telah dilaksanakan tanggal 5 Juli 2025, paket 5 Anti mager bone  telah dilaksanakan  pada tanggal 14 september dan Paket Anti Mager  selanjutnya menunggu tempat pelaksanaan.",
-                        rencana_aksi: "Menyusun administrasi pencairan paket Anti Mager Bone.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "yellow",
-                    },                  
-                ],
-            },
-            {
-                opd: "BAPPELITBANGDA",
-                pagu_opd: "2.400.000.000",
-                icon: "📈",
-                kegiatan: [
-                    {
-                        nama: "Honorarium Tim Ahli Gubernur)",
-                        pagu_kegiatan: "2.400.000.000",
-                        bobot: "47,52",
-                        pelaksanaan: "On Progres",
-                        realisasi_keuangan: "0,00",
-                        realisasi_fisik: "10,00",
-                        keterangan: "Pembuatan SK Hak Keuangan sesuai Nilai hasil Appraisal telah selesai  dan Penyesuaian nama-nama tambahan untuk SK Tim Ahli Kegiatan Perangkat daerah.",
-                        rencana_aksi: "Melakukan koordinasi penyesuaian nama-nama tambahan untuk SK Tim Ahli kegiatan perangkat daerah sesuai dengan arahan pimpinan.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },
-                    {
-                        nama: "Kajian Mitigasi Bencana",
-                        pagu_kegiatan: "950.000.000",
-                        bobot: "18,81",
-                        pelaksanaan: "On Progres",
-                        realisasi_keuangan: "30,00",
-                        realisasi_fisik: "0,00",
-                        keterangan: "Pelaksanaan TPM 1 telah dilaksanakan selanjutnya proses realisasi termin pertama (1).",
-                        rencana_aksi: "Peneliti telah melakukan pengambilan data di lapangan (data sekunder) - Penyusunan bahan untuk pemaparan output penelitian kepada pimpinan - Penyiapan administrasi pertanggungjawab termin pertama (1). - Melaksanakan rapat lanjutan bersama tim peneliti berdasarkan hasil penelitian awal yang telah dilakukan.",
-                        link_pdf: "https://drive.google.com/file/d/14uOS33tLfQOCFWQ2ajiatYuWzMwnqCyN/view?usp=sharing",
-                        status_color: "green",
-                    },                  
-                ],
-            },
-            
-        ];
         
-        // Helper untuk format mata uang
-        function formatRupiah(number) {
-            return "Rp " + number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-        }
-        
-        // Helper untuk mendapatkan kelas status 
-        function getStatusClass(status) {
-            switch (status.toLowerCase().trim()) {
-                case 'belum terlaksana':
-                    return 'status-red';
-                case 'on progres':
-                    return 'status-green'; 
-                case 'berproses':
-                    return 'status-yellow';
-                case 'selesai':
-                    return 'status-blue';
-                case 'tidak diperlukan':
-                    return 'status-purple';
-                default:
-                    return 'black';
+    // --- 1. CONFIGURASI DATA API GOOGLE SHEET ---
+    
+// --- 1. CONFIGURASI DATA API GOOGLE SHEET ---
+
+// VARIABEL INI AKAN MENAMPUNG DATA YANG DIAMBIL DARI GOOGLE SHEET
+let progressData = []; 
+
+// URL WEB APP ANDA DARI GOOGLE APPS SCRIPT
+const DATA_API_URL = 'https://script.google.com/macros/s/AKfycbzwMW5eZOnjuFQBOZQ6ksMLnTCeTnefZsJ-tohyoqwXzgQezvZuDIm_ByIqZqr88bGp/exec'; 
+
+
+// Fungsi untuk memuat semua kartu OPD saat data berhasil diambil
+function loadOPDCards() {
+    const opdContainer = document.getElementById('opd-container');
+    opdContainer.innerHTML = ''; 
+
+    if (progressData.length > 0) {
+        progressData.forEach(opd => {
+            // Pastikan fungsi createOPDCard ada
+            opdContainer.appendChild(createOPDCard(opd));
+        });
+    } else {
+        opdContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 30px;">Gagal memuat data atau data kosong.</p>';
+    }
+
+    document.getElementById('filtered-results-container').style.display = 'none';
+}
+
+// FUNGSI BARU UNTUK MENGAMBIL DATA
+function fetchAndLoadData() {
+    // Mengambil data dari Google Sheets API
+    fetch(DATA_API_URL) 
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Gagal memuat data dari API. Status: ${response.status}`);
             }
-        }
-        
-        // Helper untuk membuat HTML Card Kegiatan yang disaring (Mirip Card Kegiatan Biasa)
-        function createFilteredKegiatanCard(kegiatan, opd, index) {
-            const realisasiKeuangan = parseFloat(kegiatan.realisasi_keuangan.replace(',', '.'));
-            const realisasiFisik = parseFloat(kegiatan.realisasi_fisik.replace(',', '.'));
-            const statusClass = getStatusClass(kegiatan.pelaksanaan);
-            
-            return `
-                <div class="filtered-kegiatan-card" onclick="toggleKegiatanDetail(this)">
-                    <div class="kegiatan-card-head"> 
-                        <div>
-                            <div class="kegiatan-title">${index + 1}. [${opd.opd}] - ${kegiatan.nama}</div>
-                            <div class="kegiatan-info">Anggaran: ${formatRupiah(kegiatan.pagu_kegiatan)}</div>
-                        </div>
-                        <span class="material-icons toggle-btn">expand_more</span> 
-                    </div>
-                    
-                    <div class="kegiatan-detail">
-                        <div class="detail-row">
-                            <span class="detail-label">Bobot:</span> ${kegiatan.bobot}%
-                        </div>
-                        <div class="detail-row">
-                            <span class="detail-label">Pelaksanaan:</span> <span class="status-text ${statusClass}">${kegiatan.pelaksanaan}</span>
-                        </div>
-                        <div class="detail-row">
-                            <span class="detail-label">Realisasi Keuangan:</span> ${realisasiKeuangan.toFixed(2).replace('.', ',')}%
-                            <div class="progress-bar-container">
-                                <div class="progress-bar progress-keuangan" style="width: ${realisasiKeuangan}%">${realisasiKeuangan.toFixed(0)}%</div>
-                            </div>
-                        </div>
-                        <div class="detail-row">
-                            <span class="detail-label">Realisasi Fisik:</span> ${realisasiFisik.toFixed(2).replace('.', ',')}%
-                            <div class="progress-bar-container">
-                                <div class="progress-bar progress-fisik" style="width: ${realisasiFisik}%">${realisasiFisik.toFixed(0)}%</div>
-                            </div>
-                        </div>
-                        <div class="detail-row">
-                            <span class="detail-label">Keterangan:</span> ${kegiatan.keterangan}
-                        </div>
-                        <div class="detail-row">
-                            <span class="detail-label">Rencana Aksi:</span> ${kegiatan.rencana_aksi}
-                        </div>
-                        <a href="${kegiatan.link_pdf}" target="_blank" class="pdf-button">LIHAT LAPORAN PDF</a>
-                    </div>
-                </div>
-            `;
-        }
-
-
-        // --- FUNGSI FILTER UTAMA ---
-
-        // 1. Fungsi Toggle Dropdown Filter
-        function toggleFilterDropdown() {
-            document.getElementById('filterDropdown').classList.toggle('show');
-        }
-
-        // 2. Fungsi Logika Pemfilteran berdasarkan Status Kegiatan (DIPERBAIKI)
-        function filterByStatus(statusFilter, headerClass, clickedButton) {
-            const resultsContainer = document.getElementById('filtered-kegiatan-list');
-            const mainContainer = document.getElementById('opd-container');
-            const filteredSection = document.getElementById('filtered-results-container');
-            const filteredHeader = document.getElementById('filteredHeader');
-            
-            let filteredHTML = '';
-            let count = 0;
-
-            // 1. Reset status active pada semua tombol filter
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-
-            // 2. Set tombol yang diklik menjadi active
-            clickedButton.classList.add('active');
-
-            // 3. Atur warna header hasil filter
-            filteredHeader.className = 'filtered-header ' + headerClass; 
-            
-            // Tutup dropdown setelah memilih filter
-            toggleFilterDropdown(); 
-            
-            // Logika Filter: Kumpulkan semua kegiatan yang statusnya cocok
-            progressData.forEach(opd => {
-                opd.kegiatan.forEach(keg => {
-                    if (keg.pelaksanaan.trim() === statusFilter.trim()) {
-                        count++;
-                        filteredHTML += createFilteredKegiatanCard(keg, opd, count); 
-                    }
-                });
-            });
-
-            // Sembunyikan konten OPD utama dan tampilkan hasil filter
-            mainContainer.classList.add('hide-main-content');
-            filteredSection.style.display = 'flex';
-            
-            document.getElementById('currentFilterStatus').textContent = statusFilter + ` (${count} Kegiatan)`;
-
-            if (count > 0) {
-                resultsContainer.innerHTML = filteredHTML;
-                // Scroll ke bagian hasil filter
-                filteredSection.scrollIntoView({ behavior: 'smooth' });
+            return response.json();
+        })
+        .then(data => {
+            // Cek apakah data benar-benar berubah sebelum merender ulang seluruh kartu
+            // (Opsional, tapi bagus untuk performa)
+            if (JSON.stringify(progressData) !== JSON.stringify(data)) {
+                progressData = data; // Simpan data API ke variabel global
+                loadOPDCards();      // Panggil fungsi untuk merender kartu
+                console.log('Data diperbarui dari Google Sheet.');
             } else {
-                resultsContainer.innerHTML = `<p style="text-align: center; color: #666; padding: 30px; background-color: white; border-radius: 10px;">Tidak ditemukan kegiatan dengan status "${statusFilter}"</p>`;
+                console.log('Data tidak berubah, tidak ada rendering ulang.');
             }
+        })
+        .catch(error => {
+            console.error('Error saat mengambil data dari Google Sheet:', error);
+            // Hanya tampilkan error jika container benar-benar kosong
+            if (progressData.length === 0) {
+                document.getElementById('opd-container').innerHTML = 
+                    `<p style="text-align: center; color: red; padding: 30px;">
+                        Error saat memuat data: ${error.message}.
+                    </p>`;
+            }
+        });
+}
+
+// FUNGSI UTAMA (Menjalankan Polling)
+document.addEventListener('DOMContentLoaded', () => {
+    
+    // 1. Pemuatan Awal data
+    fetchAndLoadData();
+    
+    // 2. Polling: Mengambil data ulang setiap 10 detik (10000 milidetik)
+    // Ubah angka 10000 jika Anda ingin interval yang lebih cepat atau lambat
+    setInterval(fetchAndLoadData, 10000); 
+});
+
+    // --- 3. FUNGSI HELPER (YANG TIDAK DIUBAH) ---
+    
+    // Helper untuk format mata uang
+    function formatRupiah(number) {
+        return "Rp " + number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+    
+    // Helper untuk mendapatkan kelas status (warna)
+    function getStatusClass(status) {
+        switch (status.toLowerCase().trim()) {
+            case 'belum terlaksana':
+                return 'status-red';
+            case 'on progres':
+                return 'status-green'; 
+            case 'berproses':
+                return 'status-yellow';
+            case 'selesai':
+                return 'status-blue';
+            case 'tidak diperlukan':
+                return 'status-purple';
+            default:
+                return 'black';
         }
+    }
+    
+    // Helper untuk membuat HTML Card Kegiatan yang disaring (Mirip Card Kegiatan Biasa)
+    function createFilteredKegiatanCard(kegiatan, opd, index) {
+        const realisasiKeuangan = parseFloat(kegiatan.realisasi_keuangan.replace(',', '.'));
+        const realisasiFisik = parseFloat(kegiatan.realisasi_fisik.replace(',', '.'));
+        const statusClass = getStatusClass(kegiatan.pelaksanaan);
         
-        // 3. Fungsi Reset Filter (Menampilkan Kembali Kartu OPD)
-        function resetFilter(clickedButton) {
-            const mainContainer = document.getElementById('opd-container');
-            const filteredSection = document.getElementById('filtered-results-container');
-            const filteredHeader = document.getElementById('filteredHeader');
-            
-            // Reset status active pada semua tombol filter
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            // Hapus kelas warna dari header
-            filteredHeader.className = 'filtered-header'; 
-            document.getElementById('currentFilterStatus').textContent = "Semua OPD";
-
-            // Tampilkan kembali konten OPD utama dan sembunyikan hasil filter
-            filteredSection.style.display = 'none';
-            mainContainer.classList.remove('hide-main-content');
-            
-            // Tutup dropdown
-            toggleFilterDropdown();
-        }
-        
-        // --- FUNGSI CARD (Dipertahankan) ---
-        
-        // Fungsi untuk membuat HTML Card Kegiatan (digunakan di kartu OPD)
-        function createKegiatanCard(kegiatan, index) {
-            const realisasiKeuangan = parseFloat(kegiatan.realisasi_keuangan.replace(',', '.'));
-            const realisasiFisik = parseFloat(kegiatan.realisasi_fisik.replace(',', '.'));
-            const statusClass = getStatusClass(kegiatan.pelaksanaan);
-
-            return `
-                <div class="kegiatan-card" onclick="toggleKegiatanDetail(this)">
-                    <div class="kegiatan-card-head"> 
-                        <div>
-                            <div class="kegiatan-title">${index + 1}. ${kegiatan.nama}</div>
-                            <div class="kegiatan-info">Anggaran: ${formatRupiah(kegiatan.pagu_kegiatan)}</div>
-                        </div>
-                        <span class="material-icons toggle-btn">expand_more</span> 
+        return `
+            <div class="filtered-kegiatan-card" onclick="toggleKegiatanDetail(this)">
+                <div class="kegiatan-card-head"> 
+                    <div>
+                        <div class="kegiatan-title">${index + 1}. [${opd.opd}] - ${kegiatan.nama}</div>
+                        <div class="kegiatan-info">Anggaran: ${formatRupiah(kegiatan.pagu_kegiatan)}</div>
                     </div>
-                    
-                    <div class="kegiatan-detail">
-                        <div class="detail-row">
-                            <span class="detail-label">Bobot:</span> ${kegiatan.bobot}%
-                        </div>
-                        <div class="detail-row">
-                            <span class="detail-label">Pelaksanaan:</span> <span class="status-text ${statusClass}">${kegiatan.pelaksanaan}</span>
-                        </div>
-                        <div class="detail-row">
-                            <span class="detail-label">Realisasi Keuangan:</span> ${realisasiKeuangan.toFixed(2).replace('.', ',')}%
-                            <div class="progress-bar-container">
-                                <div class="progress-bar progress-keuangan" style="width: ${realisasiKeuangan}%">${realisasiKeuangan.toFixed(0)}%</div>
-                            </div>
-                        </div>
-                        <div class="detail-row">
-                            <span class="detail-label">Realisasi Fisik:</span> ${realisasiFisik.toFixed(2).replace('.', ',')}%
-                            <div class="progress-bar-container">
-                                <div class="progress-bar progress-fisik" style="width: ${realisasiFisik}%">${realisasiFisik.toFixed(0)}%</div>
-                            </div>
-                        </div>
-                        <div class="detail-row">
-                            <span class="detail-label">Keterangan:</span> ${kegiatan.keterangan}
-                        </div>
-                        <div class="detail-row">
-                            <span class="detail-label">Rencana Aksi:</span> ${kegiatan.rencana_aksi}
-                        </div>
-                        <a href="${kegiatan.link_pdf}" target="_blank" class="pdf-button">LIHAT LAPORAN PDF</a>
-                    </div>
+                    <span class="material-icons toggle-btn">expand_more</span> 
                 </div>
-            `;
-        }
-
-        function createOPDCard(opd) {
-            const totalKegiatan = opd.kegiatan.length;
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.setAttribute('data-opd', opd.opd);
-
-            card.innerHTML = `
-                <div class="card-header">
-                    <div class="opd-info-group">
-                        <div class="icon">${opd.icon}</div>
-                        <div class="card-content">
-                            <div class="card-title">${opd.opd}</div>
-                            <div class="card-info"><strong>Total Anggaran : </strong> ${formatRupiah(opd.pagu_opd)}</div>
-                            <div class="card-info"><strong>Jumlah Kegiatan : </strong> ${totalKegiatan}</div>
-                        </div>
-                    </div>
-                    <span class="material-icons opd-toggle-btn">expand_more</span>
-                </div>
-                <div class="kegiatan-container">
-                </div>
-            `;
-            
-            const kegiatanContainer = card.querySelector('.kegiatan-container');
-            opd.kegiatan.forEach((keg, index) => {
-                kegiatanContainer.innerHTML += createKegiatanCard(keg, index);
-            });
-
-            card.querySelector('.card-header').addEventListener('click', (event) => {
-                if (!event.target.closest('.pdf-button') && !event.target.closest('.kegiatan-card-head')) {
-                    toggleKegiatanContainer(card);
-                }
-            });
-
-            return card;
-        }
-
-        // FUNGSI TOGGLE DETAIL (DIGUNAKAN UNTUK KARTU OPD DAN KARTU FILTER)
-        function toggleKegiatanDetail(kegiatanCard) {
-            const detail = kegiatanCard.querySelector('.kegiatan-detail');
-            const toggleBtn = kegiatanCard.querySelector('.toggle-btn');
-            
-            // Menutup semua detail kegiatan lain dalam container yang sama (baik di OPD maupun di Filter)
-            kegiatanCard.parentElement.querySelectorAll('.kegiatan-card, .filtered-kegiatan-card').forEach(card => {
-                const det = card.querySelector('.kegiatan-detail');
-                const otherToggle = card.querySelector('.toggle-btn');
                 
-                if (det !== detail && card.classList.contains('expanded')) {
-                    card.classList.remove('expanded'); 
-                    if (det) det.style.display = 'none';
-                    if (otherToggle) otherToggle.textContent = 'expand_more';
-                }
-            });
+                <div class="kegiatan-detail">
+                    <div class="detail-row">
+                        <span class="detail-label">Bobot:</span> ${kegiatan.bobot}%
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Pelaksanaan:</span> <span class="status-text ${statusClass}">${kegiatan.pelaksanaan}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Realisasi Keuangan:</span> ${realisasiKeuangan.toFixed(2).replace('.', ',')}%
+                        <div class="progress-bar-container">
+                            <div class="progress-bar progress-keuangan" style="width: ${realisasiKeuangan}%">${realisasiKeuangan.toFixed(0)}%</div>
+                        </div>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Realisasi Fisik:</span> ${realisasiFisik.toFixed(2).replace('.', ',')}%
+                        <div class="progress-bar-container">
+                            <div class="progress-bar progress-fisik" style="width: ${realisasiFisik}%">${realisasiFisik.toFixed(0)}%</div>
+                        </div>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Keterangan:</span> ${kegiatan.keterangan}
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rencana Aksi:</span> ${kegiatan.rencana_aksi}
+                    </div>
+                    <a href="${kegiatan.link_pdf}" target="_blank" class="pdf-button">LIHAT LAPORAN PDF</a>
+                </div>
+            </div>
+        `;
+    }
 
-            // Menampilkan/menyembunyikan detail kegiatan yang diklik
-            kegiatanCard.classList.toggle('expanded'); 
-            if (kegiatanCard.classList.contains('expanded')) {
-                detail.style.display = 'block';
-                toggleBtn.textContent = 'expand_less';
-            } else {
-                detail.style.display = 'none';
-                toggleBtn.textContent = 'expand_more';
-            }
-        }
+
+    // --- FUNGSI FILTER UTAMA ---
+
+    // 1. Fungsi Toggle Dropdown Filter
+    function toggleFilterDropdown() {
+        document.getElementById('filterDropdown').classList.toggle('show');
+    }
+
+    // 2. Fungsi Logika Pemfilteran berdasarkan Status Kegiatan (DIPERBAIKI)
+    function filterByStatus(statusFilter, headerClass, clickedButton) {
+        const resultsContainer = document.getElementById('filtered-kegiatan-list');
+        const mainContainer = document.getElementById('opd-container');
+        const filteredSection = document.getElementById('filtered-results-container');
+        const filteredHeader = document.getElementById('filteredHeader');
         
-        // FUNGSI TOGGLE CONTAINER (KHUSUS UNTUK KARTU OPD)
-        function toggleKegiatanContainer(opdCard) {
-            const container = opdCard.querySelector('.kegiatan-container');
-            const opdToggleBtn = opdCard.querySelector('.opd-toggle-btn');
-            
-            // Tutup container OPD lain
-            document.querySelectorAll('.card').forEach(card => {
-                const cont = card.querySelector('.kegiatan-container');
-                const btn = card.querySelector('.opd-toggle-btn');
-                if (card !== opdCard && card.classList.contains('expanded')) {
-                    cont.classList.remove('show');
-                    card.classList.remove('expanded');
-                    if(btn) btn.textContent = 'expand_more';
+        let filteredHTML = '';
+        let count = 0;
+
+        // 1. Reset status active pada semua tombol filter
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        // 2. Set tombol yang diklik menjadi active
+        clickedButton.classList.add('active');
+
+        // 3. Atur warna header hasil filter
+        filteredHeader.className = 'filtered-header ' + headerClass; 
+        
+        // Tutup dropdown setelah memilih filter
+        toggleFilterDropdown(); 
+        
+        // Logika Filter: Kumpulkan semua kegiatan yang statusnya cocok
+        progressData.forEach(opd => {
+            opd.kegiatan.forEach((keg, index) => {
+                if (keg.pelaksanaan.trim() === statusFilter.trim()) {
+                    count++;
+                    // Kirim OPDA dan index kegitan untuk tampilan di kartu filter
+                    filteredHTML += createFilteredKegiatanCard(keg, opd, count); 
                 }
             });
+        });
+
+        // Sembunyikan konten OPD utama dan tampilkan hasil filter
+        mainContainer.classList.add('hide-main-content');
+        filteredSection.style.display = 'flex';
+        
+        document.getElementById('currentFilterStatus').textContent = statusFilter + ` (${count} Kegiatan)`;
+
+        if (count > 0) {
+            resultsContainer.innerHTML = filteredHTML;
+            // Scroll ke bagian hasil filter
+            filteredSection.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            resultsContainer.innerHTML = `<p style="text-align: center; color: #666; padding: 30px; background-color: white; border-radius: 10px;">Tidak ditemukan kegiatan dengan status "${statusFilter}"</p>`;
+        }
+    }
+    
+    // 3. Fungsi Reset Filter (Menampilkan Kembali Kartu OPD)
+    function resetFilter(clickedButton) {
+        const mainContainer = document.getElementById('opd-container');
+        const filteredSection = document.getElementById('filtered-results-container');
+        const filteredHeader = document.getElementById('filteredHeader');
+        
+        // Reset status active pada semua tombol filter
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Hapus kelas warna dari header
+        filteredHeader.className = 'filtered-header'; 
+        document.getElementById('currentFilterStatus').textContent = "Semua OPD";
+
+        // Tampilkan kembali konten OPD utama dan sembunyikan hasil filter
+        filteredSection.style.display = 'none';
+        mainContainer.classList.remove('hide-main-content');
+        
+        // Tutup dropdown
+        toggleFilterDropdown();
+    }
+    
+    // --- FUNGSI CARD (Dipertahankan) ---
+    
+    // Fungsi untuk membuat HTML Card Kegiatan (digunakan di kartu OPD)
+    function createKegiatanCard(kegiatan, index) {
+        const realisasiKeuangan = parseFloat(kegiatan.realisasi_keuangan.replace(',', '.'));
+        const realisasiFisik = parseFloat(kegiatan.realisasi_fisik.replace(',', '.'));
+        const statusClass = getStatusClass(kegiatan.pelaksanaan);
+
+        return `
+            <div class="kegiatan-card" onclick="toggleKegiatanDetail(this)">
+                <div class="kegiatan-card-head"> 
+                    <div>
+                        <div class="kegiatan-title">${index + 1}. ${kegiatan.nama}</div>
+                        <div class="kegiatan-info">Anggaran: ${formatRupiah(kegiatan.pagu_kegiatan)}</div>
+                    </div>
+                    <span class="material-icons toggle-btn">expand_more</span> 
+                </div>
+                
+                <div class="kegiatan-detail">
+                    <div class="detail-row">
+                        <span class="detail-label">Bobot:</span> ${kegiatan.bobot}%
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Pelaksanaan:</span> <span class="status-text ${statusClass}">${kegiatan.pelaksanaan}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Realisasi Keuangan:</span> ${realisasiKeuangan.toFixed(2).replace('.', ',')}%
+                        <div class="progress-bar-container">
+                            <div class="progress-bar progress-keuangan" style="width: ${realisasiKeuangan}%">${realisasiKeuangan.toFixed(0)}%</div>
+                        </div>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Realisasi Fisik:</span> ${realisasiFisik.toFixed(2).replace('.', ',')}%
+                        <div class="progress-bar-container">
+                            <div class="progress-bar progress-fisik" style="width: ${realisasiFisik}%">${realisasiFisik.toFixed(0)}%</div>
+                        </div>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Keterangan:</span> ${kegiatan.keterangan}
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Rencana Aksi:</span> ${kegiatan.rencana_aksi}
+                    </div>
+                    <a href="${kegiatan.link_pdf}" target="_blank" class="pdf-button">LIHAT LAPORAN PDF</a>
+                </div>
+            </div>
+        `;
+    }
+
+    function createOPDCard(opd) {
+        const totalKegiatan = opd.kegiatan.length;
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.setAttribute('data-opd', opd.opd);
+
+        card.innerHTML = `
+            <div class="card-header">
+                <div class="opd-info-group">
+                    <div class="icon">${opd.icon}</div>
+                    <div class="card-content">
+                        <div class="card-title">${opd.opd}</div>
+                        <div class="card-info"><strong>Total Anggaran : </strong> ${formatRupiah(opd.pagu_opd)}</div>
+                        <div class="card-info"><strong>Jumlah Kegiatan : </strong> ${totalKegiatan}</div>
+                    </div>
+                </div>
+                <span class="material-icons opd-toggle-btn">expand_more</span>
+            </div>
+            <div class="kegiatan-container">
+            </div>
+        `;
+        
+        const kegiatanContainer = card.querySelector('.kegiatan-container');
+        opd.kegiatan.forEach((keg, index) => {
+            kegiatanContainer.innerHTML += createKegiatanCard(keg, index);
+        });
+
+        card.querySelector('.card-header').addEventListener('click', (event) => {
+            if (!event.target.closest('.pdf-button') && !event.target.closest('.kegiatan-card-head')) {
+                toggleKegiatanContainer(card);
+            }
+        });
+
+        return card;
+    }
+
+    // FUNGSI TOGGLE DETAIL (DIGUNAKAN UNTUK KARTU OPD DAN KARTU FILTER)
+    function toggleKegiatanDetail(kegiatanCard) {
+        const detail = kegiatanCard.querySelector('.kegiatan-detail');
+        const toggleBtn = kegiatanCard.querySelector('.toggle-btn');
+        
+        // Menutup semua detail kegiatan lain dalam container yang sama (baik di OPD maupun di Filter)
+        kegiatanCard.parentElement.querySelectorAll('.kegiatan-card, .filtered-kegiatan-card').forEach(card => {
+            const det = card.querySelector('.kegiatan-detail');
+            const otherToggle = card.querySelector('.toggle-btn');
             
-            // Reset semua detail kegiatan dan ikonnya
-            document.querySelectorAll('.kegiatan-card').forEach(card => {
-                const det = card.querySelector('.kegiatan-detail');
-                const activityToggle = card.querySelector('.toggle-btn');
-                card.classList.remove('expanded');
+            if (det !== detail && card.classList.contains('expanded')) {
+                card.classList.remove('expanded'); 
                 if (det) det.style.display = 'none';
-                if (activityToggle) activityToggle.textContent = 'expand_more';
-            });
-            
-            // Tampilkan/sembunyikan container yang diklik
-            container.classList.toggle('show');
-            opdCard.classList.toggle('expanded'); 
-            
-            // Ganti icon OPD yang diklik
-            if (opdCard.classList.contains('expanded')) {
-                opdToggleBtn.textContent = 'expand_less';
-            } else {
-                opdToggleBtn.textContent = 'expand_more';
+                if (otherToggle) otherToggle.textContent = 'expand_more';
             }
+        });
+
+        // Menampilkan/menyembunyikan detail kegiatan yang diklik
+        kegiatanCard.classList.toggle('expanded'); 
+        if (kegiatanCard.classList.contains('expanded')) {
+            detail.style.display = 'block';
+            toggleBtn.textContent = 'expand_less';
+        } else {
+            detail.style.display = 'none';
+            toggleBtn.textContent = 'expand_more';
         }
-
-        // Memuat semua kartu OPD saat DOM selesai dimuat
-        document.addEventListener('DOMContentLoaded', () => {
-            const opdContainer = document.getElementById('opd-container');
-            progressData.forEach(opd => {
-                opdContainer.appendChild(createOPDCard(opd));
-            });
-            // Mulai dengan menyembunyikan kontainer hasil filter
-            document.getElementById('filtered-results-container').style.display = 'none';
-        });
-
-      /* === Fitur Suara Tap — tidak double & tidak aktif saat scroll === */
-        const tapSound = new Audio("tap_sound.mp3"); // ganti dengan file suara kamu
-        tapSound.preload = "auto";
-        tapSound.volume = 0.3; // opsional: biar suaranya lembut
-
-        let touchStartX = 0;
-        let touchStartY = 0;
-        let touchMoved = false;
-        let lastPlayTime = 0;
-
-        document.addEventListener("touchstart", (e) => {
-            const t = e.touches[0];
-            touchStartX = t.clientX;
-            touchStartY = t.clientY;
-            touchMoved = false;
-        });
-
-        document.addEventListener("touchmove", (e) => {
-            const t = e.touches[0];
-            const dx = Math.abs(t.clientX - touchStartX);
-            const dy = Math.abs(t.clientY - touchStartY);
-            if (dx > 10 || dy > 10) touchMoved = true; // dianggap scroll
-        });
-
-        document.addEventListener("touchend", (e) => {
-            if (!touchMoved) playTapSound();
-        });
-
-        document.addEventListener("click", (e) => {
-            // untuk pengguna desktop
-            if (e.pointerType !== "touch") playTapSound();
-        });
-
-        function playTapSound() {
-            const now = Date.now();
-            if (now - lastPlayTime < 200) return; // cegah suara double
-            lastPlayTime = now;
-            tapSound.currentTime = 0;
-            tapSound.play().catch(() => {});
-        }
+    }
+    
+    // FUNGSI TOGGLE CONTAINER (KHUSUS UNTUK KARTU OPD)
+    function toggleKegiatanContainer(opdCard) {
+        const container = opdCard.querySelector('.kegiatan-container');
+        const opdToggleBtn = opdCard.querySelector('.opd-toggle-btn');
         
-    </script>
+        // Tutup container OPD lain
+        document.querySelectorAll('.card').forEach(card => {
+            const cont = card.querySelector('.kegiatan-container');
+            const btn = card.querySelector('.opd-toggle-btn');
+            if (card !== opdCard && card.classList.contains('expanded')) {
+                cont.classList.remove('show');
+                card.classList.remove('expanded');
+                if(btn) btn.textContent = 'expand_more';
+            }
+        });
+        
+        // Reset semua detail kegiatan dan ikonnya
+        document.querySelectorAll('.kegiatan-card').forEach(card => {
+            const det = card.querySelector('.kegiatan-detail');
+            const activityToggle = card.querySelector('.toggle-btn');
+            card.classList.remove('expanded');
+            if (det) det.style.display = 'none';
+            if (activityToggle) activityToggle.textContent = 'expand_more';
+        });
+        
+        // Tampilkan/sembunyikan container yang diklik
+        container.classList.toggle('show');
+        opdCard.classList.toggle('expanded'); 
+        
+        // Ganti icon OPD yang diklik
+        if (opdCard.classList.contains('expanded')) {
+            opdToggleBtn.textContent = 'expand_less';
+        } else {
+            opdToggleBtn.textContent = 'expand_more';
+        }
+    }
+
+    // --- 4. FITUR SUARA (Dipertahankan) ---
+    
+    /* === Fitur Suara Tap — tidak double & tidak aktif saat scroll === */
+    const tapSound = new Audio("tap_sound.mp3"); // ganti dengan file suara kamu
+    tapSound.preload = "auto";
+    tapSound.volume = 0.3; // opsional: biar suaranya lembut
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchMoved = false;
+    let lastPlayTime = 0;
+
+    document.addEventListener("touchstart", (e) => {
+        const t = e.touches[0];
+        touchStartX = t.clientX;
+        touchStartY = t.clientY;
+        touchMoved = false;
+    });
+
+    document.addEventListener("touchmove", (e) => {
+        const t = e.touches[0];
+        const dx = Math.abs(t.clientX - touchStartX);
+        const dy = Math.abs(t.clientY - touchStartY);
+        if (dx > 10 || dy > 10) touchMoved = true; // dianggap scroll
+    });
+
+    document.addEventListener("touchend", (e) => {
+        if (!touchMoved) playTapSound();
+    });
+
+    document.addEventListener("click", (e) => {
+        // untuk pengguna desktop
+        if (e.pointerType !== "touch") playTapSound();
+    });
+
+    function playTapSound() {
+        const now = Date.now();
+        if (now - lastPlayTime < 200) return; // cegah suara double
+        lastPlayTime = now;
+        tapSound.currentTime = 0;
+        tapSound.play().catch(() => {});
+    }
+    
+</script>
+    
     <footer id="footer">
      Strong Point &copy; 2025. All rights reserved @zuwlend<p>(Best view via Smartphone/Tablet).</p>
     </footer>
 </body>
 </html>
-
-
-
-
