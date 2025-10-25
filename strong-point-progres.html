@@ -14,6 +14,63 @@
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
+
+/* CSS UNTUK LOADING SCREEN */
+
+/* 1. LAYER OVERLAY */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Background warna #0740aa (biru tua) */
+    background-color: #0740aa; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Pastikan di atas semua konten */
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s, visibility 0.5s;
+}
+
+/* 2. KONDISI SETELAH SELESAI */
+.loading-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* 3. CONTAINER SPINNER & TEXT */
+.spinner-container {
+    text-align: center;
+    color: white; /* Warna teks loading */
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* 4. SPINNER (LINGKARAN BERPUTAR) */
+.spinner {
+    width: 150px;
+    height: 150px;
+    border: 10px solid rgba(255, 255, 255, 0.3); /* Warna abu-abu transparan */
+    border-top-color: #ffffff; /* Warna putih yang berputar */
+    border-radius: 50%;
+    animation: spin 1s linear infinite; /* Animasi putar */
+    margin: 0 auto 25px auto; /* Margin bawah untuk teks */
+}
+
+/* 5. ANIMASI PUTAR */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* 6. TEKS LOADING */
+.loading-text {
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
         /* Gaya Dasar */
         body {
             margin: 0;
@@ -159,9 +216,10 @@ padding: 10px 15px; /* Tambahkan padding-top dan bottom */
         }
         
         .filter-btn-reset {
-            background-color: rgba(213, 240, 140, 0) !important; 
-            margin-top: 10px;
-            border: #02c2fc, 1px;
+            background-color: rgb(15, 15, 15) !important; 
+            margin-top: 0px;
+            
+            
         }
         
         /* Kontainer Hasil Filter Kegiatan */
@@ -319,6 +377,7 @@ padding: 10px 15px; /* Tambahkan padding-top dan bottom */
         .kegiatan-card, .filtered-kegiatan-card { 
             background-color: #eef3fc;
             border-radius: 15px;
+            border: 1px solid #02c2fc; 
             padding: 15px;
             box-shadow: inset 0 5px 10px rgba(0, 0, 0, 0.05);
             cursor: pointer;
@@ -491,11 +550,7 @@ padding: 10px 15px; /* Tambahkan padding-top dan bottom */
             .filter-dropdown {
                 left: 15px; 
             }
-            footer {
-                max-width: 900px;
-                margin: 0 auto;
-                width: 100%; 
-            }
+
         }
 
         footer {
@@ -513,6 +568,13 @@ padding: 10px 15px; /* Tambahkan padding-top dan bottom */
     </style>
 </head>
 <body>
+
+    <div id="loading-screen" class="loading-screen">
+    <div class="spinner-container">
+        <div class="spinner"></div>
+        <div class="loading-text">sabarki di', ndag lamaji...</div>
+    </div>
+</div>
     <header>
 
         
@@ -552,6 +614,14 @@ padding: 10px 15px; /* Tambahkan padding-top dan bottom */
     const DATA_API_URL = 'https://script.google.com/macros/s/AKfycbzwMW5eZOnjuFQBOZQ6ksMLnTCeTnefZsJ-tohyoqwXzgQezvZuDIm_ByIqZqr88bGp/exec'; 
     
     
+    // FUNGSI BARU: Menyembunyikan Loading Screen
+    function hideLoadingScreen() {
+        const loadingScreen = document.getElementById('loading-screen');
+        if (loadingScreen) {
+            loadingScreen.classList.add('hidden');
+        }
+    }
+
     // Fungsi untuk memuat semua kartu OPD saat data berhasil diambil
     function loadOPDCards() {
         const opdContainer = document.getElementById('opd-container');
@@ -568,10 +638,16 @@ padding: 10px 15px; /* Tambahkan padding-top dan bottom */
         }
     
         document.getElementById('filtered-results-container').style.display = 'none';
+
+        // PENTING: Sembunyikan loading screen setelah data selesai di-render
+        hideLoadingScreen(); 
     }
     
     // FUNGSI BARU UNTUK MENGAMBIL DATA
     function fetchAndLoadData() {
+        // Tampilkan loading screen di sini jika ini bukan pemanggilan pertama 
+        // (opsional, karena interval 10 detik mungkin hanya perlu loading kecil)
+        
         fetch(DATA_API_URL) 
             .then(response => {
                 if (!response.ok) {
@@ -582,7 +658,7 @@ padding: 10px 15px; /* Tambahkan padding-top dan bottom */
             .then(data => {
                 if (JSON.stringify(progressData) !== JSON.stringify(data)) {
                     progressData = data; 
-                    loadOPDCards();      
+                    loadOPDCards();      
                     console.log('Data diperbarui dari Google Sheet.');
                 } else {
                     console.log('Data tidak berubah, tidak ada rendering ulang.');
@@ -595,20 +671,23 @@ padding: 10px 15px; /* Tambahkan padding-top dan bottom */
                         `<p style="text-align: center; color: red; padding: 30px;">
                             Error saat memuat data: ${error.message}. (Kemungkinan masalah koneksi atau Apps Script deployment).
                         </p>`;
+                    // Sembunyikan loading screen meskipun error
+                    hideLoadingScreen();
                 }
             });
     }
     
     // FUNGSI UTAMA (Menjalankan Polling)
     document.addEventListener('DOMContentLoaded', () => {
-        
+        // Tampilkan loading screen secara default di HTML, lalu panggil
         fetchAndLoadData();
         
         setInterval(fetchAndLoadData, 10000); 
     });
     
     // --- 2. FUNGSI HELPER & LOGIC ---
-    
+    // ... (sisa fungsi lainnya TIDAK DIUBAH) ...
+
     function formatRupiah(number) {
         return "Rp " + number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
@@ -927,10 +1006,10 @@ padding: 10px 15px; /* Tambahkan padding-top dan bottom */
 
         if (!opdCard.classList.contains('expanded')) {
              opdCard.querySelectorAll('.kegiatan-card').forEach(kegCard => {
-                kegCard.classList.remove('expanded');
-                kegCard.querySelector('.kegiatan-detail').style.display = 'none';
-                kegCard.querySelector('.toggle-btn').textContent = 'expand_more';
-            });
+                 kegCard.classList.remove('expanded');
+                 kegCard.querySelector('.kegiatan-detail').style.display = 'none';
+                 kegCard.querySelector('.toggle-btn').textContent = 'expand_more';
+             });
         }
     }
 
@@ -978,9 +1057,7 @@ padding: 10px 15px; /* Tambahkan padding-top dan bottom */
 </script>
     
     <footer id="footer">
-     Strong Point 2025 &copy; All rights reserved @zuwlend<p>(Best view via Smartphone/Tablet).</p>
+     Strong Point 2025. &COPY; All rights reserved by @zuwlend<p>(Best view via Smartphone/Tablet).</p>
     </footer>
 </body>
 </html>
-
-
