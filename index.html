@@ -195,56 +195,50 @@ Ekstrasi data: 31 Oktober 2025 | 17.00 WITA. (Best view via smartphone/tablet)" 
     </footer>
   </div>
 <script>
-    // Mendapatkan elemen audio
-    const tapSound = document.getElementById('tapSound');
+      // --- 3. FITUR SUARA (Dipertahankan) ---
+    
+    const tapSound = new Audio("tap_sound.mp3"); 
+    tapSound.preload = "auto";
+    tapSound.volume = 0.3; 
 
-    // Fungsi untuk memutar suara dan me-resetnya
-    function playTapSound() {
-      tapSound.pause();
-      tapSound.currentTime = 0;
-      tapSound.play().catch(error => {
-        console.error("Pemutaran audio diblokir:", error);
-      });
-    }
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchMoved = false;
+    let lastPlayTime = 0;
 
-    // 1. Menerapkan suara ketukan pada SELURUH body (kecuali tautan)
-    document.body.addEventListener('click', playTapSound);
-    document.body.addEventListener('touchstart', playTapSound);
+    document.addEventListener("touchstart", (e) => {
+        const t = e.touches[0];
+        touchStartX = t.clientX;
+        touchStartY = t.clientY;
+        touchMoved = false;
+    });
 
-    // 2. Menerapkan logika khusus pada TAUTAN KARTU (card-link)
-    const cardLinks = document.querySelectorAll('.card-link');
+    document.addEventListener("touchmove", (e) => {
+        const t = e.touches[0];
+        const dx = Math.abs(t.clientX - touchStartX);
+        const dy = Math.abs(t.clientY - touchStartY);
+        if (dx > 10 || dy > 10) touchMoved = true; 
+    });
 
-    cardLinks.forEach(link => {
-      link.addEventListener('click', function(e) {
-        
-        // SOLUSI: MENGHENTIKAN PROPAGASI EVENT
-        e.stopPropagation(); 
-        
-        // Hentikan aksi default tautan (pindah halaman)
-        e.preventDefault(); 
+    document.addEventListener("touchend", (e) => {
+        if (!touchMoved) playTapSound();
+    });
 
-        // Dapatkan URL tujuan
-        const destination = this.href;
-        
-        // Cek apakah tautan membuka di tab baru (_blank)
-        const isNewTab = this.target === '_blank';
+    document.addEventListener("click", (e) => {
+        if (e.pointerType !== "touch") playTapSound();
+    });
 
-        // Putar suara (Hanya sekali)
-        playTapSound();
-
-        // Tunggu sebentar (200ms) agar suara sempat terdengar, lalu pindah halaman.
-        setTimeout(() => {
-          if (isNewTab) {
-            window.open(destination, '_blank');
-          } else {
-            window.location.href = destination;
-          }
-        }, 200); // Jeda 200 milidetik (0.2 detik)
-      });
-    });
+    function playTapSound() {
+        const now = Date.now();
+        if (now - lastPlayTime < 200) return; 
+        lastPlayTime = now;
+        tapSound.currentTime = 0;
+        tapSound.play().catch(() => {});
+    }
   </script>
  </body>
 </html>
+
 
 
 
