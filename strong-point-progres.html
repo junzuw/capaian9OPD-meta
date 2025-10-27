@@ -1028,49 +1028,10 @@ padding: 10px 15px; /* Tambahkan padding-top dan bottom */
     }
    
 </script>
-       // --- 3. FITUR SUARA (Dipertahankan) ---
-    
-    const tapSound = new Audio("tap_sound.mp3"); 
-    tapSound.preload = "auto";
-    tapSound.volume = 0.3; 
-
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let touchMoved = false;
-    let lastPlayTime = 0;
-
-    document.addEventListener("touchstart", (e) => {
-        const t = e.touches[0];
-        touchStartX = t.clientX;
-        touchStartY = t.clientY;
-        touchMoved = false;
-    });
-
-    document.addEventListener("touchmove", (e) => {
-        const t = e.touches[0];
-        const dx = Math.abs(t.clientX - touchStartX);
-        const dy = Math.abs(t.clientY - touchStartY);
-        if (dx > 10 || dy > 10) touchMoved = true; 
-    });
-
-    document.addEventListener("touchend", (e) => {
-        if (!touchMoved) playTapSound();
-    });
-
-    document.addEventListener("click", (e) => {
-        if (e.pointerType !== "touch") playTapSound();
-    });
-
-    function playTapSound() {
-        const now = Date.now();
-        if (now - lastPlayTime < 200) return; 
-        lastPlayTime = now;
-        tapSound.currentTime = 0;
-        tapSound.play().catch(() => {});
-    }
     <footer id="footer">
      Strong Point 2025. &COPY; All rights reserved by @zuwlend<p>(Best view via Smartphone/Tablet).</p>
     </footer>
 </body>
 </html>
+
 
