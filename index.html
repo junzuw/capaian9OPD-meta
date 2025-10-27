@@ -215,8 +215,11 @@ Ekstrasi data: 31 Oktober 2025 | 17.00 WITA. (Best view via smartphone/tablet)" 
     const cardLinks = document.querySelectorAll('.card-link');
 
     cardLinks.forEach(link => {
-      // Menggunakan 'click' yang mencakup sentuhan pada tautan
       link.addEventListener('click', function(e) {
+        
+        // SOLUSI: MENGHENTIKAN PROPAGASI EVENT
+        e.stopPropagation(); 
+        
         // Hentikan aksi default tautan (pindah halaman)
         e.preventDefault(); 
 
@@ -226,7 +229,7 @@ Ekstrasi data: 31 Oktober 2025 | 17.00 WITA. (Best view via smartphone/tablet)" 
         // Cek apakah tautan membuka di tab baru (_blank)
         const isNewTab = this.target === '_blank';
 
-        // Putar suara
+        // Putar suara (Hanya sekali)
         playTapSound();
 
         // Tunggu sebentar (200ms) agar suara sempat terdengar, lalu pindah halaman.
@@ -242,6 +245,7 @@ Ekstrasi data: 31 Oktober 2025 | 17.00 WITA. (Best view via smartphone/tablet)" 
   </script>
  </body>
 </html>
+
 
 
 
