@@ -105,7 +105,10 @@ Ekstrasi data: 31 Oktober 2025 | 17.00 WITA. (Best view via smartphone/tablet)" 
   </style>
 </head>
 <body>
-
+    <audio id="tapSound">
+        <source src="tap_sound.mp3" type="audio/mpeg">
+            Browser Anda tidak mendukung elemen audio.
+</audio>
   <div class="wrapper">
     <div class="header-card">
       <h1>Realisasi Fisik & Keuangan <br>9 OPD Mitra per 31 Oktober 2025</h1>
@@ -187,14 +190,59 @@ Ekstrasi data: 31 Oktober 2025 | 17.00 WITA. (Best view via smartphone/tablet)" 
       </a>
     </div>
 
-    </script>
     <footer id="footer">
       Data Extract --> https://sulselprov.e-planning.id <br> 31 Oktober 2025 | 17.00 WITA <br>&copy; Copyright by @zuwlend.
     </footer>
   </div>
+<script>
+    // Mendapatkan elemen audio
+    const tapSound = document.getElementById('tapSound');
 
-</body>
+    // Fungsi untuk memutar suara dan me-resetnya
+    function playTapSound() {
+      tapSound.pause();
+      tapSound.currentTime = 0;
+      tapSound.play().catch(error => {
+        console.error("Pemutaran audio diblokir:", error);
+      });
+    }
+
+    // 1. Menerapkan suara ketukan pada SELURUH body (kecuali tautan)
+    document.body.addEventListener('click', playTapSound);
+    document.body.addEventListener('touchstart', playTapSound);
+
+    // 2. Menerapkan logika khusus pada TAUTAN KARTU (card-link)
+    const cardLinks = document.querySelectorAll('.card-link');
+
+    cardLinks.forEach(link => {
+      // Menggunakan 'click' yang mencakup sentuhan pada tautan
+      link.addEventListener('click', function(e) {
+        // Hentikan aksi default tautan (pindah halaman)
+        e.preventDefault(); 
+
+        // Dapatkan URL tujuan
+        const destination = this.href;
+        
+        // Cek apakah tautan membuka di tab baru (_blank)
+        const isNewTab = this.target === '_blank';
+
+        // Putar suara
+        playTapSound();
+
+        // Tunggu sebentar (200ms) agar suara sempat terdengar, lalu pindah halaman.
+        setTimeout(() => {
+          if (isNewTab) {
+            window.open(destination, '_blank');
+          } else {
+            window.location.href = destination;
+          }
+        }, 200); // Jeda 200 milidetik (0.2 detik)
+      });
+    });
+  </script>
+ </body>
 </html>
+
 
 
 
