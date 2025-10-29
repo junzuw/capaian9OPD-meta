@@ -4,82 +4,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Realisasi Fisik & Keuangan 9 OPD</title>
-
-<meta property="og:title" content="Tingkat Capaian Realisasi Fisik & Keuangan 9 OPD Mitra per 31 Oktober 2025" />
-<meta property="og:description" content="Lihat grafik interaktif realisasi fisik & keuangan hingga bulan Oktober Tahun 2025. 
-Ekstrasi data: 31 Oktober 2025 | 17.00 WITA. (Best view via smartphone/tablet)" />
-<meta property="og:image" content="https://binfraswilzulsel.my.id/thumbnail.jpg" />
-<meta property="og:url" content="https://binfraswilzulsel.my.id/" />
-<meta property="og:type" content="website" />
-
+  <meta property="og:title" content="Tingkat Capaian Realisasi Fisik & Keuangan 9 OPD Mitra per 30 September 2025" />
+  <meta property="og:description" content="Lihat grafik interaktif realisasi fisik & keuangan hingga bulan Oktober Tahun 2025. Ekstrasi data: 30 September 2025 | 17.00 WITA. (Best view via smartphone/tablet)" />
+  <meta property="og:image" content="https://binfraswilzulsel.my.id/thumbnail.jpg" />
+  <meta property="og:url" content="https://binfraswilzulsel.my.id/" />
+  <meta property="og:type" content="website" />
   <style>
     body {
       font-family: Arial, sans-serif;
-      font-size: 14px;
+      font-size: 12px;
       background: #0740aa;
-      margin: 0;
-      padding: 20px;
+      margin: 25px;
     }
-    header {
-      width: 100%;
-      position: sticky;
-      top: 0;
-      color: white;
-      padding: 10px;
-      font-size: 20px;
-      font-weight: bold;
-      text-align: center;
-      z-index: 1000;
-    }
-
-    .header-card {
-      color: white;
-      padding: 0;
-      margin: 0 0 10px;
-      text-align: center;
-    }
-
-    .header-card h1 {
-      margin: 0;
-      font-size: 25px;
-      line-height: 1.4;
-    }
-
+    .header-card { color: white; text-align: center; }
     .card-container {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 10px;
     }
-
     .card {
       background: #fff;
-      border-radius: 25px;
-      padding: 30px 0px;
+      border-radius: 20px;
+      padding: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 60px;
       text-align: center;
       transition: transform 0.2s;
     }
-
-    .card:hover {
-      transform: translateY(-5px);
-    }
-
-    .icon {
-      font-size: 50px;
-      margin-bottom: 10px;
-    }
-
-    .title {
-      font-size: 16px;
-      font-weight: bold;
-      word-break: break-word;
-    }
-
+    .card:hover { transform: translateY(-5px); }
+    .icon { font-size: 40px; }
+    .title { font-size: 16px; font-weight: bold; }
     footer {
       text-align: center;
       background-color: #0740aa;
@@ -87,113 +40,37 @@ Ekstrasi data: 31 Oktober 2025 | 17.00 WITA. (Best view via smartphone/tablet)" 
       padding: 10px 0;
       font-size: 11px;
       margin-top: 5px;
-      width: 93vw;
-      position: center;
-      margin-left: -vw;
     }
-
-    h2 {
-      font-size: 11px;
-      font-weight: 500;
-    }
-
-    .card-link {
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
+    .card-link { text-decoration: none; color: inherit; display: block; }
+    h2 {font-size: 10px;}
   </style>
 </head>
 <body>
-    <audio id="tapSound">
-        <source src="tap_sound.mp3" type="audio/mpeg">
-            Browser Anda tidak mendukung elemen audio.
-</audio>
   <div class="wrapper">
     <div class="header-card">
-      <h1>Realisasi Fisik & Keuangan <br>9 OPD Mitra per 31 Oktober 2025</h1>
+      <h1>Realisasi Fisik & Keuangan 9 OPD Mitra Bidang Infraswil <br>per 30 September 2025</h1>
       <h2>> Pilih salah satu Kartu OPD untuk melihat grafik realisasi <</h2>
     </div>
 
     <div class="card-container">
-      <a href="realisasi9opd-appscript.html?opd=bappeda" class="card-link">
-        <div class="card">
-          <span class="icon">🏛️</span>
-          <div class="title">BAPPEDA</div>
-        </div>
-      </a>
+      <a href="realisasi9opdtampilall-final.html?opd=bappeda" class="card-link" target="_blank"><div class="card"><span class="icon">🏛️</span><div class="title">BAPPEDA</div></div></a>
+      <a href="realisasi9opdtampilall-final.html?opd=bpbd" class="card-link" target="_blank"><div class="card"><span class="icon">🛡️</span><div class="title">BPBD</div></div></a>
+      <a href="realisasi9opdtampilall-final.html?opd=bmbk" class="card-link" target="_blank"><div class="card"><span class="icon">🚧</span><div class="title">BM & BK</div></div></a>
+      <a href="realisasi9opdtampilall-final.html?opd=sdacktr" class="card-link" target="_blank"><div class="card"><span class="icon">💦</span><div class="title">SDA & CKTR</div></div></a>
+      <a href="realisasi9opdtampilall-final.html?opd=perkimtan" class="card-link" target="_blank"><div class="card"><span class="icon">🏡</span><div class="title">PERKIMTAN</div></div></a>
+      <a href="realisasi9opdtampilall-final.html?opd=kominfo" class="card-link" target="_blank"><div class="card"><span class="icon">📡</span><div class="title">KOMINFO</div></div></a>
+      <a href="realisasi9opdtampilall-final.html?opd=dishub" class="card-link" target="_blank"><div class="card"><span class="icon">🚍</span><div class="title">DISHUB</div></div></a>
+      <a href="realisasi9opdtampilall-final.html?opd=dispora" class="card-link" target="_blank"><div class="card"><span class="icon">⚽</span><div class="title">DISPORA</div></div></a>
+      <a href="realisasi9opdtampilall-final.html?opd=barjas" class="card-link" target="_blank"><div class="card"><span class="icon">🛒</span><div class="title">BARJAS</div></div></a>
 
-      <a href="realisasi9opd-appscript.html?opd=bpbd" class="card-link">
-        <div class="card">
-          <span class="icon">🛡️</span>
-          <div class="title">BPBD</div>
-        </div>
-      </a>
-
-      <a href="realisasi9opd-appscript.html?opd=bmbk" class="card-link">
-        <div class="card">
-          <span class="icon">🚧</span>
-          <div class="title">BM & BK</div>
-        </div>
-      </a>
-
-      <a href="realisasi9opd-appscript.html?opd=sdacktr" class="card-link">
-        <div class="card">
-          <span class="icon">💦</span>
-          <div class="title">SDA & CKTR</div>
-        </div>
-      </a>
-
-      <a href="realisasi9opd-appscript.html?opd=perkimtan" class="card-link">
-        <div class="card">
-          <span class="icon">🏡</span>
-          <div class="title">PERKIMTAN</div>
-        </div>
-      </a>
-
-      <a href="realisasi9opd-appscript.html?opd=kominfo" class="card-link">
-        <div class="card">
-          <span class="icon">📡</span>
-          <div class="title">KOMINFO</div>
-        </div>
-      </a>
-
-      <a href="realisasi9opd-appscript.html?opd=dishub" class="card-link">
-        <div class="card">
-          <span class="icon">🚍</span>
-          <div class="title">DISHUB</div>
-        </div>
-      </a>
-
-      <a href="realisasi9opd-appscript.html?opd=dispora" class="card-link">
-        <div class="card">
-          <span class="icon">⚽</span>
-          <div class="title">DISPORA</div>
-        </div>
-      </a>
-
-      <a href="realisasi9opd-appscript.html?opd=barjas" class="card-link">
-        <div class="card">
-          <span class="icon">🛒</span>
-          <div class="title">BARJAS</div>
-        </div>
-      </a>
-
-      <!-- Kartu REKAP menuju PDF Google Sheets -->
-      <a href="https://docs.google.com/spreadsheets/d/1q0ez1fyLLy-d2vfrb641JICHMVz-HR4tjNy6kZNQ_F4/edit?usp=sharing" 
-         class="card-link" 
-         target="_blank"> 
-         <div class="card">
-          <span class="icon">📊</span>
-          <div class="title">DATA REKAP</div>
-        </div>
+      <a href="https://docs.google.com/spreadsheets/d/1q0ez1fyLLy-d2vfrb641JICHMVz-HR4tjNy6kZNQ_F4/edit?usp=sharing" class="card-link" target="_blank">
+        <div class="card"><span class="icon">📊</span><div class="title">DATA REKAP</div></div>
       </a>
     </div>
 
-    <footer id="footer">
-      Data Extract --> https://sulselprov.e-planning.id <br> 31 Oktober 2025 | 17.00 WITA <br>&copy; Copyright by @zuwlend.
-    </footer>
+    <footer>Data Extract → https://sulselprov.e-planning.id <br> 30 September 2025 | 17.00 WITA <br> &copy; Copyrigth by @zuwlend</footer>
   </div>
+
 <script>
       // --- 3. FITUR SUARA (Dipertahankan) ---
     
@@ -236,13 +113,6 @@ Ekstrasi data: 31 Oktober 2025 | 17.00 WITA. (Best view via smartphone/tablet)" 
         tapSound.play().catch(() => {});
     }
   </script>
- </body>
+
+</body>
 </html>
-
-
-
-
-
-
-
-
