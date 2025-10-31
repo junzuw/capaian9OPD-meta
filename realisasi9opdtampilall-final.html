@@ -226,7 +226,7 @@
     };
 
     function createOPDCard(opd, idx) {
-      const total = opd.realisasiTotal + opd.realisasiBulanSeptember;
+      const total = opd.realisasiTotal + opd.realisasiBulanOktober;
       const sisa = opd.totalBudget - total;
       const persenKeuangan = (total / opd.totalBudget) * 100;
 
@@ -243,12 +243,12 @@
         </div>
 
         <div class="monthly">
-          <h3>REALISASI BULAN SEPTEMBER</h3>
-          <div class="amount">Rp. ${formatRupiah(opd.realisasiBulanSeptember)}</div>
+          <h3>REALISASI BULAN OKTOBER</h3>
+          <div class="amount">Rp. ${formatRupiah(opd.realisasiBulanOktober)}</div>
         </div>
 
         <div class="chart-card">
-          <div class="chart-title">TOTAL REALISASI <span class="hingga-bg">HINGGA</span> September</div>
+          <div class="chart-title">TOTAL REALISASI <span class="hingga-bg">HINGGA</span> OKTOBER</div>
           
 	<div class="legend">
             <div><span class="dot" style="background:var(--accent-green)"></span> Realisasi</div>
@@ -282,7 +282,7 @@
         const card = createOPDCard(opd, idx);
         container.appendChild(card);
 
-        const total = opd.realisasiTotal + opd.realisasiBulanSeptember;
+        const total = opd.realisasiTotal + opd.realisasiBulanOktober;
         const sisa = opd.totalBudget - opd.realisasiTotal;
         const persenKeuangan = (total / opd.totalBudget) * 100;
 
@@ -350,7 +350,7 @@
 
   <footer>
     Data Extract → https://sulselprov.e-planning.id <br>
-    30 September 2025 | 17.05 WITA | &copy; Copyright by @zuwlend
+    31 Oktober 2025 | 16.30 WITA | &copy; Copyright by @zuwlend
   </footer>
 
 <div style="
@@ -367,3 +367,4 @@
 
 </body>
 </html>
+
