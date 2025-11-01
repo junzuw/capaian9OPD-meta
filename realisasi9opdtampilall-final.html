@@ -186,167 +186,185 @@
   <div class="container" id="containerOPD"></div>
 
   <script>
-    const APPSCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyejuIHszRU2q5ozE0kGzO2FQpa-_iOoQXnAUssEwedzo85JM_zuDZ4oyDQj3rW4rqdTQ/exec'; 
+    const APPSCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyYScBrl0u_uouNkBg1TI38ZyuJRK4VxlxC-_S1LiCsgrxVzS5jNM1TPlTngtOao62vCQ/exec'; 
     const formatRupiah = (n) => new Intl.NumberFormat('id-ID').format(n);
 
     function getUrlParameter(name) {
-      name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-      const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-      const results = regex.exec(location.search);
-      return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        const results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
 
     async function fetchOPDData() {
-      try {
-        const response = await fetch(APPSCRIPT_URL);
-        return await response.json(); 
-      } catch (error) {
-        console.error("Gagal mengambil data dari Apps Script:", error);
-        return []; 
-      }
+        try {
+            const response = await fetch(APPSCRIPT_URL);
+            return await response.json(); 
+        } catch (error) {
+            console.error("Gagal mengambil data dari Apps Script:", error);
+            return []; 
+        }
     }
 
+    // Plugin Chart.js untuk menampilkan nilai di tengah pie chart
     const pieLabelPlugin = {
-      id: 'pieLabelPlugin',
-      afterDraw(chart) {
-        const { ctx } = chart;
-        const meta = chart.getDatasetMeta(0);
-        const data = chart.data.datasets[0].data;
-        ctx.save();
-        ctx.font = 'bold 11px Inter';
-        ctx.fillStyle = '#fff';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        meta.data.forEach((arc, i) => {
-          const pos = arc.tooltipPosition();
-          ctx.fillText('Rp. ' + formatRupiah(data[i]), pos.x, pos.y);
-        });
-        ctx.restore();
-      }
+        id: 'pieLabelPlugin',
+        afterDraw(chart) {
+            const { ctx } = chart;
+            const meta = chart.getDatasetMeta(0);
+            const data = chart.data.datasets[0].data;
+            ctx.save();
+            ctx.font = 'bold 11px Inter';
+            ctx.fillStyle = '#fff';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            meta.data.forEach((arc, i) => {
+                const pos = arc.tooltipPosition();
+                // Menampilkan realisasi dan sisa dana di atas potongannya
+                ctx.fillText('Rp. ' + formatRupiah(data[i]), pos.x, pos.y);
+            });
+            ctx.restore();
+        }
     };
 
+    /**
+     * Membuat elemen kartu (Card) HTML untuk setiap OPD.
+     * Tidak lagi menghitung persenKeuangan di sini.
+     */
     function createOPDCard(opd, idx) {
-      const total = opd.realisasiTotal + opd.realisasiBulanOktober;
-      const sisa = opd.totalBudget - total;
-      const persenKeuangan = (total / opd.totalBudget) * 100;
+        // PERHATIAN: Perhitungan `total`, `sisa`, dan `persenKeuangan`
+        // telah dihapus dari fungsi ini karena tidak digunakan
+        // untuk mengisi DOM di sini dan akan dihitung di renderAllOPD.
 
-      const card = document.createElement('div');
-      card.className = 'opd-card';
-      card.innerHTML = `
-        <div class="opd-header">
-          <div class="emoji-wrap">${opd.emoji}</div>
-          <div class="opd-body">
-            <h1 class="opd-title">${opd.opdName}</h1>
-            <div class="sub">Total Anggaran :</div>
-            <div class="big-amount total-anggaran">Rp. ${formatRupiah(opd.totalBudget)}</div>
-          </div>
-        </div>
+        const card = document.createElement('div');
+        card.className = 'opd-card';
+        card.innerHTML = `
+            <div class="opd-header">
+                <div class="emoji-wrap">${opd.emoji}</div>
+                <div class="opd-body">
+                    <h1 class="opd-title">${opd.opdName}</h1>
+                    <div class="sub">Total Anggaran :</div>
+                    <div class="big-amount total-anggaran">Rp. ${formatRupiah(opd.totalBudget)}</div>
+                </div>
+            </div>
 
-        <div class="monthly">
-          <h3>REALISASI BULAN OKTOBER</h3>
-          <div class="amount">Rp. ${formatRupiah(opd.realisasiBulanOktober)}</div>
-        </div>
+            <div class="monthly">
+                <h3>REALISASI BULAN OKTOBER</h3>
+                <div class="amount">Rp. ${formatRupiah(opd.realisasiBulanOktober)}</div>
+            </div>
 
-        <div class="chart-card">
-          <div class="chart-title">TOTAL REALISASI <span class="hingga-bg">HINGGA</span> OKTOBER</div>
-          
-	<div class="legend">
-            <div><span class="dot" style="background:var(--accent-green)"></span> Realisasi</div>
-            <div><span class="dot" style="background:var(--accent-blue)"></span> Sisa Dana</div>
-          </div>
-          <div class="pie-wrapper"><canvas id="pie${idx}" class="pie-canvas" width="400" height="400"></canvas></div>
+            <div class="chart-card">
+                <div class="chart-title">TOTAL REALISASI <span class="hingga-bg">HINGGA</span> OKTOBER</div>
+                
+                <div class="legend">
+                    <div><span class="dot" style="background:var(--accent-green)"></span> Realisasi</div>
+                    <div><span class="dot" style="background:var(--accent-blue)"></span> Sisa Dana</div>
+                </div>
+                <div class="pie-wrapper"><canvas id="pie${idx}" class="pie-canvas" width="400" height="400"></canvas></div>
 
-          <div class="progress-row">
-            <div class="progress-label">Realisasi Keuangan (%)</div>
-            <div class="progress-bar"><div class="progress-fill" id="finance${idx}" style="width:0;background:var(--accent-green)">0%</div></div>
-          </div>
-          <div class="progress-row">
-            <div class="progress-label">Realisasi Fisik (%)</div>
-            <div class="progress-bar"><div class="progress-fill" id="physical${idx}" style="width:0;background:var(--accent-pink)">0%</div></div>
-          </div>
-        </div>
-      `;
-      return card;
+                <div class="progress-row">
+                    <div class="progress-label">Realisasi Keuangan (%)</div>
+                    <div class="progress-bar"><div class="progress-fill" id="finance${idx}" style="width:0;background:var(--accent-green)">0%</div></div>
+                </div>
+                <div class="progress-row">
+                    <div class="progress-label">Realisasi Fisik (%)</div>
+                    <div class="progress-bar"><div class="progress-fill" id="physical${idx}" style="width:0;background:var(--accent-pink)">0%</div></div>
+                </div>
+            </div>
+        `;
+        return card;
     }
 
+    /**
+     * Mengatur lebar progress bar dan menampilkan nilai persentase.
+     */
     function setProgress(el, percent) {
-      const val = Math.max(0, Math.min(100, percent));
-      el.style.width = val + '%';
-      el.textContent = val.toFixed(2).replace(/\.00$/, '') + '%';
+        // Memastikan nilai antara 0 dan 100
+        const val = Math.max(0, Math.min(100, percent)); 
+        el.style.width = val + '%';
+        // Menampilkan dua angka di belakang koma, menghilangkan .00 jika nol
+        el.textContent = val.toFixed(2).replace(/\.00$/, '') + '%'; 
     }
 
-    function renderAllOPD(dataOPD) {
-      const container = document.getElementById('containerOPD');
-      container.innerHTML = '';
-      dataOPD.forEach((opd, idx) => {
-        const card = createOPDCard(opd, idx);
-        container.appendChild(card);
+    /**
+     * Memproses data dan merender semua kartu OPD,
+     * sekaligus melakukan semua perhitungan persentase.
+     */
+function renderAllOPD(dataOPD) {
+        const container = document.getElementById('containerOPD');
+        container.innerHTML = '';
+        dataOPD.forEach((opd, idx) => {
+            const card = createOPDCard(opd, idx);
+            container.appendChild(card);
 
-        const total = opd.realisasiTotal + opd.realisasiBulanOktober;
-        const sisa = opd.totalBudget - opd.realisasiTotal;
-        const persenKeuangan = (total / opd.totalBudget) * 100;
+            // PERBAIKAN: Menggunakan opd.realisasiTotal sebagai total kumulatif,
+            // TIDAK DITAMBAH opd.realisasiBulanOktober untuk menghindari double counting.
+            const total = opd.realisasiTotal; 
+            const sisa = opd.totalBudget - total;
+            const persenKeuangan = (total / (opd.totalBudget || 1)) * 100;
 
-        const ctx = document.getElementById(`pie${idx}`).getContext('2d');
-        new Chart(ctx, {
-          type: 'pie',
-          data: { 
-		labels: ['Realisasi', 'Sisa Dana'], 
-		datasets: [{ 
-		data: [total, sisa], 
-		backgroundColor: ['#07AA1F', '#0740AA'],
-		borderColor: '#fff', 
-		borderWidth: 4 
-		}] },
+            const ctx = document.getElementById(`pie${idx}`).getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: { 
+                    labels: ['Realisasi', 'Sisa Dana'], 
+                    datasets: [{ 
+                        data: [total, sisa], // Menggunakan total yang sudah benar
+                        backgroundColor: ['#07AA1F', '#0740AA'],
+                        borderColor: '#fff', 
+                        borderWidth: 4 
+                    }] 
+                },
+                options: {
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { display: false }, tooltip: { enabled: false } } 
+                },
+                plugins: [pieLabelPlugin]
+            });
 
-          options: {
-		responsive: true, 
-		maintainAspectRatio: false, 
-		plugins: { legend: { display: false }, tooltip: { enabled: false } } },
-          plugins: [pieLabelPlugin]
+            // Mengisi Progress Bar Keuangan dan Fisik
+            setProgress(document.getElementById(`finance${idx}`), persenKeuangan);
+            setProgress(document.getElementById(`physical${idx}`), opd.percentPhysical);
         });
-
-        setProgress(document.getElementById(`finance${idx}`), persenKeuangan);
-        setProgress(document.getElementById(`physical${idx}`), opd.percentPhysical);
-      });
     }
 
     // =====================
     // INISIALISASI DASHBOARD
     // =====================
     async function initDashboard() {
-      let selectedOpdId = getUrlParameter('opd');
-      if (!selectedOpdId && window.location.hash) {
-        selectedOpdId = window.location.hash.substring(1);
-      }
+        let selectedOpdId = getUrlParameter('opd');
+        if (!selectedOpdId && window.location.hash) {
+            selectedOpdId = window.location.hash.substring(1);
+        }
 
-      const allDataOPD = await fetchOPDData();
-      renderAllOPD(allDataOPD);
+        const allDataOPD = await fetchOPDData();
+        renderAllOPD(allDataOPD);
 
-      // Scroll ke kartu yang sesuai
-    if (selectedOpdId) {
-  setTimeout(() => {
-    const normalize = str => str.toLowerCase().replace(/[^a-z0-9]/g, '');
-    const targetId = normalize(selectedOpdId);
+        // Scroll ke kartu yang sesuai (jika ada)
+        if (selectedOpdId) {
+            setTimeout(() => {
+                const normalize = str => str.toLowerCase().replace(/[^a-z0-9]/g, '');
+                const targetId = normalize(selectedOpdId);
 
-    const targetCard = Array.from(document.querySelectorAll('.opd-card')).find(el => {
-      const titleText = el.querySelector('.opd-title')?.textContent || '';
-      return normalize(titleText).includes(targetId);
-    });
+                const targetCard = Array.from(document.querySelectorAll('.opd-card')).find(el => {
+                    const titleText = el.querySelector('.opd-title')?.textContent || '';
+                    return normalize(titleText).includes(targetId);
+                });
 
-    if (targetCard) {
-      // Pastikan seluruh kartu sudah stabil di-render (grafik dll)
-      setTimeout(() => {
-        const offsetTop = targetCard.getBoundingClientRect().top + window.scrollY - 25;
-        window.scrollTo({ top: offsetTop, behavior: 'smooth' });
-      }, 400);
-    }
-  }, 1400);
-}
-
+                if (targetCard) {
+                    // Beri jeda waktu agar grafik sempat di-render sepenuhnya
+                    setTimeout(() => {
+                        const offsetTop = targetCard.getBoundingClientRect().top + window.scrollY - 25;
+                        window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+                    }, 400);
+                }
+            }, 1400);
+        }
     }
 
     initDashboard();
-  </script>
+</script>
 
   <footer>
     Data Extract → https://sulselprov.e-planning.id <br>
@@ -367,4 +385,3 @@
 
 </body>
 </html>
-
