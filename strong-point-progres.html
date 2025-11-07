@@ -1070,8 +1070,23 @@ padding: 10px 15px; /* Tambahkan padding-top dan bottom */
     <footer id="footer">
      Strong Point 2025. &COPY; All rights reserved by @zuwlend<p>(Best view via Smartphone/Tablet).</p>
     </footer>
+
+<script>
+  const VISITOR_URL = 'https://script.google.com/macros/s/AKfycbwfbbXioNyRK2EiFO2_6Ok6Ahp_8n9kidDbLiru2K2KMuiD3TB9zmqJiz5PGihrwA/exec'; // ganti dgn URL kamu
+  fetch(VISITOR_URL)
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('visitorCount').textContent = `👁️ : ${data.visits}`;
+    })
+    .catch(err => {
+      console.error('Gagal memuat counter:', err);
+      document.getElementById('visitorCount').textContent = '👁️ Counter offline';
+    });
+</script>
+    
 </body>
 </html>
+
 
 
 
