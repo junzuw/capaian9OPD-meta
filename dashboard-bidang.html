@@ -3,7 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard Kegiatan Bidang Infraswil</title>
+<title>Dashboard Realisasi Anggaran</title>
+
+<meta property="og:title" content="Dashboard Kegiatan Internal Bidang Infraswil per 28 Pebruari 2026" />
+<meta property="og:description" content="Lihat progres pelaksanaan kegiatan & realisasi fisik & keuangan hingga bulan Pebruari Tahun 2026. 
+Ekstrasi data: 28 Pebruari 2026 | 14.00 WITA. (Best view via smartphone/tablet)" />
+<meta property="og:image" content="https://binfraswilzulsel.my.id/thumbnail.jpg" />
+<meta property="og:url" content="https://binfraswilzulsel.my.id/" />
+<meta property="og:type" content="website" />
+
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
     * { box-sizing: border-box; }
@@ -17,39 +26,52 @@
         min-height: 100vh;
     }
     
-    /* MODIFIKASI HEADER UNTUK LOGO */
     .header { 
         background: linear-gradient(90deg,#0f3c78,#0c6bdc); 
         color: white; 
         padding: 20px 40px; 
         display: flex; 
         align-items: center; 
-        gap: 20px; /* Jarak antara logo dan teks */
+        gap: 20px;
     }
+    
     .header-logo {
-        width: 60px; /* Ukuran lebar logo */
-        height: auto;
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 12px;
         filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.2));
+        border: 2px solid rgba(255, 255, 255, 0.5);
     }
+    
     .header-text h1 { margin: 0; font-size: 22px; line-height: 1.2; }
     .header-text p { margin: 5px 0 0 0; opacity: 0.9; font-size: 14px; }
 
     .container { padding: 20px 40px; flex: 1; }
 
-    /* GRID SYSTEM */
+    /* HIGHLIGHT STYLE UNTUK KATA HINGGA */
+    .highlight-orange {
+        background-color: #e712a0;
+        color: white;
+        padding: 2px 10px;
+        border-radius: 5px;
+        font-weight: bold;
+        margin: 0 4px;
+        display: inline-block;
+        font-size: 14px;
+    }
+
     .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 10px; }
     .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; }
 
-    /* CARD STYLING */
     .card { 
         background: white; 
         padding: 20px; 
         border-radius: 12px; 
         box-shadow: 0 4px 12px rgba(0,0,0,0.06); 
-        margin-bottom: 0; 
     }
     
-    .card-wrapper { margin-bottom: 5px; padding: 20px; background: white; border-radius: 12px; border: 1.5px solid #e3e6f0; }
+    .card-wrapper { margin-bottom: 20px; padding: 20px; background: white; border-radius: 12px; border: 1.5px solid #e3e6f0; }
 
     .card h4 { margin: 0; font-size: 12px; color: #666; text-transform: uppercase; }
     .card h2 { margin: 8px 0 0 0; font-size: 20px; color: #1a1a1a; }
@@ -62,11 +84,9 @@
     .icon-orange { background: #ff9800; }
     .icon-red { background: #e53935; }
 
-    /* PROGRESS BAR */
     .progress-bar { height: 7px; background: #eee; border-radius: 10px; margin-top: 10px; overflow: hidden; }
     .progress-fill { height: 100%; transition: width 0.5s ease; }
 
-    /* PROGRAM SECTION */
     .program-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
     .program-header h3 { margin: 0; font-size: 15px; line-height: 1.4; color: #0f3c78; flex: 1; padding-right: 15px; }
     
@@ -76,20 +96,19 @@
     .inner-card { border: 1.5px solid #e3e6f0; box-shadow: none; transition: all 0.2s ease; }
     .inner-card:hover { border-color: #0c6bdc; }
 
-    /* FOOTER STYLING */
     .footer {
         background: #0f3c78;
         color: white;
         text-align: center;
         padding: 15px;
         font-size: 10px;
-        margin-top: 5px;
+        margin-top: auto;
     }
 
     @media (max-width: 1200px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 768px) { 
         .header { padding: 20px; flex-direction: row; gap: 15px; } 
-        .header-logo { width: 100px; border-radius: 10px;}
+        .header-logo { width: 45px; height: 45px; }
         .header-text h1 { font-size: 18px; }
         .container { padding: 15px; } 
         .grid-4, .grid-2 { grid-template-columns: 1fr; } 
@@ -100,8 +119,9 @@
 <body>
 
 <div class="header">
-    <img src="logo.png" alt="Logo" class="header-logo"> <div class="header-text">
-        <h1>Dashboard Progres Pelaksanaan Kegiatan Internal Bidang Infraswil 2026</h1>
+    <img src="logo.png" alt="Logo" class="header-logo"> 
+    <div class="header-text">
+        <h1>Dashboard Progres Pelaksanaan Kegiatan Internal | Bidang Infrastruktur & Kewilayahan T.A. 2026</h1>
         <p><i class="fa-regular fa-calendar-check"></i> Per 28 Pebruari 2026</p>
     </div>
 </div>
@@ -131,7 +151,10 @@
     </div>
 
     <div class="card-wrapper">
-        <h3 style="margin-top:0; margin-bottom:15px; font-size: 16px;">TOTAL Realisasi Hingga Bulan Pebruari</h3>
+        <h3 style="margin-top:0; margin-bottom:15px; font-size: 16px;">
+            TOTAL Realisasi <span class="highlight-orange">HINGGA</span> Bulan Pebruari
+        </h3>
+        
         <div class="grid-4">
             <div class="card inner-card">
                 <div class="card-flex">
@@ -185,15 +208,14 @@
 </div>
 
 <div class="footer">
-    Data Extract --> https://sulselprov.e-planning.id <br>28 Pebruari 2026 | 14.00 WITA <br>&copy; Copyright by @zuwlend.
+    Data Extract --> https://sulselprov.e-planning.id | 28 Pebruari 2026 | 14.00 WITA <br>&copy; Copyright 2026  by @zuwlend.
 </div>
 
 <script>
-    // --- INPUT MANUAL ---
     const totalPaguManual = 606291800; 
     const realisasiBulanManual = 0; 
     const totalKeuManual = 0; 
-    const totalFisikManual = 0.00;
+    const totalFisikManual = 0;
 
     const programs = [
         {name:'Monitoring & Evaluasi Penyusunan DOKPER Perangkat Daerah Bidang Infrastruktur', pagu:122634800, realisasi: 0, fisik:0},
@@ -250,5 +272,4 @@
     }
 </script>
 </body>
-
 </html>
