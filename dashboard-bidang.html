@@ -107,9 +107,24 @@ Ekstrasi data: 28 Pebruari 2026 | 14.00 WITA. (Best view via smartphone/tablet)"
 
     @media (max-width: 1200px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 768px) { 
-        .header { padding: 20px; flex-direction: row; gap: 15px; } 
-        .header-logo { width: 100px; height: 100px; }
-        .header-text h1 { font-size: 18px; }
+        .header { 
+            padding: 20px; 
+            flex-direction: row; /* Menjaga logo tetap di samping teks, bukan di atasnya */
+            gap: 15px; 
+        } 
+        
+        .header-logo { 
+            /* UBAH DI SINI: Samakan dengan ukuran desktop agar tidak mengecil saat landscape */
+            width: 100px !important; 
+            height: 100px !important; 
+            flex-shrink: 0; /* Mencegah logo terhimpit oleh teks yang panjang */
+        }
+
+        .header-text h1 { 
+            font-size: 16px; /* Mengecilkan teks judul sedikit agar tidak menabrak logo */
+            line-height: 1.2;
+        }
+    }
         .container { padding: 15px; } 
         .grid-4, .grid-2 { grid-template-columns: 1fr; } 
     }
@@ -273,6 +288,7 @@ Ekstrasi data: 28 Pebruari 2026 | 14.00 WITA. (Best view via smartphone/tablet)"
 </script>
 </body>
 </html>
+
 
 
 
