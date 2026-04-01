@@ -224,6 +224,7 @@ Ekstrasi data: 31 Maret 2026 | 20.00 WITA. (Best view via smartphone/tablet)" />
 
 <div class="footer">
     Data Extract --> https://sulselprov.e-planning.id | 31 Maret 2026 | 20.00 WITA <br>&copy; Copyright 2026  by @zuwlend.
+   <span class="footer-divider">|</span> <span id="visitorCount"><i class="fa-solid fa-eye"></i> ...</span>
 </div>
   
 <script>
@@ -285,6 +286,20 @@ Ekstrasi data: 31 Maret 2026 | 20.00 WITA. (Best view via smartphone/tablet)" />
         const isOpen = content.style.display === "block";
         content.style.display = isOpen ? "none" : "block";
         button.textContent = isOpen ? "Detail" : "Tutup";
+
+// --- BAGIAN VISIT COUNTER (FOOTER) ---
+    const VISITOR_URL = 'https://script.google.com/macros/s/AKfycbwfbbXioNyRK2EiFO2_6Ok6Ahp_8n9kidDbLiru2K2KMuiD3TB9zmqJiz5PGihrwA/exec';
+    
+    fetch(VISITOR_URL)
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('visitorCount').innerHTML = `<i class="fa-solid fa-eye"></i> ${data.visits} `;
+        })
+        .catch(err => {
+            console.error('Gagal memuat counter:', err);
+            document.getElementById('visitorCount').innerHTML = '<i class="fa-solid fa-eye-slash"></i> Offline';
+        });
+       
     }
 </script>
 </body>
