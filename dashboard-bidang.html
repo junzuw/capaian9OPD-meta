@@ -287,19 +287,6 @@ Ekstrasi data: 31 Maret 2026 | 20.00 WITA. (Best view via smartphone/tablet)" />
         button.textContent = isOpen ? "Detail" : "Tutup";
     }
 </script>
-
-      <script>
-  const VISITOR_URL = 'https://script.google.com/macros/s/AKfycbwfbbXioNyRK2EiFO2_6Ok6Ahp_8n9kidDbLiru2K2KMuiD3TB9zmqJiz5PGihrwA/exec'; // ganti dgn URL kamu
-  fetch(VISITOR_URL)
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById('visitorCount').textContent = `👁️ : ${data.visits}`;
-    })
-    .catch(err => {
-      console.error('Gagal memuat counter:', err);
-      document.getElementById('visitorCount').textContent = '👁️ Counter offline';
-    });
-</script>
 </body>
 </html>
 
