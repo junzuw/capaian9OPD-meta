@@ -285,7 +285,7 @@
     fetch(VISITOR_URL)
         .then(res => res.json())
         .then(data => {
-            document.getElementById('visitorCount').innerHTML = `<i class="fa-solid fa-eye"></i> ${data.visits} Kunjungan`;
+            document.getElementById('visitorCount').innerHTML = `<i class="fa-solid fa-eye"></i> ${data.visits} `;
         })
         .catch(err => {
             console.error('Gagal memuat counter:', err);
