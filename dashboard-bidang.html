@@ -6,12 +6,10 @@
 <title>Dashboard Realisasi Keuangan</title>
 
 <meta property="og:title" content="Dashboard Kegiatan Internal Bidang Infraswil per 31 Maret 2026" />
-<meta property="og:description" content="Lihat progres pelaksanaan kegiatan, realisasi fisik & keuangan Bidang Infraswil hingga bulan Maret Tahun 2026. 
-Ekstrasi data: 31 Maret 2026 | 20.00 WITA. (Best view via smartphone/tablet)" />
+<meta property="og:description" content="Lihat progres pelaksanaan kegiatan, realisasi fisik & keuangan Bidang Infraswil hingga bulan Maret Tahun 2026. Ekstrasi data: 31 Maret 2026 | 20.00 WITA. (Best view via smartphone/tablet)" />
 <meta property="og:image" content="https://binfraswilzulsel.my.id/thumbnail4.jpg" />
 <meta property="og:url" content="https://binfraswilzulsel.my.id/" />
 <meta property="og:type" content="website" />
-
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
@@ -44,12 +42,24 @@ Ekstrasi data: 31 Maret 2026 | 20.00 WITA. (Best view via smartphone/tablet)" />
         border: 2px solid rgba(255, 255, 255, 0.5);
     }
     
-    .header-text h1 { margin: 0; font-size: 22px; line-height: 1.2; }
-    .header-text p { margin: 5px 0 0 0; opacity: 0.9; font-size: 14px; }
+    .header-text h1 { margin: 0; font-size: 20px; line-height: 1.2; }
+    .header-info { display: flex; gap: 15px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
+    .header-info p { margin: 0; opacity: 0.9; font-size: 13px; }
+
+    /* STYLE BARU UNTUK VISITOR COUNTER */
+    .visitor-badge {
+        background: rgba(255, 255, 255, 0.15);
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 12px !important;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
 
     .container { padding: 20px 40px; flex: 1; }
 
-    /* HIGHLIGHT STYLE UNTUK KATA HINGGA */
     .highlight-orange {
         background-color: #e712a0;
         color: white;
@@ -107,24 +117,9 @@ Ekstrasi data: 31 Maret 2026 | 20.00 WITA. (Best view via smartphone/tablet)" />
 
     @media (max-width: 1200px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 768px) { 
-        .header { 
-            padding: 20px; 
-            flex-direction: row; /* Menjaga logo tetap di samping teks, bukan di atasnya */
-            gap: 15px; 
-        } 
-        
-        .header-logo { 
-            /* UBAH DI SINI: Samakan dengan ukuran desktop agar tidak mengecil saat landscape */
-            width: 100px !important; 
-            height: 100px !important; 
-            flex-shrink: 0; /* Mencegah logo terhimpit oleh teks yang panjang */
-        }
-
-        .header-text h1 { 
-            font-size: 16px; /* Mengecilkan teks judul sedikit agar tidak menabrak logo */
-            line-height: 1.2;
-        }
-    }
+        .header { padding: 20px; gap: 15px; } 
+        .header-logo { width: 50px !important; height: 50px !important; }
+        .header-text h1 { font-size: 16px; }
         .container { padding: 15px; } 
         .grid-4, .grid-2 { grid-template-columns: 1fr; } 
     }
@@ -137,7 +132,12 @@ Ekstrasi data: 31 Maret 2026 | 20.00 WITA. (Best view via smartphone/tablet)" />
     <img src="logo.png" alt="Logo" class="header-logo"> 
     <div class="header-text">
         <h1>Dashboard Progres Pelaksanaan Kegiatan Internal | Bidang Infraswil T.A. 2026</h1>
-        <p><i class="fa-regular fa-calendar-check"></i> Per 31 Maret 2026</p>
+        <div class="header-info">
+            <p><i class="fa-regular fa-calendar-check"></i> Per 31 Maret 2026</p>
+            <p id="visitorCount" class="visitor-badge">
+                <i class="fa-solid fa-spinner fa-spin"></i> Menghitung...
+            </p>
+        </div>
     </div>
 </div>
 
@@ -223,10 +223,11 @@ Ekstrasi data: 31 Maret 2026 | 20.00 WITA. (Best view via smartphone/tablet)" />
 </div>
 
 <div class="footer">
-    Data Extract --> https://sulselprov.e-planning.id | 31 Maret 2026 | 20.00 WITA <br>&copy; Copyright 2026  by @zuwlend.
+    Data Extract --> https://sulselprov.e-planning.id | 31 Maret 2026 | 20.00 WITA <br>&copy; Copyright 2026 by @zuwlend.
 </div>
   
 <script>
+    // DATA MANUAL
     const totalPaguManual = 1818875400;  
     const realisasiBulanManual = 0; 
     const totalKeuManual = 0; 
@@ -239,6 +240,7 @@ Ekstrasi data: 31 Maret 2026 | 20.00 WITA. (Best view via smartphone/tablet)" />
         {name:'Sinergitas & Harmonisasi Perencanaan Bidang Kewilayahan', pagu:416683000, realisasi:0, fisik:0}
     ];
 
+    // RENDER DASHBOARD UTAMA
     document.getElementById('total-pagu').textContent = `Rp ${totalPaguManual.toLocaleString('id-ID')}`;
     document.getElementById('realisasi-bulan').textContent = `Rp ${realisasiBulanManual.toLocaleString('id-ID')}`;
     document.getElementById('total-keu-rp').textContent = `Rp ${totalKeuManual.toLocaleString('id-ID')}`;
@@ -251,6 +253,7 @@ Ekstrasi data: 31 Maret 2026 | 20.00 WITA. (Best view via smartphone/tablet)" />
     document.getElementById('total-fisik-bar').style.width = `${totalFisikManual}%`;
     document.getElementById('total-sisa').textContent = `Rp ${(totalPaguManual-totalKeuManual).toLocaleString('id-ID')}`;
 
+    // RENDER LIST PROGRAM
     const container = document.getElementById('program-container');
     programs.forEach((p)=>{
         const card = document.createElement('div');
@@ -286,11 +289,19 @@ Ekstrasi data: 31 Maret 2026 | 20.00 WITA. (Best view via smartphone/tablet)" />
         content.style.display = isOpen ? "none" : "block";
         button.textContent = isOpen ? "Detail" : "Tutup";
     }
+
+    // --- BAGIAN VISIT COUNTER ---
+    const VISITOR_URL = 'https://script.google.com/macros/s/AKfycbwfbbXioNyRK2EiFO2_6Ok6Ahp_8n9kidDbLiru2K2KMuiD3TB9zmqJiz5PGihrwA/exec';
+    
+    fetch(VISITOR_URL)
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('visitorCount').innerHTML = `<i class="fa-solid fa-eye"></i> ${data.visits} Dilihat`;
+        })
+        .catch(err => {
+            console.error('Gagal memuat counter:', err);
+            document.getElementById('visitorCount').innerHTML = '<i class="fa-solid fa-eye-slash"></i> Offline';
+        });
 </script>
 </body>
 </html>
-
-
-
-
-
