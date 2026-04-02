@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Realisasi Bidang Infraswil 2026</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: #f4f6fb; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        /* Header */
+        .header { background: linear-gradient(90deg,#0f3c78,#0c6bdc); color: white; padding: 20px 40px; display: flex; align-items: center; gap: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .header-logo { width: 60px; height: 60px; object-fit: cover; border-radius: 12px; border: 2px solid rgba(255, 255, 255, 0.5); }
+        .header-text h1 { margin: 0; font-size: 18px; line-height: 1.2; }
+        .header-text p { margin: 5px 0 0 0; opacity: 0.9; font-size: 12px; }
+
+        .container { padding: 20px 40px; flex: 1; }
+
+        /* Card Styles */
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .inner-card { border: 1.5px solid #e3e6f0; box-shadow: none; transition: border-color 0.2s; }
+        .inner-card:hover { border-color: #0c6bdc; }
+
+        .card h4 { margin: 0; font-size: 12px; color: #777; text-transform: uppercase; letter-spacing: 0.5px; }
+        .card h2 { margin: 8px 0 0 0; font-size: 20px; color: #1a1a1a; font-weight: 700; }
+        
+        .card-flex { display: flex; align-items: center; gap: 12px; }
+        .icon-box { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 15px; color: white; flex-shrink: 0; }
+        
+        .icon-blue { background: #0c6bdc; }
+        .icon-green { background: #28a745; }
+        .icon-orange { background: #ff9800; }
+        .icon-red { background: #e53935; }
+
+        /* Grid Layout */
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 15px; }
+
+        /* Progress Bar */
+        .progress-bar { height: 8px; background: #eee; border-radius: 10px; margin-top: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; width: 0%; transition: width 1.5s ease-in-out; }
+
+        /* Accordion */
+        .program-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .program-header h3 { margin: 0; font-size: 14px; color: #0f3c78; flex: 1; padding-right: 15px; font-weight: 600; line-height: 1.4; }
+        
+        .toggle-btn { background: #f5f4f0; color: #0f3c78; border: 1px solid #e6e2d1; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; }
+
+        .program-content { display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee; }
+
+        /* Footer */
+        .footer { background: #0f3c78; color: white; text-align: center; padding: 20px; font-size: 11px; margin-top: auto; }
+
+        /* Responsive */
+        @media (max-width: 992px) { .grid-4 { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 600px) { .header { padding: 15px; } .container { padding: 15px; } .grid-4 { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <img src="logo.png" alt="Logo" class="header-logo"> 
+    <div class="header-text">
+        <h1>Dashboard Progres Realisasi Kegiatan | Bidang Infraswil 2026</h1>
+        <p><i class="fa-regular fa-calendar-check"></i> Data Realisasi per 31 Maret 2026</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="card inner-card" style="background: white;">
+        <div class="card-flex">
+            <div class="icon-box icon-blue"><i class="fa-solid fa-wallet"></i></div>
+            <div class="card-text">
+                <h4>Total Pagu Bidang</h4>
+                <h2 id="total-pagu-label">Rp 1.212.583.600</h2>
+            </div>
+        </div>
+    </div>
+
+        <div class="card inner-card" style="background: white;">
+        <div class="card-flex">
+            <div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div>
+            <div class="card-text">
+                <h4>Total Realisasi</h4>
+                <h2 id="total-realisasi-label">Rp 0</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="card inner-card" style="background: white;">
+        <div class="card-flex">
+            <div class="icon-box icon-red"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+            <div class="card-text">
+                <h4>Sisa Pagu</h4>
+                <h2 id="sisa-pagu-label">Rp 0</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="border: 1.5px solid #e3e6f0; box-shadow: none;">
+        <h3 style="margin-top:0; margin-bottom:20px; font-size: 16px; color: #333;">
+            <i class="fa-solid fa-list-check"></i> Rincian Progres per Kegiatan
+        </h3>
+
+        <div id="program-list">
+            
+            <div class="card inner-card">
+                <div class="program-header" onclick="toggleProgram(this)">
+                    <div>
+                        <h3>Koordinasi Perencanaan Bidang Infrastruktur dan Kewilayahan</h3>
+                        <p style="margin:6px 0 0 0; font-size:15px; color:#0c6bdc; font-weight:700;">Pagu: Rp 606.291.800</p>
+                    </div>
+                    <button class="toggle-btn">Detail</button>
+                </div>
+                <div class="program-content" id="keg-0">
+                
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div><div><h4>Realisasi Bulan Ini (Rp)</h4><h2 class="txt-realisasi">...</h2></div></div></div>
+                        <h3 style="text-align: center; font-size: 14px;">REALISASI TOTAL <span style="background-color: rgb(255, 115, 0); color: white; padding: 0 5px; border-radius: 8px;">HINGGA</span> MARET</h3>
+                    <div class="grid-4">
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div><div><h4>Realisasi (Rp)</h4><h2 class="txt-realisasi">...</h2></div></div></div>
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-blue"><i class="fa-solid fa-chart-line"></i></div><div><h4>Keuangan</h4><h2 class="txt-keu">0%</h2></div></div><div class="progress-bar"><div class="progress-fill bar-keu" style="background:#0c6bdc;"></div></div></div>
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-orange"><i class="fa-solid fa-building"></i></div><div><h4>Fisik</h4><h2 class="txt-fisik">0%</h2></div></div><div class="progress-bar"><div class="progress-fill bar-fisik" style="background:#ff9800;"></div></div></div>
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-red"><i class="fa-solid fa-hand-holding-dollar"></i></div><div><h4>Sisa Dana</h4><h2 class="txt-sisa">...</h2></div></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card inner-card">
+                <div class="program-header" onclick="toggleProgram(this)">
+                    <div>
+                        <h3>Pelaksanaan Monitoring dan Evaluasi Penyusunan Dokumen Perencanaan Pembangunan Perangkat Daerah Bidang Infrastruktur</h3>
+                        <p style="margin:6px 0 0 0; font-size:15px; color:#0c6bdc; font-weight:700;">Pagu: Rp 122.634.800</p>
+                    </div>
+                    <button class="toggle-btn">Detail</button>
+                </div>
+                <div class="program-content" id="keg-1">
+
+                    <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div><div><h4>Realisasi Bulan Ini (Rp)</h4><h2 class="txt-realisasi">...</h2></div></div></div>
+                        <h3 style="text-align: center; font-size: 14px;">REALISASI TOTAL <span style="background-color: rgb(255, 115, 0); color: white; padding: 0 5px; border-radius: 8px;">HINGGA</span> MARET</h3>
+
+                    <div class="grid-4">
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div><div><h4>Realisasi (Rp)</h4><h2 class="txt-realisasi">...</h2></div></div></div>
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-blue"><i class="fa-solid fa-chart-line"></i></div><div><h4>Keuangan</h4><h2 class="txt-keu">0%</h2></div></div><div class="progress-bar"><div class="progress-fill bar-keu" style="background:#0c6bdc;"></div></div></div>
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-orange"><i class="fa-solid fa-building"></i></div><div><h4>Fisik</h4><h2 class="txt-fisik">0%</h2></div></div><div class="progress-bar"><div class="progress-fill bar-fisik" style="background:#ff9800;"></div></div></div>
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-red"><i class="fa-solid fa-hand-holding-dollar"></i></div><div><h4>Sisa Dana</h4><h2 class="txt-sisa">...</h2></div></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card inner-card">
+                <div class="program-header" onclick="toggleProgram(this)">
+                    <div>
+                        <h3>Koordinasi Penyusunan Dokumen Perencanaan Pembangunan Daerah Bidang Kewilayahan (RPJPD, RPJMD dan RKPD)</h3>
+                        <p style="margin:6px 0 0 0; font-size:15px; color:#0c6bdc; font-weight:700;">Pagu: Rp 66.974.000</p>
+                </div>
+                <button class="toggle-btn">Detail</button>
+                </div>
+                <div class="program-content" id="keg-2">
+
+                    <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div><div><h4>Realisasi Bulan Ini (Rp)</h4><h2 class="txt-realisasi">...</h2></div></div></div>
+                        <h3 style="text-align: center; font-size: 14px;">REALISASI TOTAL <span style="background-color: rgb(255, 115, 0); color: white; padding: 0 5px; border-radius: 8px;">HINGGA</span> MARET</h3>
+
+                    <div class="grid-4">
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div><div><h4>Realisasi (Rp)</h4><h2 class="txt-realisasi">...</h2></div></div></div>
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-blue"><i class="fa-solid fa-chart-line"></i></div><div><h4>Keuangan</h4><h2 class="txt-keu">0%</h2></div></div><div class="progress-bar"><div class="progress-fill bar-keu" style="background:#0c6bdc;"></div></div></div>
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-orange"><i class="fa-solid fa-building"></i></div><div><h4>Fisik</h4><h2 class="txt-fisik">0%</h2></div></div><div class="progress-bar"><div class="progress-fill bar-fisik" style="background:#ff9800;"></div></div></div>
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-red"><i class="fa-solid fa-hand-holding-dollar"></i></div><div><h4>Sisa Dana</h4><h2 class="txt-sisa">...</h2></div></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card inner-card">
+                <div class="program-header" onclick="toggleProgram(this)">
+                    <div>
+                        <h3>Koordinasi Pelaksanaan Sinergitas dan Harmonisasi Perencanaan Pembangunan Daerah Bidang Kewilayahan</h3>
+                        <p style="margin:6px 0 0 0; font-size:15px; color:#0c6bdc; font-weight:700;">Pagu: Rp 416.683.000</p>
+                    </div>
+                    <button class="toggle-btn">Detail</button>
+                </div>
+                <div class="program-content" id="keg-3">
+
+                    <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div><div><h4>Realisasi Bulan Ini (Rp)</h4><h2 class="txt-realisasi">...</h2></div></div></div>
+                        <h3 style="text-align: center; font-size: 14px;">REALISASI TOTAL <span style="background-color: rgb(255, 115, 0); color: white; padding: 0 5px; border-radius: 8px;">HINGGA</span> MARET</h3>
+
+                    <div class="grid-4">
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div><div><h4>Realisasi (Rp)</h4><h2 class="txt-realisasi">...</h2></div></div></div>
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-blue"><i class="fa-solid fa-chart-line"></i></div><div><h4>Keuangan</h4><h2 class="txt-keu">0%</h2></div></div><div class="progress-bar"><div class="progress-fill bar-keu" style="background:#0c6bdc;"></div></div></div>
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-orange"><i class="fa-solid fa-building"></i></div><div><h4>Fisik</h4><h2 class="txt-fisik">0%</h2></div></div><div class="progress-bar"><div class="progress-fill bar-fisik" style="background:#ff9800;"></div></div></div>
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-red"><i class="fa-solid fa-hand-holding-dollar"></i></div><div><h4>Sisa Dana</h4><h2 class="txt-sisa">...</h2></div></div></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    Sumber Data: <a href="https://sulselprov.e-planning.id" style="color:#6ab0ff; text-decoration:none;">sulselprov.e-planning.id</a> | Update: 31 Maret 2026 <br>
+    &copy; 2026 by @zuwlend. All Rights Reserved.
+    <div id="visitorCount" style="margin-top:8px; opacity:0.8;"></div>
+</div>
+
+<script>
+    // MASUKKAN URL WEB APP ANDA DI SINI
+    const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycby9z8Zlrftiv7acUaY4az5JTNI3H20PtrxisPGalQdlY89c-Cxf2zSVKOLP_L-NIDjkiQ/exec';
+    const VISITOR_URL = 'https://script.google.com/macros/s/AKfycbxrA6l4GNepnK6QllaRUHBT8lBzUFPy0QUbd-SFM11iVNP8GOX8Hn8UJaK23SXClWO7/exec'; 
+
+    async function loadDataAndInject() {
+        try {
+            const response = await fetch(SHEET_API_URL + '?t=' + new Date().getTime());
+            const data = await response.json();
+            
+            data.forEach((item, index) => {
+                const row = document.getElementById(`keg-${index}`);
+                if (row) {
+                    // Suntik Angka Realisasi
+                    row.querySelector('.txt-realisasi').textContent = `Rp ${item.realisasiTot.toLocaleString('id-ID')}`;
+                    // Suntik Persen Keuangan & Progress Bar
+                    row.querySelector('.txt-keu').textContent = `${item.keuPersen}%`;
+                    row.querySelector('.bar-keu').style.width = `${item.keuPersen}%`;
+                    // Suntik Persen Fisik & Progress Bar
+                    row.querySelector('.txt-fisik').textContent = `${item.fisikPersen}%`;
+                    row.querySelector('.bar-fisik').style.width = `${item.fisikPersen}%`;
+                    // Suntik Sisa Dana
+                    row.querySelector('.txt-sisa').textContent = `Rp ${item.sisa.toLocaleString('id-ID')}`;
+                }
+            });
+        } catch (error) {
+            console.error("Gagal mengambil data realisasi:", error);
+        }
+    }
+
+    function toggleProgram(element) {
+        const content = element.nextElementSibling;
+        const button = element.querySelector(".toggle-btn");
+        const isOpen = content.style.display === "block";
+        content.style.display = isOpen ? "none" : "block";
+        button.textContent = isOpen ? "Detail" : "Tutup";
+        button.style.background = isOpen ? "#f0f2f5" : "#0c6bdc";
+        button.style.color = isOpen ? "#0f3c78" : "white";
+    }
+
+    // Load Visitor
+    fetch(VISITOR_URL).then(res => res.json()).then(data => {
+        document.getElementById('visitorCount').innerHTML = `<i class="fa-solid fa-eye"></i> : ${data.visits}`;
+    }).catch(() => {});
+
+    // Jalankan penyuntikan data
+    loadDataAndInject();
+</script>
+</body>
+</html>
