@@ -62,26 +62,27 @@
     <img src="logo.png" alt="Logo" class="header-logo"> 
     <div class="header-text">
         <h1>Dashboard Progres Realisasi Kegiatan | Bidang Infraswil 2026</h1>
-        <p><i class="fa-regular fa-calendar-check"></i> Data Realisasi per 31 Maret 2026</p>
+        <p><i class="fa-regular fa-calendar-check"></i> Data Realisasi per 30 April 2026</p>
     </div>
 </div>
 
 <div class="container">
+    <!-- Ringkasan Atas -->
     <div class="card inner-card" style="background: white;">
         <div class="card-flex">
             <div class="icon-box icon-blue"><i class="fa-solid fa-wallet"></i></div>
             <div class="card-text">
                 <h4>Total Pagu Bidang</h4>
-                <h2 id="total-pagu-label">Rp 1.212.583.600</h2>
+                <h2 id="total-pagu-label">Rp 0</h2>
             </div>
         </div>
     </div>
 
-        <div class="card inner-card" style="background: white;">
+    <div class="card inner-card" style="background: white;">
         <div class="card-flex">
             <div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div>
             <div class="card-text">
-                <h4>Total Realisasi</h4>
+                <h4>Total Realisasi (s.d April)</h4>
                 <h2 id="total-realisasi-label">Rp 0</h2>
             </div>
         </div>
@@ -91,7 +92,7 @@
         <div class="card-flex">
             <div class="icon-box icon-red"><i class="fa-solid fa-hand-holding-dollar"></i></div>
             <div class="card-text">
-                <h4>Sisa Pagu</h4>
+                <h4>Sisa Pagu Keseluruhan</h4>
                 <h2 id="sisa-pagu-label">Rp 0</h2>
             </div>
         </div>
@@ -104,6 +105,7 @@
 
         <div id="program-list">
             
+            <!-- Kegiatan 0 -->
             <div class="card inner-card">
                 <div class="program-header" onclick="toggleProgram(this)">
                     <div>
@@ -113,18 +115,18 @@
                     <button class="toggle-btn">Detail</button>
                 </div>
                 <div class="program-content" id="keg-0">
-                
-                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div><div><h4>Realisasi Bulan Ini (Rp)</h4><h2 class="txt-realisasi">...</h2></div></div></div>
-                        <h3 style="text-align: center; font-size: 14px;">REALISASI TOTAL <span style="background-color: rgb(255, 115, 0); color: white; padding: 0 5px; border-radius: 8px;">HINGGA</span> MARET</h3>
+                    <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-calendar-day"></i></div><div><h4>Realisasi Bulan April (Rp)</h4><h2 class="txt-realisasi-bulan">...</h2></div></div></div>
+                    <h3 style="text-align: center; font-size: 14px;">REALISASI TOTAL <span style="background-color: rgb(255, 115, 0); color: white; padding: 0 5px; border-radius: 8px;">HINGGA</span> APRIL</h3>
                     <div class="grid-4">
-                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div><div><h4>Realisasi (Rp)</h4><h2 class="txt-realisasi">...</h2></div></div></div>
-                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-blue"><i class="fa-solid fa-chart-line"></i></div><div><h4>Keuangan</h4><h2 class="txt-keu">0%</h2></div></div><div class="progress-bar"><div class="progress-fill bar-keu" style="background:#0c6bdc;"></div></div></div>
-                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-orange"><i class="fa-solid fa-building"></i></div><div><h4>Fisik</h4><h2 class="txt-fisik">0%</h2></div></div><div class="progress-bar"><div class="progress-fill bar-fisik" style="background:#ff9800;"></div></div></div>
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div><div><h4>Total Realisasi</h4><h2 class="txt-realisasi">...</h2></div></div></div>
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-blue"><i class="fa-solid fa-chart-line"></i></div><div><h4>Keuangan (%)</h4><h2 class="txt-keu">...</h2></div></div><div class="progress-bar"><div class="progress-fill bar-keu" style="background:#0c6bdc;"></div></div></div>
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-orange"><i class="fa-solid fa-building"></i></div><div><h4>Fisik (%)</h4><h2 class="txt-fisik">...</h2></div></div><div class="progress-bar"><div class="progress-fill bar-fisik" style="background:#ff9800;"></div></div></div>
                         <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-red"><i class="fa-solid fa-hand-holding-dollar"></i></div><div><h4>Sisa Dana</h4><h2 class="txt-sisa">...</h2></div></div></div>
                     </div>
                 </div>
             </div>
 
+            <!-- Kegiatan 1 -->
             <div class="card inner-card">
                 <div class="program-header" onclick="toggleProgram(this)">
                     <div>
@@ -134,41 +136,39 @@
                     <button class="toggle-btn">Detail</button>
                 </div>
                 <div class="program-content" id="keg-1">
-
-                    <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div><div><h4>Realisasi Bulan Ini (Rp)</h4><h2 class="txt-realisasi">...</h2></div></div></div>
-                        <h3 style="text-align: center; font-size: 14px;">REALISASI TOTAL <span style="background-color: rgb(255, 115, 0); color: white; padding: 0 5px; border-radius: 8px;">HINGGA</span> MARET</h3>
-
+                    <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-calendar-day"></i></div><div><h4>Realisasi Bulan April (Rp)</h4><h2 class="txt-realisasi-bulan">...</h2></div></div></div>
+                    <h3 style="text-align: center; font-size: 14px;">REALISASI TOTAL <span style="background-color: rgb(255, 115, 0); color: white; padding: 0 5px; border-radius: 8px;">HINGGA</span> APRIL</h3>
                     <div class="grid-4">
-                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div><div><h4>Realisasi (Rp)</h4><h2 class="txt-realisasi">...</h2></div></div></div>
-                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-blue"><i class="fa-solid fa-chart-line"></i></div><div><h4>Keuangan</h4><h2 class="txt-keu">0%</h2></div></div><div class="progress-bar"><div class="progress-fill bar-keu" style="background:#0c6bdc;"></div></div></div>
-                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-orange"><i class="fa-solid fa-building"></i></div><div><h4>Fisik</h4><h2 class="txt-fisik">0%</h2></div></div><div class="progress-bar"><div class="progress-fill bar-fisik" style="background:#ff9800;"></div></div></div>
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div><div><h4>Total Realisasi</h4><h2 class="txt-realisasi">...</h2></div></div></div>
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-blue"><i class="fa-solid fa-chart-line"></i></div><div><h4>Keuangan (%)</h4><h2 class="txt-keu">...</h2></div></div><div class="progress-bar"><div class="progress-fill bar-keu" style="background:#0c6bdc;"></div></div></div>
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-orange"><i class="fa-solid fa-building"></i></div><div><h4>Fisik (%)</h4><h2 class="txt-fisik">...</h2></div></div><div class="progress-bar"><div class="progress-fill bar-fisik" style="background:#ff9800;"></div></div></div>
                         <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-red"><i class="fa-solid fa-hand-holding-dollar"></i></div><div><h4>Sisa Dana</h4><h2 class="txt-sisa">...</h2></div></div></div>
                     </div>
                 </div>
             </div>
 
+            <!-- Kegiatan 2 -->
             <div class="card inner-card">
                 <div class="program-header" onclick="toggleProgram(this)">
                     <div>
                         <h3>Koordinasi Penyusunan Dokumen Perencanaan Pembangunan Daerah Bidang Kewilayahan (RPJPD, RPJMD dan RKPD)</h3>
                         <p style="margin:6px 0 0 0; font-size:15px; color:#0c6bdc; font-weight:700;">Pagu: Rp 66.974.000</p>
-                </div>
-                <button class="toggle-btn">Detail</button>
+                    </div>
+                    <button class="toggle-btn">Detail</button>
                 </div>
                 <div class="program-content" id="keg-2">
-
-                    <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div><div><h4>Realisasi Bulan Ini (Rp)</h4><h2 class="txt-realisasi">...</h2></div></div></div>
-                        <h3 style="text-align: center; font-size: 14px;">REALISASI TOTAL <span style="background-color: rgb(255, 115, 0); color: white; padding: 0 5px; border-radius: 8px;">HINGGA</span> MARET</h3>
-
+                    <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-calendar-day"></i></div><div><h4>Realisasi Bulan April (Rp)</h4><h2 class="txt-realisasi-bulan">...</h2></div></div></div>
+                    <h3 style="text-align: center; font-size: 14px;">REALISASI TOTAL <span style="background-color: rgb(255, 115, 0); color: white; padding: 0 5px; border-radius: 8px;">HINGGA</span> APRIL</h3>
                     <div class="grid-4">
-                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div><div><h4>Realisasi (Rp)</h4><h2 class="txt-realisasi">...</h2></div></div></div>
-                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-blue"><i class="fa-solid fa-chart-line"></i></div><div><h4>Keuangan</h4><h2 class="txt-keu">0%</h2></div></div><div class="progress-bar"><div class="progress-fill bar-keu" style="background:#0c6bdc;"></div></div></div>
-                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-orange"><i class="fa-solid fa-building"></i></div><div><h4>Fisik</h4><h2 class="txt-fisik">0%</h2></div></div><div class="progress-bar"><div class="progress-fill bar-fisik" style="background:#ff9800;"></div></div></div>
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div><div><h4>Total Realisasi</h4><h2 class="txt-realisasi">...</h2></div></div></div>
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-blue"><i class="fa-solid fa-chart-line"></i></div><div><h4>Keuangan (%)</h4><h2 class="txt-keu">...</h2></div></div><div class="progress-bar"><div class="progress-fill bar-keu" style="background:#0c6bdc;"></div></div></div>
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-orange"><i class="fa-solid fa-building"></i></div><div><h4>Fisik (%)</h4><h2 class="txt-fisik">...</h2></div></div><div class="progress-bar"><div class="progress-fill bar-fisik" style="background:#ff9800;"></div></div></div>
                         <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-red"><i class="fa-solid fa-hand-holding-dollar"></i></div><div><h4>Sisa Dana</h4><h2 class="txt-sisa">...</h2></div></div></div>
                     </div>
                 </div>
             </div>
 
+            <!-- Kegiatan 3 -->
             <div class="card inner-card">
                 <div class="program-header" onclick="toggleProgram(this)">
                     <div>
@@ -178,14 +178,12 @@
                     <button class="toggle-btn">Detail</button>
                 </div>
                 <div class="program-content" id="keg-3">
-
-                    <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div><div><h4>Realisasi Bulan Ini (Rp)</h4><h2 class="txt-realisasi">...</h2></div></div></div>
-                        <h3 style="text-align: center; font-size: 14px;">REALISASI TOTAL <span style="background-color: rgb(255, 115, 0); color: white; padding: 0 5px; border-radius: 8px;">HINGGA</span> MARET</h3>
-
+                    <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-calendar-day"></i></div><div><h4>Realisasi Bulan April (Rp)</h4><h2 class="txt-realisasi-bulan">...</h2></div></div></div>
+                    <h3 style="text-align: center; font-size: 14px;">REALISASI TOTAL <span style="background-color: rgb(255, 115, 0); color: white; padding: 0 5px; border-radius: 8px;">HINGGA</span> APRIL</h3>
                     <div class="grid-4">
-                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div><div><h4>Realisasi (Rp)</h4><h2 class="txt-realisasi">...</h2></div></div></div>
-                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-blue"><i class="fa-solid fa-chart-line"></i></div><div><h4>Keuangan</h4><h2 class="txt-keu">0%</h2></div></div><div class="progress-bar"><div class="progress-fill bar-keu" style="background:#0c6bdc;"></div></div></div>
-                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-orange"><i class="fa-solid fa-building"></i></div><div><h4>Fisik</h4><h2 class="txt-fisik">0%</h2></div></div><div class="progress-bar"><div class="progress-fill bar-fisik" style="background:#ff9800;"></div></div></div>
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div><div><h4>Total Realisasi</h4><h2 class="txt-realisasi">...</h2></div></div></div>
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-blue"><i class="fa-solid fa-chart-line"></i></div><div><h4>Keuangan (%)</h4><h2 class="txt-keu">...</h2></div></div><div class="progress-bar"><div class="progress-fill bar-keu" style="background:#0c6bdc;"></div></div></div>
+                        <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-orange"><i class="fa-solid fa-building"></i></div><div><h4>Fisik (%)</h4><h2 class="txt-fisik">...</h2></div></div><div class="progress-bar"><div class="progress-fill bar-fisik" style="background:#ff9800;"></div></div></div>
                         <div class="card inner-card"><div class="card-flex"><div class="icon-box icon-red"><i class="fa-solid fa-hand-holding-dollar"></i></div><div><h4>Sisa Dana</h4><h2 class="txt-sisa">...</h2></div></div></div>
                     </div>
                 </div>
@@ -196,39 +194,82 @@
 </div>
 
 <div class="footer">
-    Sumber Data: <a href="https://sulselprov.e-planning.id" style="color:#6ab0ff; text-decoration:none;">sulselprov.e-planning.id</a> | Update: 31 Maret 2026 <br>
+    Sumber Data: <a href="https://sulselprov.e-planning.id" style="color:#6ab0ff; text-decoration:none;">sulselprov.e-planning.id</a> | Update: 30 April 2026 <br>
     &copy; 2026 by @zuwlend. All Rights Reserved.
     <div id="visitorCount" style="margin-top:8px; opacity:0.8;"></div>
 </div>
 
 <script>
-    // MASUKKAN URL WEB APP ANDA DI SINI
-    const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycby9z8Zlrftiv7acUaY4az5JTNI3H20PtrxisPGalQdlY89c-Cxf2zSVKOLP_L-NIDjkiQ/exec';
+    // ==========================================
+    // DATA TABEL PER APRIL 2026
+    // ==========================================
+    const dataKegiatan = [
+        {
+            pagu: 606291800,
+            realisasiBulanIni: 12797341, // Realisasi Bulan April
+            realisasiTot: 12797341,      // Hingga April
+            fisikPersen: 4.81
+        },
+        {
+            pagu: 122634800,
+            realisasiBulanIni: 0,
+            realisasiTot: 0,
+            fisikPersen: 0.0
+        },
+        {
+            pagu: 66974000,
+            realisasiBulanIni: 1390000,
+            realisasiTot: 1390000,
+            fisikPersen: 6.37
+        },
+        {
+            pagu: 416683000,
+            realisasiBulanIni: 11407341,
+            realisasiTot: 11407341,
+            fisikPersen: 5.98
+        }
+    ];
+
     const VISITOR_URL = 'https://script.google.com/macros/s/AKfycbxrA6l4GNepnK6QllaRUHBT8lBzUFPy0QUbd-SFM11iVNP8GOX8Hn8UJaK23SXClWO7/exec'; 
 
-    async function loadDataAndInject() {
-        try {
-            const response = await fetch(SHEET_API_URL + '?t=' + new Date().getTime());
-            const data = await response.json();
-            
-            data.forEach((item, index) => {
-                const row = document.getElementById(`keg-${index}`);
-                if (row) {
-                    // Suntik Angka Realisasi
-                    row.querySelector('.txt-realisasi').textContent = `Rp ${item.realisasiTot.toLocaleString('id-ID')}`;
-                    // Suntik Persen Keuangan & Progress Bar
-                    row.querySelector('.txt-keu').textContent = `${item.keuPersen}%`;
-                    row.querySelector('.bar-keu').style.width = `${item.keuPersen}%`;
-                    // Suntik Persen Fisik & Progress Bar
-                    row.querySelector('.txt-fisik').textContent = `${item.fisikPersen}%`;
-                    row.querySelector('.bar-fisik').style.width = `${item.fisikPersen}%`;
-                    // Suntik Sisa Dana
-                    row.querySelector('.txt-sisa').textContent = `Rp ${item.sisa.toLocaleString('id-ID')}`;
-                }
-            });
-        } catch (error) {
-            console.error("Gagal mengambil data realisasi:", error);
-        }
+    function loadDataAndInject() {
+        let grandTotalPagu = 0;
+        let grandTotalRealisasi = 0;
+
+        dataKegiatan.forEach((item, index) => {
+            const row = document.getElementById(`keg-${index}`);
+            if (row) {
+                // Hitung Keuangan (Persen) & Sisa
+                const keuPersen = ((item.realisasiTot / item.pagu) * 100).toFixed(2);
+                const sisa = item.pagu - item.realisasiTot;
+
+                // Akumulasi untuk header
+                grandTotalPagu += item.pagu;
+                grandTotalRealisasi += item.realisasiTot;
+
+                // Injeksi Realisasi Bulan April
+                row.querySelector('.txt-realisasi-bulan').textContent = `Rp ${item.realisasiBulanIni.toLocaleString('id-ID')}`;
+                
+                // Injeksi Realisasi Hingga April
+                row.querySelector('.txt-realisasi').textContent = `Rp ${item.realisasiTot.toLocaleString('id-ID')}`;
+                
+                // Injeksi Keuangan & Bar
+                row.querySelector('.txt-keu').textContent = `${keuPersen}%`;
+                row.querySelector('.bar-keu').style.width = `${keuPersen}%`;
+                
+                // Injeksi Fisik & Bar
+                row.querySelector('.txt-fisik').textContent = `${item.fisikPersen}%`;
+                row.querySelector('.bar-fisik').style.width = `${item.fisikPersen}%`;
+                
+                // Injeksi Sisa Dana
+                row.querySelector('.txt-sisa').textContent = `Rp ${sisa.toLocaleString('id-ID')}`;
+            }
+        });
+
+        // Update Header Utama Dashboard
+        document.getElementById('total-pagu-label').textContent = `Rp ${grandTotalPagu.toLocaleString('id-ID')}`;
+        document.getElementById('total-realisasi-label').textContent = `Rp ${grandTotalRealisasi.toLocaleString('id-ID')}`;
+        document.getElementById('sisa-pagu-label').textContent = `Rp ${(grandTotalPagu - grandTotalRealisasi).toLocaleString('id-ID')}`;
     }
 
     function toggleProgram(element) {
@@ -241,12 +282,12 @@
         button.style.color = isOpen ? "#0f3c78" : "white";
     }
 
-    // Load Visitor
+    // Visitor Counter
     fetch(VISITOR_URL).then(res => res.json()).then(data => {
         document.getElementById('visitorCount').innerHTML = `<i class="fa-solid fa-eye"></i> : ${data.visits}`;
     }).catch(() => {});
 
-    // Jalankan penyuntikan data
+    // Jalankan
     loadDataAndInject();
 </script>
 </body>
