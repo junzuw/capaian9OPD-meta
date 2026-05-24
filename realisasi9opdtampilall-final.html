@@ -5,16 +5,15 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Dashboard OPD — Progres Realisasi Keuangan & Fisik</title>
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XGZ0G9ZM3K"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XGZ0G9ZM3K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-    gtag('config', 'G-XXXXXXXXXX'); // PASTIKAN JUGA MENGGANTI YANG INI
-  </script>
+    gtag('config', 'G-XXXXXXXXXX'); 
+  </script>
 
-  
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     :root {
@@ -36,6 +35,27 @@
       color: #0740aa;
       padding: 20px;
       box-sizing: border-box;
+    }
+
+    /* CONTAINER DROPDOWN FILTER */
+    .filter-container {
+      max-width: 500px;
+      margin: 0 auto 25px auto;
+      text-align: center;
+    }
+    .opd-select {
+      width: 100%;
+      padding: 12px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #0740aa;
+      background-color: var(--card);
+      border: 3px solid var(--accent-pink);
+      border-radius: 12px;
+      outline: none;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+      font-family: "Inter", sans-serif;
     }
 
     .container {
@@ -93,25 +113,6 @@
     .opd-title { font-weight: 800; font-size: 24px; color: #0b4aa2; margin: 0; line-height: 1; }
     .sub { color: var(--muted); margin-top: 6px; font-size: 14px; }
 
-    .toggle-btn {
-      position: absolute;
-      right: 12px;
-      top: 12px;
-      background: transparent;
-      border: none;
-      font-size: 20px;
-      cursor: pointer;
-      color: var(--accent-blue);
-    }
-
-    .expandable {
-      background: var(--card);
-      border-radius: 16px;
-      padding: 14px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-      margin-top: 10px;
-    }
-
     .monthly {
       background: #40AA07;
       border-radius: 16px; 
@@ -123,16 +124,8 @@
       margin: 10px auto;
     }
 
-    .monthly h3 { 
-      margin: 0; 
-      font-size: 12px; 
-      color: #ffffff; }
-    
-    .monthly .amount { 
-      margin-top: 0; 
-      font-size: 22px; 
-      font-weight: bold; 
-      color: #ffffff; }
+    .monthly h3 { margin: 0; font-size: 12px; color: #ffffff; }
+    .monthly .amount { margin-top: 0; font-size: 22px; font-weight: bold; color: #ffffff; }
 
     .chart-card {
       background: var(--card);
@@ -146,7 +139,6 @@
 
     .chart-title { font-weight: bold; text-align: center; margin-bottom: 8px; font-size: 14px; }
     .legend { display: flex; gap: 12px; justify-content: center; margin-bottom: 10px; font-size: 13px; color: var(--muted); }
-   	.legend .item { display: flex; gap: 8px; align-items: center; }
     .dot { width: 18px; height: 10px; border-radius: 6px; display: inline-block; }
 
     .progress-row { margin-top: 8px; font-size: 14px; color: #111; }
@@ -176,9 +168,7 @@
       .opd-card { padding: 12px; }
       .big-amount { font-size: 18px; }
       .monthly .amount { font-size: 22px; }
-      .pie-canvas {
-        max-width: 300px;
-      }
+      .pie-canvas { max-width: 300px; }
     }
 
     .hingga-bg {
@@ -194,11 +184,20 @@
 </head>
 
 <body>
+
+  <div class="filter-container">
+    <select id="opdFilter" class="opd-select">
+      <option value="all">-- TAMPILKAN SEMUA OPD --</option>
+    </select>
+  </div>
+
   <div class="container" id="containerOPD"></div>
 
   <script>
     const APPSCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyYScBrl0u_uouNkBg1TI38ZyuJRK4VxlxC-_S1LiCsgrxVzS5jNM1TPlTngtOao62vCQ/exec'; 
     const formatRupiah = (n) => new Intl.NumberFormat('id-ID').format(n);
+    
+    let globalOPDData = []; // Menyimpan data mentah global
 
     function getUrlParameter(name) {
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
@@ -217,7 +216,6 @@
         }
     }
 
-    // Plugin Chart.js untuk menampilkan nilai di tengah pie chart
     const pieLabelPlugin = {
         id: 'pieLabelPlugin',
         afterDraw(chart) {
@@ -231,22 +229,13 @@
             ctx.textBaseline = 'middle';
             meta.data.forEach((arc, i) => {
                 const pos = arc.tooltipPosition();
-                // Menampilkan realisasi dan sisa dana di atas potongannya
                 ctx.fillText('Rp. ' + formatRupiah(data[i]), pos.x, pos.y);
             });
             ctx.restore();
         }
     };
 
-    /**
-     * Membuat elemen kartu (Card) HTML untuk setiap OPD.
-     * Tidak lagi menghitung persenKeuangan di sini.
-     */
     function createOPDCard(opd, idx) {
-        // PERHATIAN: Perhitungan `total`, `sisa`, dan `persenKeuangan`
-        // telah dihapus dari fungsi ini karena tidak digunakan
-        // untuk mengisi DOM di sini dan akan dihitung di renderAllOPD.
-
         const card = document.createElement('div');
         card.className = 'opd-card';
         card.innerHTML = `
@@ -286,30 +275,20 @@
         return card;
     }
 
-    /**
-     * Mengatur lebar progress bar dan menampilkan nilai persentase.
-     */
     function setProgress(el, percent) {
-        // Memastikan nilai antara 0 dan 100
         const val = Math.max(0, Math.min(100, percent)); 
         el.style.width = val + '%';
-        // Menampilkan dua angka di belakang koma, menghilangkan .00 jika nol
         el.textContent = val.toFixed(2).replace(/\.00$/, '') + '%'; 
     }
 
-    /**
-     * Memproses data dan merender semua kartu OPD,
-     * sekaligus melakukan semua perhitungan persentase.
-     */
-function renderAllOPD(dataOPD) {
+    function renderAllOPD(dataOPD) {
         const container = document.getElementById('containerOPD');
         container.innerHTML = '';
+        
         dataOPD.forEach((opd, idx) => {
             const card = createOPDCard(opd, idx);
             container.appendChild(card);
 
-            // PERBAIKAN: Menggunakan opd.realisasiTotal sebagai total kumulatif,
-            // TIDAK DITAMBAH opd.realisasiBulanMei untuk menghindari double counting.
             const total = opd.realisasiTotal; 
             const sisa = opd.totalBudget - total;
             const persenKeuangan = (total / (opd.totalBudget || 1)) * 100;
@@ -320,7 +299,7 @@ function renderAllOPD(dataOPD) {
                 data: { 
                     labels: ['Realisasi', 'Sisa Dana'], 
                     datasets: [{ 
-                        data: [total, sisa], // Menggunakan total yang sudah benar
+                        data: [total, sisa],
                         backgroundColor: ['#07AA1F', '#0740AA'],
                         borderColor: '#fff', 
                         borderWidth: 1 
@@ -334,91 +313,100 @@ function renderAllOPD(dataOPD) {
                 plugins: [pieLabelPlugin]
             });
 
-            // Mengisi Progress Bar Keuangan dan Fisik
             setProgress(document.getElementById(`finance${idx}`), persenKeuangan);
             setProgress(document.getElementById(`physical${idx}`), opd.percentPhysical);
         });
     }
 
-    // =====================
-    // INISIALISASI DASHBOARD
-    // =====================
+    function populateDropdown(dataOPD) {
+        const select = document.getElementById('opdFilter');
+        dataOPD.forEach((opd) => {
+            const option = document.createElement('option');
+            option.value = opd.opdName;
+            option.textContent = `${opd.emoji} ${opd.opdName}`;
+            select.appendChild(option);
+        });
+
+        select.addEventListener('change', (e) => {
+            const selectedValue = e.target.value;
+            if (selectedValue === 'all') {
+                renderAllOPD(globalOPDData);
+            } else {
+                const filteredData = globalOPDData.filter(opd => opd.opdName === selectedValue);
+                renderAllOPD(filteredData);
+            }
+        });
+    }
+
+    // ===================================
+    // INITIALIZATION (SINKRON DENGAN INDEX)
+    // ===================================
     async function initDashboard() {
         let selectedOpdId = getUrlParameter('opd');
         if (!selectedOpdId && window.location.hash) {
             selectedOpdId = window.location.hash.substring(1);
         }
 
-        const allDataOPD = await fetchOPDData();
-        renderAllOPD(allDataOPD);
+        globalOPDData = await fetchOPDData();
+        populateDropdown(globalOPDData);
 
-        // Scroll ke kartu yang sesuai (jika ada)
+        // Algoritma pencocokan data dari index.html (?opd=...)
         if (selectedOpdId) {
-            setTimeout(() => {
-                const normalize = str => str.toLowerCase().replace(/[^a-z0-9]/g, '');
-                const targetId = normalize(selectedOpdId);
+            const normalize = str => str.toLowerCase().replace(/[^a-z0-9]/g, '');
+            const targetId = normalize(selectedOpdId);
 
-                const targetCard = Array.from(document.querySelectorAll('.opd-card')).find(el => {
-                    const titleText = el.querySelector('.opd-title')?.textContent || '';
-                    return normalize(titleText).includes(targetId);
-                });
+            // Mencari kecocokan sebagian teks (misal 'bappeda' di dalam 'BAPPELITBANGDA')
+            const foundOPD = globalOPDData.find(opd => {
+                const dbName = normalize(opd.opdName);
+                return dbName.includes(targetId) || targetId.includes(dbName);
+            });
 
-                if (targetCard) {
-                    // Beri jeda waktu agar grafik sempat di-render sepenuhnya
-                    setTimeout(() => {
-                        const offsetTop = targetCard.getBoundingClientRect().top + window.scrollY - 25;
-                        window.scrollTo({ top: offsetTop, behavior: 'smooth' });
-                    }, 400);
-                }
-            }, 1400);
+            if (foundOPD) {
+                // Sinkronisasi pilihan Dropdown
+                document.getElementById('opdFilter').value = foundOPD.opdName;
+                // Hanya menampilkan 1 OPD yang dipilih
+                renderAllOPD([foundOPD]);
+                return; 
+            }
         }
+
+        // Tampilkan semua jika parameter kosong/tidak ditemukan
+        renderAllOPD(globalOPDData);
     }
 
     initDashboard();
 </script>
 
   <footer>
-  Data Extract → https://sulselprov.e-planning.id <br>
-  20 Mei 2026 | 21.30 WITA | &copy; Copyright by @zuwlend
-  <div id="visitorCount" style="margin-top:6px; color:#fff; font-size:11px;"></div>
-</footer>
+    Data Extract &rarr; https://sulselprov.e-planning.id <br>
+    20 Mei 2026 | 21.30 WITA | &copy; Copyright by @zuwlend
+    <div id="visitorCount" style="margin-top:6px; color:#fff; font-size:11px;"></div>
+  </footer>
 
-<script>
-  const VISITOR_URL = 'https://script.google.com/macros/s/AKfycbwfbbXioNyRK2EiFO2_6Ok6Ahp_8n9kidDbLiru2K2KMuiD3TB9zmqJiz5PGihrwA/exec'; // ganti dgn URL kamu
-  fetch(VISITOR_URL)
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById('visitorCount').textContent = `👁️ : ${data.visits}`;
-    })
-    .catch(err => {
-      console.error('Gagal memuat counter:', err);
-      document.getElementById('visitorCount').textContent = '👁️ Counter offline';
-    });
-</script>
+  <script>
+    const VISITOR_URL = 'https://script.google.com/macros/s/AKfycbwfbbXioNyRK2EiFO2_6Ok6Ahp_8n9kidDbLiru2K2KMuiD3TB9zmqJiz5PGihrwA/exec'; 
+    fetch(VISITOR_URL)
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('visitorCount').textContent = `👁️ : ${data.visits}`;
+      })
+      .catch(err => {
+        console.error('Gagal memuat counter:', err);
+        document.getElementById('visitorCount').textContent = '👁️ Counter offline';
+      });
+  </script>
 
-<div style="
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  z-index: 999;
-  text-align: center;
-  font-family: Arial, sans-serif;
-  cursor: pointer;
-  user-select: none;">
-  <a href="index.html" style="font-size: 15px; font-weight: bold; text-decoration: none; display: block; line-height: 40px;">👈BACK</a>
-</div>
+  <div style="
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 999;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    cursor: pointer;
+    user-select: none;">
+    <a href="index.html" style="font-size: 15px; font-weight: bold; text-decoration: none; display: block; line-height: 40px;">👈BACK</a>
+  </div>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
