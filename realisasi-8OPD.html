@@ -466,11 +466,19 @@
             const normalize = str => str.toLowerCase().replace(/[^a-z0-9]/g, '');
             const targetId = normalize(selectedOpdId);
 
-            const foundOPD = globalOPDData.find(opd => {
-                const dbName = normalize(opd.opdName);
-                return dbName.includes(targetId) || targetId.includes(dbName);
-            });
-
+// --- KODE BARU (Sudah Mengantisipasi Bappeda / Bappelitbangda) ---
+const foundOPD = globalOPDData.find(opd => {
+    const dbName = normalize(opd.opdName);
+    
+    // Jika parameter dari index mencari 'bappeda' dan di database namanya 'bappelitbangda' (atau sebaliknya)
+    if ((targetId === 'bappeda' && dbName === 'bappelitbangda') || 
+        (targetId === 'bappelitbangda' && dbName === 'bappeda')) {
+        return true;
+    }
+    
+    // Pencocokan default untuk 7 OPD lainnya
+    return dbName.includes(targetId) || targetId.includes(dbName);
+});
             if (foundOPD) {
                 document.getElementById('opdFilter').value = foundOPD.opdName;
                 renderAllOPD([foundOPD]);
