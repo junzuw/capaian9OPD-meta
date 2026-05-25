@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Multi-OPD Terintegrasi Provinsi Sulsel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* CSS DARI style.css */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: #f4f6fb;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(90deg, #0f3c78, #0c6bdc);
+            color: white;
+            padding: 20px 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-logo {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .header-text h1 {
+            margin: 0;
+            font-size: 18px;
+            line-height: 1.2;
+        }
+
+        .header-text p {
+            margin: 5px 0 0 0;
+            opacity: 0.9;
+            font-size: 12px;
+        }
+
+        .container {
+            padding: 15px 15px;
+            flex: 1;
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 15px;
+        }
+
+        .inner-card {
+            border: 1.5px solid #e3e6f0;
+            box-shadow: none;
+            transition: border-color 0.2s;
+        }
+
+        .inner-card:hover {
+            border-color: #0c6bdc;
+        }
+
+        .card h4 {
+            margin: 0;
+            font-size: 11px;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card h2 {
+            margin: 8px 0 0 0;
+            font-size: 18px;
+            color: #1a1a1a;
+            font-weight: 700;
+        }
+
+        .card-flex {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .icon-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .icon-blue {
+            background: #0c6bdc;
+        }
+
+        .icon-green {
+            background: #28a745;
+        }
+
+        .icon-orange {
+            background: #ff9800;
+        }
+
+        .icon-red {
+            background: #e53935;
+        }
+
+        /* Container Section Title */
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #0f3c78;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e3e6f0;
+            padding-bottom: 8px;
+        }
+
+        .select-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .wrapper-title {
+            text-align: center;
+            font-size: 13px;
+            margin-bottom: 15px;
+            color: #0f3c78;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .badge-hingga {
+            background-color: #ff7300;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 11px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 8px;
+            background: #eee;
+            border-radius: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 1.5s ease-in-out;
+        }
+
+        /* Accordion */
+        .program-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .program-header h3 {
+            margin: 0;
+            font-size: 14px;
+            color: #0f3c78;
+            flex: 1;
+            padding-right: 15px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: stretch;
+            min-width: 80px;
+        }
+
+        .toggle-btn {
+            background: #0c6bdc;
+            color: white;
+            border: 1px solid #0a56b2;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            transition: background 0.2s, color 0.2s;
+            text-align: center;
+        }
+
+        .kegiatan-btn {
+            background: #28a745;
+            color: white;
+            border: 1px solid #1e7e34;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+            display: none;
+            transition: background 0.2s;
+        }
+
+        .program-content {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        /* Kegiatan List Wrapper */
+        .sub-kegiatan-wrapper {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border-left: 4px solid #28a745;
+        }
+
+        .sub-kegiatan-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1e7e34;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sub-kegiatan-block {
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 15px;
+        }
+
+        .sub-kegiatan-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .sub-kegiatan-name-header {
+            font-size: 13px;
+            font-weight: bold;
+            color: #334155;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .sub-kegiatan-name-text {
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        .sub-detail-btn {
+            background: #28a745;
+            color: white;
+            border: 1px solid #1e7e34;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+
+        /* Container Kartu Detail Kegiatan */
+        .sub-kegiatan-cards-content {
+            display: none;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #cbd5e1;
+        }
+
+        .footer {
+            background: #0f3c78;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 11px;
+            margin-top: auto;
+        }
+
+        @media (max-width: 992px) {
+            .grid-4 {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .grid-4 {
+                grid-template-columns: 1fr !important;
+                gap: 15px !important;
+            }
+
+            .grid-4 .card,
+            .grid-4 .inner-card {
+                margin-bottom: 0 !important;
+            }
+
+            .sub-kegiatan-name-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .sub-detail-btn {
+                align-self: flex-end;
+            }
+
+            #opd-selector:hover {
+                border-color: #0c6bdc !important;
+                box-shadow: 0 0 8px rgba(12, 107, 220, 0.2);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <img src="logosda.png" alt="Logo" class="header-logo" id="header-logo-img">
+        <div class="header-text">
+            <h1 id="header-title-text">Dashboard Progres Realisasi Fisik & Keuangan Multi-OPD</h1>
+            <p><i class="fa-regular fa-calendar-check"></i> Data Realisasi per Mei 2026</p>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <div class="card inner-card" style="border-left: 5px solid #0c6bdc; background: #fdfdfd; margin-bottom: 20px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <i class="fa-solid fa-building-shield" style="color: #0c6bdc; font-size: 18px;"></i>
+                <h4 style="margin: 0; color: #334155; font-size: 15px;">PILIH PERANGKAT DAERAH (OPD)</h4>
+            </div>
+            <select id="opd-selector" onchange="gantiOPD(this.value)"
+                style="width: 100%; padding: 12px 15px; border-radius: 8px; border: 1.5px solid #cbd5e1; font-size: 15px; font-weight: 600; color: #1e293b; background: white; cursor: pointer; outline: none; transition: all 0.2s;">
+                <option value="">-- Pilih Perangkat Daerah --</option>
+                <option value="bappeda">BAPPELITBANGDA</option>
+                <option value="bpbd">BPBD</option>
+                <option value="bmbk">BM & BK</option>
+                <option value="sdacktr">SDA & CKTR</option>
+                <option value="perkimtan">PERKIMTAN</option>
+                <option value="kominfo">DISKOMINFO</option>
+                <option value="dishub">DISHUB</option>
+                <option value="barjas">BARJAS</option>
+            </select>
+        </div>
+
+        <div class="card inner-card">
+            <div class="card-flex">
+                <div class="icon-box icon-blue"><i class="fa-solid fa-wallet"></i></div>
+                <div class="card-text">
+                    <h4>Total Pagu OPD</h4>
+                    <h2 id="total-pagu-label">Rp 0</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="card inner-card">
+            <div class="card-flex">
+                <div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div>
+                <div class="card-text">
+                    <h4>Total Realisasi Hingga Bulan Ini</h4>
+                    <h2 id="total-realisasi-label">Rp 0</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="card inner-card">
+            <div class="card-flex">
+                <div class="icon-box icon-red"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                <div class="card-text">
+                    <h4>Sisa Pagu Keseluruhan</h4>
+                    <h2 id="sisa-pagu-label">Rp 0</h2>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: flex !important; flex-direction: row !important; gap: 15px; width: 100%; margin-bottom: 15px;">
+            <div class="card inner-card" style="flex: 1 !important; margin-bottom: 0 !important; padding: 15px;">
+                <div class="card-flex">
+                    <div class="icon-box icon-orange"><i class="fa-solid fa-folder-open"></i></div>
+                    <div class="card-text" style="min-width: 0;">
+                        <h4>TOTAL PROGRAM</h4>
+                        <h2 id="total-program-badge" style="margin: 8px 0 0 0; font-size: 16px; color: #1a1a1a; font-weight: 700;">0 Program</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="card inner-card" style="flex: 1 !important; margin-bottom: 0 !important; padding: 15px;">
+                <div class="card-flex">
+                    <div class="icon-box icon-blue"><i class="fa-solid fa-list-check"></i></div>
+                    <div class="card-text" style="min-width: 0;">
+                        <h4>TOTAL KEGIATAN</h4>
+                        <h2 id="total-kegiatan-badge" style="margin: 8px 0 0 0; font-size: 16px; color: #1a1a1a; font-weight: 700;">0 Kegiatan</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-title" id="nama-opd-title">Rincian Progres Per Program</div>
+            <div id="program-list"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        Sumber Data: <a href="https://sulselprov.e-planning.id" style="color:#6ab0ff; text-decoration:none;">sulselprov.e-planning.id</a> <br>
+        &copy; 2026 by @zuwlend. All Rights Reserved.
+        <div id="visitorCount" style="margin-top:8px; opacity:0.8;"></div>
+    </div>
+
+    <script>
+        /* JAVASCRIPT DATA OPD INTEGRASI */
+        const seluruhDataOPD = {
+            "sdacktr": [
+                {
+                    "namaProgram": "Penunjang Urusan Pemerintahan Daerah Provinsi",
+                    "pagu": 47640085889,
+                    "realisasiBulanIni": 3073857650,
+                    "realisasiTot": 15813191466,
+                    "fisikPersen": 33.19,
+                    "subKegiatan": [
+                        { "nama": "Administrasi Keuangan Perangkat Daerah", "pagu": 20000000000, "realisasiBulanIni": 1500000000, "realisasi": 8500000000, "fisik": 42.5 },
+                        { "nama": "Penyediaan Gaji dan Tunjangan ASN", "pagu": 22000000000, "realisasiBulanIni": 1200000000, "realisasi": 6200000000, "fisik": 28.1 }
+                    ]
+                },
+                {
+                    "namaProgram": "Pengelolaan Sumber Daya Air (SDA)",
+                    "pagu": 435988315367,
+                    "realisasiBulanIni": 13757174,
+                    "realisasiTot": 1324165312,
+                    "fisikPersen": 0.3,
+                    "subKegiatan": [
+                        { "nama": "Pembangunan Jaringan Irigasi Permukaan", "pagu": 250000000000, "realisasiBulanIni": 5000000, "realisasi": 800000000, "fisik": 0.32 }
+                    ]
+                }
+            ],
+            "bappeda": [],
+            "bpbd": [],
+            "bmbk": [],
+            "perkimtan": [],
+            "kominfo": [],
+            "dishub": [],
+            "barjas": []
+        };
+
+        const VISITOR_URL = 'https://script.google.com/macros/s/AKfycbw4heB0YjxHIH31Mn6C_JRGHzdnWdCvrahsgGjZ3D8ZX9CQGDftb1Rmyy-3trQdgyt0/exec';
+        let opdAktif = "";
+
+        function renderDashboard() {
+            let grandTotalPagu = 0;
+            let grandTotalRealisasi = 0;
+            let totalKegiatanCount = 0;
+            
+            const mainContainer = document.getElementById('program-list');
+            mainContainer.innerHTML = ''; 
+            const selector = document.getElementById('opd-selector');
+            
+            // Definisikan DOM Header agar dinamis
+            const headerLogo = document.getElementById('header-logo-img');
+            const headerTitle = document.getElementById('header-title-text');
+
+            // JIKA BELUM ADA OPD YANG DIPILIH
+            if (opdAktif === "") {
+                // Kembalikan header ke teks default & logo default
+                headerLogo.src = "logosda.png";
+                headerTitle.textContent = "Dashboard Progres Realisasi Fisik & Keuangan Multi-OPD";
+
+                document.getElementById('total-pagu-label').textContent = "Rp 0";
+                document.getElementById('total-realisasi-label').textContent = "Rp 0";
+                document.getElementById('sisa-pagu-label').textContent = "Rp 0";
+                document.getElementById('total-program-badge').textContent = "0 Program";
+                document.getElementById('total-kegiatan-badge').textContent = "0 Kegiatan";
+                document.getElementById('nama-opd-title').textContent = "Rincian Progres per Program: Silahkan pilih OPD terlebih dahulu";
+                mainContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: #64748b; font-style: italic;">Belum ada OPD yang dipilih. Silakan pilih OPD pada menu di atas.</div>';
+                return;
+            }
+
+            // JIKA OPD SUDAH DIPILIH -> Ubah Header Otomatis
+            const namaOPDTerpilih = selector.options[selector.selectedIndex].text;
+            headerTitle.textContent = `Dashboard Progres Realisasi Fisik & Keuangan ${namaOPDTerpilih}`;
+            
+            /* Logika ganti gambar logo otomatis: 
+               Jika Anda punya logo per dinas, ganti baris di bawah dengan: headerLogo.src = `logo_${opdAktif}.png`;
+               Jika semua dinas pakai 1 logo provinsi yang sama (logosda.png), biarkan saja baris di bawah ini.
+            */
+            headerLogo.src = "logosda.png"; 
+
+            const dataDipilih = seluruhDataOPD[opdAktif] || [];
+
+            if (dataDipilih.length === 0) {
+                document.getElementById('total-pagu-label').textContent = "Rp 0";
+                document.getElementById('total-realisasi-label').textContent = "Rp 0";
+                document.getElementById('sisa-pagu-label').textContent = "Rp 0";
+                document.getElementById('total-program-badge').textContent = "0 Program";
+                document.getElementById('total-kegiatan-badge').textContent = "0 Kegiatan";
+                document.getElementById('nama-opd-title').textContent = `Rincian Progres per Program: ${namaOPDTerpilih}`;
+                mainContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: #64748b; font-style: italic;">Data rincian program untuk OPD ini belum tersedia / belum di-input.</div>';
+                return;
+            }
+
+            dataDipilih.forEach((item, index) => {
+                const keuPersen = item.pagu > 0 ? ((item.realisasiTot / item.pagu) * 100).toFixed(2) : 0;
+                const sisa = item.pagu - item.realisasiTot;
+
+                grandTotalPagu += item.pagu;
+                grandTotalRealisasi += item.realisasiTot;
+                totalKegiatanCount += item.subKegiatan.length;
+
+                const programCard = document.createElement('div');
+                programCard.className = 'card inner-card';
+                programCard.innerHTML = `
+                    <div class="program-header" onclick="toggleProgram(this)">
+                        <div>
+                            <h3>${item.namaProgram}</h3>
+                            <p style="margin:6px 0 0 0; font-size:15px; color:#0c6bdc; font-weight:700;">Pagu: Rp ${item.pagu.toLocaleString('id-ID')}</p>
+                        </div>
+                        <div class="btn-container" onclick="event.stopPropagation();">
+                            <button class="toggle-btn" onclick="toggleProgramFromBtn(this)">Detail</button>
+                            <button class="kegiatan-btn" onclick="toggleKegiatanData(this, ${index})">Kegiatan</button>
+                        </div>
+                    </div>
+                    
+                    <div class="program-content" id="keg-${index}">
+                        <div class="card inner-card">
+                            <div class="card-flex">
+                                <div class="icon-box icon-green"><i class="fa-solid fa-calendar-day"></i></div>
+                                <div>
+                                    <h4>Realisasi Bulan Ini (Rp)</h4>
+                                    <h2 class="txt-realisasi-bulan">Rp ${item.realisasiBulanIni.toLocaleString('id-ID')}</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card inner-card" style="background: #fafafa;">
+                            <div class="wrapper-title">REALISASI TOTAL HINGGA BULAN INI</div>
+                            <div class="grid-4">
+                                <div class="card inner-card" style="background: white;">
+                                    <div class="card-flex">
+                                        <div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div>
+                                        <div><h4>Total Realisasi</h4><h2>Rp ${item.realisasiTot.toLocaleString('id-ID')}</h2></div>
+                                    </div>
+                                </div>
+                                <div class="card inner-card" style="background: white;">
+                                    <div class="card-flex">
+                                        <div class="icon-box icon-blue"><i class="fa-solid fa-chart-line"></i></div>
+                                        <div><h4>Keuangan (%)</h4><h2>${keuPersen}%</h2></div>
+                                    </div>
+                                    <div class="progress-bar"><div class="progress-fill" style="width: ${keuPersen}%; background:#0c6bdc;"></div></div>
+                                </div>
+                                <div class="card inner-card" style="background: white;">
+                                    <div class="card-flex">
+                                        <div class="icon-box icon-orange"><i class="fa-solid fa-building"></i></div>
+                                        <div><h4>Fisik (%)</h4><h2>${item.fisikPersen}%</h2></div>
+                                    </div>
+                                    <div class="progress-bar"><div class="progress-fill" style="width: ${item.fisikPersen}%; background:#ff9800;"></div></div>
+                                </div>
+                                <div class="card inner-card" style="background: white;">
+                                    <div class="card-flex">
+                                        <div class="icon-box icon-red"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                                        <div><h4>Sisa Dana</h4><h2>Rp ${sisa.toLocaleString('id-ID')}</h2></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sub-kegiatan-wrapper" id="sub-list-${index}">
+                        <div class="sub-kegiatan-title"><i class="fa-solid fa-list-check"></i> Daftar Kegiatan Dalam Program</div>
+                        <div class="sub-kegiatan-container"></div>
+                    </div>
+                `;
+
+                mainContainer.appendChild(programCard);
+
+                const subContainer = programCard.querySelector(`#sub-list-${index} .sub-kegiatan-container`);
+                item.subKegiatan.forEach((sub) => {
+                    const subKeuPct = sub.pagu > 0 ? ((sub.realisasi / sub.pagu) * 100).toFixed(2) : 0;
+                    const subSisa = sub.pagu - sub.realisasi;
+
+                    subContainer.innerHTML += `
+                        <div class="sub-kegiatan-block">
+                            <div class="sub-kegiatan-name-header">
+                                <div class="sub-kegiatan-name-text">
+                                    <i class="fa-solid fa-circle-dot" style="color:#28a745; font-size:10px;"></i> <b>${sub.nama}</b>
+                                    <div style="font-size:11px; color:#64748b; margin-top:3px;">Pagu: Rp ${sub.pagu.toLocaleString('id-ID')}</div>
+                                </div>
+                                <button class="sub-detail-btn" onclick="toggleSubDetailCard(this)">Detail</button>
+                            </div>
+                            
+                            <div class="sub-kegiatan-cards-content">
+                                <div class="card inner-card" style="padding:10px; margin-bottom:10px;">
+                                    <div class="card-flex">
+                                        <div class="icon-box icon-green" style="width:30px; height:30px; font-size:12px;"><i class="fa-solid fa-calendar-day"></i></div>
+                                        <div><h4>Realisasi Bulan Ini (Rp)</h4><h2 style="font-size:14px; margin-top:2px;">Rp ${sub.realisasiBulanIni.toLocaleString('id-ID')}</h2></div>
+                                    </div>
+                                </div>
+                                <div class="card inner-card" style="background: #fafafa; padding:12px; margin-bottom:0;">
+                                    <div class="wrapper-title" style="font-size:11px; margin-bottom:10px;">REALISASI TOTAL HINGGA BULAN INI</div>
+                                    <div class="grid-4">
+                                        <div class="card inner-card" style="background: white; padding:10px;"><div class="card-flex"><div class="icon-box icon-green" style="width:30px; height:30px; font-size:12px;"><i class="fa-solid fa-money-bill"></i></div><div><h4 style="font-size:10px;">Total Realisasi</h4><h2 style="font-size:13px;">Rp ${sub.realisasi.toLocaleString('id-ID')}</h2></div></div></div>
+                                        <div class="card inner-card" style="background: white; padding:10px;"><div class="card-flex"><div class="icon-box icon-blue" style="width:30px; height:30px; font-size:12px;"><i class="fa-solid fa-chart-line"></i></div><div><h4 style="font-size:10px;">Keuangan (%)</h4><h2 style="font-size:13px;">${subKeuPct}%</h2></div></div><div class="progress-bar" style="height:5px;"><div class="progress-fill" style="width:${subKeuPct}%; background:#0c6bdc;"></div></div></div>
+                                        <div class="card inner-card" style="background: white; padding:10px;"><div class="card-flex"><div class="icon-box icon-orange" style="width:30px; height:30px; font-size:12px;"><i class="fa-solid fa-building"></i></div><div><h4 style="font-size:10px;">Fisik (%)</h4><h2 style="font-size:13px;">${sub.fisik}%</h2></div></div><div class="progress-bar" style="height:5px;"><div class="progress-fill" style="width:${sub.fisik}%; background:#ff9800;"></div></div></div>
+                                        <div class="card inner-card" style="background: white; padding:10px;"><div class="card-flex"><div class="icon-box icon-red" style="width:30px; height:30px; font-size:12px;"><i class="fa-solid fa-hand-holding-dollar"></i></div><div><h4 style="font-size:10px;">Sisa Dana</h4><h2 style="font-size:13px;">Rp ${subSisa.toLocaleString('id-ID')}</h2></div></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+
+            document.getElementById('total-pagu-label').textContent = `Rp ${grandTotalPagu.toLocaleString('id-ID')}`;
+            document.getElementById('total-realisasi-label').textContent = `Rp ${grandTotalRealisasi.toLocaleString('id-ID')}`;
+            document.getElementById('sisa-pagu-label').textContent = `Rp ${(grandTotalPagu - grandTotalRealisasi).toLocaleString('id-ID')}`;
+            document.getElementById('total-program-badge').textContent = `${dataDipilih.length} Program`;
+            document.getElementById('total-kegiatan-badge').textContent = `${totalKegiatanCount} Kegiatan`;
+            document.getElementById('nama-opd-title').textContent = `Rincian Progres per Program: ${namaOPDTerpilih}`;
+        }
+
+        function gantiOPD(kodeOPD) {
+            opdAktif = kodeOPD;
+            renderDashboard();
+        }
+
+        function toggleSubDetailCard(btn) {
+            const cardContent = btn.closest('.sub-kegiatan-block').querySelector('.sub-kegiatan-cards-content');
+            if (cardContent.style.display === "block") {
+                cardContent.style.display = "none"; btn.textContent = "Detail";
+                btn.style.background = "#28a745"; btn.style.borderColor = "#1e7e34";
+            } else {
+                cardContent.style.display = "block"; btn.textContent = "Tutup";
+                btn.style.background = "#ff7300"; btn.style.borderColor = "#ff7300";
+            }
+        }
+        
+        function toggleProgramFromBtn(btn) { toggleProgram(btn.closest('.program-header')); }
+        
+        function toggleProgram(header) {
+            const content = header.nextElementSibling;
+            const button = header.querySelector(".toggle-btn");
+            const kegButton = header.querySelector(".kegiatan-btn");
+            const subWrapper = header.parentElement.querySelector(".sub-kegiatan-wrapper");
+            if (content.style.display === "block") {
+                content.style.display = "none"; subWrapper.style.display = "none";
+                button.textContent = "Detail"; button.style.background = "#0c6bdc"; button.style.borderColor = "#0a56b2";
+                kegButton.style.display = "none";
+            } else {
+                content.style.display = "block"; subWrapper.style.display = "none";
+                button.textContent = "Tutup"; button.style.background = "#ff7300"; button.style.borderColor = "#ff7300";
+                kegButton.style.display = "block"; kegButton.innerHTML = "Kegiatan";
+                kegButton.style.background = "#28a745"; kegButton.style.borderColor = "#1e7e34";
+            }
+        }
+        
+        function toggleKegiatanData(button, index) {
+            const programContent = document.getElementById(`keg-${index}`);
+            const subWrapper = document.getElementById(`sub-list-${index}`);
+            if (subWrapper.style.display === "block") {
+                subWrapper.style.display = "none"; programContent.style.display = "block";
+                button.style.background = "#28a745"; button.style.borderColor = "#1e7e34"; button.innerHTML = "Kegiatan";
+            } else {
+                subWrapper.style.display = "block"; programContent.style.display = "none";
+                button.style.background = "#17a2b8"; button.style.borderColor = "#117a8b"; button.innerHTML = "Tutup Kegiatan";
+            }
+        }
+
+        // AMBIL PARAMETER URL SAAT HALAMAN DI-LOAD
+        document.addEventListener("DOMContentLoaded", () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            let opdParam = urlParams.get('opd'); 
+
+            if (opdParam) {
+                const singkatanAktif = decodeURIComponent(opdParam).trim().toLowerCase();
+
+                if (seluruhDataOPD[singkatanAktif] !== undefined) {
+                    opdAktif = singkatanAktif;
+                    document.getElementById('opd-selector').value = singkatanAktif;
+                } 
+                else {
+                    const selector = document.getElementById('opd-selector');
+                    for (let i = 0; i < selector.options.length; i++) {
+                        if (selector.options[i].text.toLowerCase().includes(singkatanAktif)) {
+                            opdAktif = selector.options[i].value; 
+                            selector.value = opdAktif; 
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            // Jalankan fungsi render untuk menampilkan data ke layar
+            renderDashboard();
+
+            // Hitung Visitor Log
+            fetch(VISITOR_URL + '?t=' + new Date().getTime())
+                .then(res => res.json()).then(data => {
+                    document.getElementById('visitorCount').innerHTML = `<i class="fa-solid fa-eye"></i> : ${data.visits}`;
+                }).catch(() => {});
+        });
+    </script>
+</body>
+
+</html>
