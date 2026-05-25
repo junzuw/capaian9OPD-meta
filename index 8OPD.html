@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kartu Kontrol Progres Realisasi Fisik & Keuangan 8 OPD</title>
+
+  <meta property="og:title" content="Kartu Kontrol Progres Realisasi Fisik & Keuangan 8 OPD Mitra per 20 Mei 2026" />
+  <meta property="og:description" content="Lihat grafik interaktif progres realisasi fisik & keuangan hingga tanggal 20 Mei 2026. Ekstrasi data: 20 Mei 2026 | 21.30 WITA. (Best view via smartphone/tablet)" />
+  <meta property="og:image" content="https://binfraswilzulsel.my.id/thumbnail.jpg" />
+  <meta property="og:url" content="https://binfraswilzulsel.my.id/" />
+  <meta property="og:type" content="website" />
+
+  <style>
+
+    *{
+      box-sizing:border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #0740aa;
+      margin: 0;
+      padding: 20px 15px;
+      color: white;
+    }
+
+    .wrapper{
+      max-width: 650px;
+      margin:auto;
+    }
+
+    .header-card {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .header-card h1{
+      font-size: 30px;
+      line-height: 1.2;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .header-card h2{
+      font-size: 14px;
+      font-weight: normal;
+      opacity: 0.9;
+      margin-top:0;
+    }
+
+    .card-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .card-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .card {
+      background: #f5f5f5;
+      border-radius: 24px;
+      padding: 20px 12px;
+      min-height: 145px;
+
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+
+      transition: 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      background: white;
+    }
+
+    .icon {
+      font-size: 52px;
+      margin-bottom: 10px;
+    }
+
+    .title {
+      font-size: 17px;
+      font-weight: bold;
+      color: #000;
+      text-align:center;
+    }
+
+    /* ========================= */
+    /* KARTU FULL WIDTH REKAP    */
+    /* ========================= */
+
+    .full-width{
+      grid-column: span 2;
+    }
+
+    .rekap-card{
+      min-height: 120px;
+      background: linear-gradient(135deg,#ffffff,#e9eefc);
+    }
+
+    .rekap-card .icon{
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+
+    .rekap-card .title{
+      font-size: 20px;
+    }
+
+    .rekap-subtitle{
+      font-size: 12px;
+      color:#444;
+      margin-top:5px;
+    }
+
+    footer {
+      text-align: center;
+      color: white;
+      padding: 20px 10px 10px;
+      font-size: 12px;
+      line-height:1.6;
+      opacity:0.95;
+    }
+
+    /* ========================= */
+    /* RESPONSIVE MOBILE         */
+    /* ========================= */
+
+    @media(max-width:480px){
+
+      .header-card h1{
+        font-size: 26px;
+      }
+
+      .card{
+        min-height:130px;
+        border-radius:20px;
+      }
+
+      .icon{
+        font-size:45px;
+      }
+
+      .title{
+        font-size:15px;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <div class="header-card">
+    <h1>
+      Dashboard Progres Realisasi <br>
+      Fisik & Keuangan 8 OPD <br>
+      Mitra Bidang Infraswil <br>
+      per 20 Mei 2026
+    </h1>
+
+    <h2>
+      > Pilih satu Kartu OPD untuk melihat grafik realisasi <
+    </h2>
+  </div>
+
+  <!-- GRID CARD -->
+  <div class="card-container">
+
+    <a href="realisasi9opdtampilall-final.html?opd=bappeda" class="card-link" target="_blank">
+      <div class="card">
+        <span class="icon">🏛️</span>
+        <div class="title">BAPPELITBANGDA</div>
+      </div>
+    </a>
+
+    <a href="realisasi9opdtampilall-final.html?opd=bpbd" class="card-link" target="_blank">
+      <div class="card">
+        <span class="icon">🛡️</span>
+        <div class="title">BPBD</div>
+      </div>
+    </a>
+
+    <a href="realisasi9opdtampilall-final.html?opd=bmbk" class="card-link" target="_blank">
+      <div class="card">
+        <span class="icon">🚧</span>
+        <div class="title">BM & BK</div>
+      </div>
+    </a>
+
+    <a href="realisasi9opdtampilall-final.html?opd=sdacktr" class="card-link" target="_blank">
+      <div class="card">
+        <span class="icon">💦</span>
+        <div class="title">SDA & CKTR</div>
+      </div>
+    </a>
+
+    <a href="realisasi9opdtampilall-final.html?opd=perkimtan" class="card-link" target="_blank">
+      <div class="card">
+        <span class="icon">🏡</span>
+        <div class="title">PERKIMTAN</div>
+      </div>
+    </a>
+
+    <a href="realisasi9opdtampilall-final.html?opd=kominfo" class="card-link" target="_blank">
+      <div class="card">
+        <span class="icon">📡</span>
+        <div class="title">KOMINFO</div>
+      </div>
+    </a>
+
+    <a href="realisasi9opdtampilall-final.html?opd=dishub" class="card-link" target="_blank">
+      <div class="card">
+        <span class="icon">🚍</span>
+        <div class="title">DISHUB</div>
+      </div>
+    </a>
+
+    <a href="realisasi9opdtampilall-final.html?opd=barjas" class="card-link" target="_blank">
+      <div class="card">
+        <span class="icon">🛒</span>
+        <div class="title">BARJAS</div>
+      </div>
+    </a>
+
+    <!-- FULL WIDTH DATA REKAP -->
+    <a href="https://docs.google.com/spreadsheets/d/1q0ez1fyLLy-d2vfrb641JICHMVz-HR4tjNy6kZNQ_F4/edit?gid=1122971279#gid=1122971279"
+       class="card-link full-width"
+       target="_blank">
+
+      <div class="card rekap-card">
+
+        <span class="icon">📊</span>
+
+        <div class="title">
+          DATA REKAP KESELURUHAN
+        </div>
+
+        <div class="rekap-subtitle">
+          Monitoring Realisasi 8 OPD Mitra
+        </div>
+
+      </div>
+
+    </a>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    Data Extract → https://sulselprov.e-planning.id
+    <br>
+    20 Mei 2026 | 21.30 WITA
+    <br>
+    &copy; Copyright by @zuwlend
+  </footer>
+
+</div>
+
+<!-- SOUND EFFECT -->
+<script>
+
+const tapSound = new Audio("tap_sound.mp3");
+tapSound.preload = "auto";
+tapSound.volume = 0.3;
+
+let touchStartX = 0;
+let touchStartY = 0;
+let touchMoved = false;
+let lastPlayTime = 0;
+
+document.addEventListener("touchstart", (e) => {
+    const t = e.touches[0];
+    touchStartX = t.clientX;
+    touchStartY = t.clientY;
+    touchMoved = false;
+});
+
+document.addEventListener("touchmove", (e) => {
+    const t = e.touches[0];
+    const dx = Math.abs(t.clientX - touchStartX);
+    const dy = Math.abs(t.clientY - touchStartY);
+
+    if (dx > 10 || dy > 10){
+      touchMoved = true;
+    }
+});
+
+document.addEventListener("touchend", () => {
+    if (!touchMoved){
+      playTapSound();
+    }
+});
+
+document.addEventListener("click", (e) => {
+    if (e.pointerType !== "touch"){
+      playTapSound();
+    }
+});
+
+function playTapSound() {
+
+    const now = Date.now();
+
+    if (now - lastPlayTime < 200){
+      return;
+    }
+
+    lastPlayTime = now;
+
+    tapSound.currentTime = 0;
+
+    tapSound.play().catch(() => {});
+}
+
+</script>
+
+</body>
+</html>
