@@ -73,25 +73,64 @@
     /* ---------------------------------- */
 
     /* CONTAINER DROPDOWN FILTER */
+   /* --- PERBAIKAN STYLE DROPDOWN AGAR LEBIH KENTARA --- */
+    /* --- PENYESUAIAN LEBAR DROPDOWN AGAR SAMA DENGAN KARTU OPD --- */
     .filter-container {
-      max-width: 500px;
-      margin: 0 auto 25px auto;
-      text-align: center;
+      width: calc(50% - 10px); /* Rumus lebar yang sama persis dengan kartu OPD */
+      max-width: 100%; 
+      margin: 0 auto 25px auto; /* Tetap berada di tengah halaman */
+      text-align: left;
+      box-sizing: border-box;
+      
+    }
+    
+    .filter-label {
+      display: block;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+      opacity: 0.9;
+    }
+    .select-wrapper {
+      position: relative;
+      width: 100%;
     }
     .opd-select {
       width: 100%;
-      padding: 12px 20px;
+      padding: 14px 45px 14px 20px; /* Jarak kanan dilebarkan untuk ruang ikon panah */
       font-size: 16px;
-      font-weight: bold;
+      font-weight: 800;
       color: #0740aa;
       background-color: var(--card);
-      border: 3px solid var(--accent-pink);
-      border-radius: 12px;
+      border: 3px solid #ff00b7; /* Warna border pink cerah agar kontras */
+      border-radius: 40px;
       outline: none;
       cursor: pointer;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3); /* Bayangan lebih tegas agar terlihat timbul */
       font-family: "Inter", sans-serif;
+      appearance: none; /* Menghilangkan panah bawaan browser yang kaku */
+      -webkit-appearance: none;
+      -moz-appearance: none;
     }
+    /* Membuat ikon panah kustom menggantikan bawaan browser */
+    .select-wrapper::after {
+      content: "▼";
+      font-size: 12px;
+      color: #0740aa;
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none; /* Klik tembus ke select di bawahnya */
+    }
+    /* Efek sedikit membesar saat dropdown disentuh/diklik */
+    .opd-select:focus {
+      border-color: var(--accent-green);
+      box-shadow: 0 8px 25px rgba(7, 170, 31, 0.4);
+    }
+    /* -------------------------------------------------- */
 
     .container {
       display: flex;
@@ -195,7 +234,7 @@
     .pie-canvas { width: 100% !important; max-width: 400px; margin: 0 auto; }
 
     @media (max-width: 768px) {
-      .opd-card { width: 100%; }
+      .opd-card, .filter-container { width: 100%; } /* Otomatis keduanya jadi full-width di HP */
       .pie-canvas { max-width: 350px; }
     }
 
@@ -226,9 +265,12 @@
   </div>
 
   <div class="filter-container">
-    <select id="opdFilter" class="opd-select">
-      <option value="all">-- TAMPILKAN SEMUA OPD --</option>
-    </select>
+    <label for="opdFilter" class="filter-label">PILIH ATAU GANTI OPD DI SINI:</label>
+    <div class="select-wrapper">
+      <select id="opdFilter" class="opd-select">
+        <option value="all">-- TAMPILKAN SEMUA OPD --</option>
+      </select>
+    </div>
   </div>
 
   <div class="container" id="containerOPD"></div>
