@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard OPD — Progres Realisasi Keuangan & Fisik</title>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XGZ0G9ZM3K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-XXXXXXXXXX'); 
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #0740aa;
+      --card: #ffffff;
+      --muted: #6b7280;
+      --accent-green: #07AA1F;
+      --accent-blue: #1149b8;
+      --accent-pink: #AA0792;
+      --radius: 18px;
+      --pad: 14px;
+    }
+
+    html,body{height:100%}
+    body {
+      margin: 0;
+      background: var(--bg);
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color: #0740aa;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    /* --- STYLE BARU: LOADING SCREEN --- */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      color: white;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+    .loading-text {
+      margin-top: 15px;
+      font-size: 16px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* CONTAINER DROPDOWN FILTER */
+    .filter-container {
+      width: calc(50% - 10px); 
+      max-width: 100%; 
+      margin: 0 auto 15px auto; 
+      text-align: center;
+      box-sizing: border-box;
+    }
+    
+    .filter-label {
+      display: block;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+      opacity: 0.9;
+    }
+    .select-wrapper {
+      position: relative;
+      width: 100%;
+    }
+    .opd-select {
+      width: 100%;
+      padding: 14px 20px; 
+      font-size: 16px;
+      font-weight: 800;
+      color: #0740aa;
+      background-color: var(--card);
+      border: 3px solid #ff00b7;
+      border-radius: 40px;
+      outline: none;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      font-family: "Inter", sans-serif;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      text-align: center;
+      text-align-last: center; 
+    }
+
+    .select-wrapper::after {
+      content: "▼";
+      font-size: 12px;
+      color: #0740aa;
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none; 
+    }
+    .opd-select:focus {
+      border-color: var(--accent-green);
+      box-shadow: 0 8px 25px rgba(7, 170, 31, 0.4);
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin: 0 auto;
+      padding-bottom: 1px;
+    }
+
+    .opd-card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: var(--pad);
+      box-shadow: 0 6px 18 rgba(0,0,0,0.12);
+      position: relative;
+      overflow: visible;
+      width: calc(50% - 10px);
+      box-sizing: border-box;
+    }
+
+    .emoji-wrap {
+      flex: 0 0 90px;
+      border-radius: 12px;
+      background: linear-gradient(180deg,#fff8,#fff0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 60px;
+    }
+
+    .opd-header {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 5px;
+    }
+
+    .opd-body .total-anggaran {
+      background-color: var(--accent-blue);
+      color: white;
+      font-weight: 700;
+      font-size: 16px;
+      padding: 6px 6px;
+      border-radius: 8px;
+      margin-top: 8px;
+      text-align: center;
+      width: 100%;
+      max-width: 85%;
+      box-sizing: border-box;
+    }
+
+    .opd-body { flex: 1; }
+    .opd-title { font-weight: 800; font-size: 24px; color: #0b4aa2; margin: 0; line-height: 1; }
+    .sub { color: var(--muted); margin-top: 6px; font-size: 14px; }
+
+    .monthly {
+      background: #40AA07;
+      border-radius: 16px; 
+      padding: 8px; 
+      text-align: center;
+      margin-top: 10px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      width: 92%; 
+      margin: 10px auto;
+    }
+
+    .monthly h3 { margin: 0; font-size: 12px; color: #ffffff; }
+    .monthly .amount { margin-top: 0; font-size: 22px; font-weight: bold; color: #ffffff; }
+
+    .chart-card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 12px;
+      margin-top: 14px;
+      outline: #AA0792 solid 3px;
+      width: 89%;
+      margin: 14px auto;
+    }
+
+    .chart-title { font-weight: bold; text-align: center; margin-bottom: 8px; font-size: 14px; }
+    .legend { display: flex; gap: 12px; justify-content: center; margin-bottom: 10px; font-size: 13px; color: var(--muted); }
+    .dot { width: 18px; height: 10px; border-radius: 6px; display: inline-block; }
+
+    .progress-row { margin-top: 8px; font-size: 14px; color: #111; }
+    .progress-label { color: var(--muted); font-size: 13px; }
+    .progress-bar { background: #e6e6e6; border-radius: 999px; height: 22px; overflow: hidden; display: flex; align-items: center; padding: 3px; }
+    .progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      min-width: 40px;
+      transition: width 600ms ease;
+    }
+
+    .pie-wrapper { position: relative; padding: 10px; }
+    .pie-canvas { width: 100% !important; max-width: 400px; margin: 0 auto; }
+
+    /* ======================================= */
+    /* PENYESUAIAN ANTISIPASI TOMBOL HP     */
+    /* ======================================= */
+    @media (max-width: 768px) {
+      body {
+        /* Memberikan bantalan ekstra di bawah agar konten terbawah tidak mentok/tertutup sistem bar navigasi HP */
+        padding-bottom: 80px !important; 
+      }
+      .opd-card, .filter-container { width: 100%; } 
+      .pie-canvas { max-width: 350px; }
+    }
+
+    @media (max-width: 420px) {
+      .opd-card { padding: 12px; }
+      .big-amount { font-size: 18px; }
+      .monthly .amount { font-size: 22px; }
+      .pie-canvas { max-width: 300px; }
+    }
+
+    .hingga-bg {
+      background-color: #AA0792; 
+      padding: 1px 4px; 
+      border-radius: 5px; 
+      font-weight: bold;
+      color: #ffffff; 
+    }
+
+    /* --- STYLE TOMBOL DETAIL FULL-WIDTH --- */
+    .btn-detail-full {
+      display: block;
+      width: 100%; /* Memenuhi lebar penuh kartu OPD */
+      box-sizing: border-box;
+      background: transparent;
+      color: #AA0792; /* Warna pink khas tema */
+      border: 2px solid #AA0792;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 800;
+      padding: 12px 0;
+      border-radius: 15px;
+      text-align: center;
+      letter-spacing: 0.5px;
+      margin-top: 20px; /* Memberikan jarak yang pas dari kotak chart di atasnya */
+      transition: all 0.2s ease-in-out;
+    }
+
+    /* Efek hover saat kursor di atas tombol atau saat ditekan di HP */
+    .btn-detail-full:hover {
+      background: #AA0792;
+      color: white;
+      box-shadow: 0 6px 15px rgba(170, 7, 146, 0.25);
+    }
+
+    footer { text-align: center; color: white; padding: 25px; font-size: 11px; }
+  </style>
+</head>
+
+<body>
+
+  <div id="loading-screen">
+    <div class="spinner"></div>
+    <div class="loading-text">MEMUAT DATA DASHBOARD...</div>
+  </div>
+
+  <div class="filter-container">
+    <label for="opdFilter" class="filter-label">PILIH ATAU GANTI OPD :</label>
+    <div class="select-wrapper">
+      <select id="opdFilter" class="opd-select">
+        <option value="all">-- TAMPILKAN SEMUA OPD --</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="container" id="containerOPD"></div>
+
+  <script>
+    const APPSCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyYScBrl0u_uouNkBg1TI38ZyuJRK4VxlxC-_S1LiCsgrxVzS5jNM1TPlTngtOao62vCQ/exec'; 
+    const formatRupiah = (n) => new Intl.NumberFormat('id-ID').format(n);
+    
+    let globalOPDData = []; 
+
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        const results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+    async function fetchOPDData() {
+        try {
+            const response = await fetch(APPSCRIPT_URL);
+            return await response.json(); 
+        } catch (error) {
+            console.error("Gagal mengambil data dari Apps Script:", error);
+            return []; 
+        }
+    }
+
+    const pieLabelPlugin = {
+        id: 'pieLabelPlugin',
+        afterDraw(chart) {
+            const { ctx } = chart;
+            const meta = chart.getDatasetMeta(0);
+            const data = chart.data.datasets[0].data;
+            ctx.save();
+            ctx.font = 'bold 11px Inter';
+            ctx.fillStyle = '#fff';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            meta.data.forEach((arc, i) => {
+                const pos = arc.tooltipPosition();
+                ctx.fillText('Rp. ' + formatRupiah(data[i]), pos.x, pos.y);
+            });
+            ctx.restore();
+        }
+    };
+
+    function createOPDCard(opd, idx) {
+        const card = document.createElement('div');
+        card.className = 'opd-card';
+        card.innerHTML = `
+            <div class="opd-header">
+                <div class="emoji-wrap">${opd.emoji}</div>
+                <div class="opd-body">
+                    <h1 class="opd-title">${opd.opdName}</h1>
+                    <div class="sub">Total Anggaran :</div>
+                    <div class="big-amount total-anggaran">Rp. ${formatRupiah(opd.totalBudget)}</div>
+                </div>
+            </div>
+
+            <div class="monthly">
+                <h3>REALISASI BULAN MEI</h3>
+                <div class="amount">Rp. ${formatRupiah(opd.realisasiBulanMei)}</div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-title">TOTAL REALISASI <span class="hingga-bg">HINGGA</span> 20 MEI</div>
+                
+                <div class="legend">
+                    <div><span class="dot" style="background:var(--accent-green)"></span> Realisasi</div>
+                    <div><span class="dot" style="background:var(--accent-blue)"></span> Sisa Dana</div>
+                </div>
+                <div class="pie-wrapper"><canvas id="pie${idx}" class="pie-canvas" width="400" height="400"></canvas></div>
+
+                <div class="progress-row">
+                    <div class="progress-label">Realisasi Keuangan (%)</div>
+                    <div class="progress-bar"><div class="progress-fill" id="finance${idx}" style="width:0;background:var(--accent-green)">0%</div></div>
+                </div>
+                <div class="progress-row">
+                    <div class="progress-label">Realisasi Fisik (%)</div>
+                    <div class="progress-bar"><div class="progress-fill" id="physical${idx}" style="width:0;background:var(--accent-pink)">0%</div></div>
+                </div>
+            </div>
+
+            <a href="detail.html?opd=${encodeURIComponent(opd.opdName)}" class="btn-detail-full">
+               LIHAT DETAIL DATA ➔
+            </a>
+        `;
+        return card;
+    }
+
+    function setProgress(el, percent) {
+        const val = Math.max(0, Math.min(100, percent)); 
+        el.style.width = val + '%';
+        el.textContent = val.toFixed(2).replace(/\.00$/, '') + '%'; 
+    }
+
+    function renderAllOPD(dataOPD) {
+        const container = document.getElementById('containerOPD');
+        container.innerHTML = '';
+        
+        dataOPD.forEach((opd, idx) => {
+            const card = createOPDCard(opd, idx);
+            container.appendChild(card);
+
+            const total = opd.realisasiTotal; 
+            const sisa = opd.totalBudget - total;
+            const persenKeuangan = (total / (opd.totalBudget || 1)) * 100;
+
+            const ctx = document.getElementById(`pie${idx}`).getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: { 
+                    labels: ['Realisasi', 'Sisa Dana'], 
+                    datasets: [{ 
+                        data: [total, sisa],
+                        backgroundColor: ['#07AA1F', '#0740AA'],
+                        borderColor: '#fff', 
+                        borderWidth: 1 
+                    }] 
+                },
+                options: {
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { display: false }, tooltip: { enabled: false } } 
+                },
+                plugins: [pieLabelPlugin]
+            });
+
+            setProgress(document.getElementById(`finance${idx}`), persenKeuangan);
+            setProgress(document.getElementById(`physical${idx}`), opd.percentPhysical);
+        });
+    }
+
+    function populateDropdown(dataOPD) {
+        const select = document.getElementById('opdFilter');
+        dataOPD.forEach((opd) => {
+            const option = document.createElement('option');
+            option.value = opd.opdName;
+            option.textContent = `${opd.emoji} ${opd.opdName}`;
+            select.appendChild(option);
+        });
+
+        select.addEventListener('change', (e) => {
+            const selectedValue = e.target.value;
+            if (selectedValue === 'all') {
+                renderAllOPD(globalOPDData);
+            } else {
+                const filteredData = globalOPDData.filter(opd => opd.opdName === selectedValue);
+                renderAllOPD(filteredData);
+            }
+        });
+    }
+
+    async function initDashboard() {
+        let selectedOpdId = getUrlParameter('opd');
+        if (!selectedOpdId && window.location.hash) {
+            selectedOpdId = window.location.hash.substring(1);
+        }
+
+        globalOPDData = await fetchOPDData();
+        populateDropdown(globalOPDData);
+
+        if (selectedOpdId) {
+            const normalize = str => str.toLowerCase().replace(/[^a-z0-9]/g, '');
+            const targetId = normalize(selectedOpdId);
+
+            const foundOPD = globalOPDData.find(opd => {
+                const dbName = normalize(opd.opdName);
+                return dbName.includes(targetId) || targetId.includes(dbName);
+            });
+
+            if (foundOPD) {
+                document.getElementById('opdFilter').value = foundOPD.opdName;
+                renderAllOPD([foundOPD]);
+                hideLoading(); 
+                return; 
+            }
+        }
+
+        renderAllOPD(globalOPDData);
+        hideLoading(); 
+    }
+
+    function hideLoading() {
+        const loader = document.getElementById('loading-screen');
+        if(loader) {
+            loader.style.opacity = '0';
+            loader.style.visibility = 'hidden';
+            setTimeout(() => loader.remove(), 400); 
+        }
+    }
+
+    initDashboard();
+</script>
+
+  <footer>
+    Data Extract &rarr; https://sulselprov.e-planning.id <br>
+    20 Mei 2026 | 21.30 WITA | &copy; Copyright by @zuwlend
+    <div id="visitorCount" style="margin-top:6px; color:#fff; font-size:11px;"></div>
+  </footer>
+
+  <script>
+    const VISITOR_URL = 'https://script.google.com/macros/s/AKfycbwfbbXioNyRK2EiFO2_6Ok6Ahp_8n9kidDbLiru2K2KMuiD3TB9zmqJiz5PGihrwA/exec'; 
+    fetch(VISITOR_URL)
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('visitorCount').textContent = `👁️ : ${data.visits}`;
+      })
+      .catch(err => {
+        console.error('Gagal memuat counter:', err);
+        document.getElementById('visitorCount').textContent = '👁️ Counter offline';
+      });
+  </script>
+
+  <div style="
+    position: fixed;
+    bottom: 15px;
+    left: 15px;
+    z-index: 999;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    cursor: pointer;
+    user-select: none;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2px 10px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+    <a href="index.html" style="font-size: 13px; font-weight: bold; text-decoration: none; color: #0740aa; display: block; line-height: 32px;">👈 BACK</a>
+  </div>
+
+</body>
+</html>
