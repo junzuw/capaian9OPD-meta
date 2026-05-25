@@ -70,18 +70,14 @@
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
-    /* ---------------------------------- */
 
     /* CONTAINER DROPDOWN FILTER */
-   /* --- PERBAIKAN STYLE DROPDOWN AGAR LEBIH KENTARA --- */
-    /* --- PENYESUAIAN LEBAR DROPDOWN AGAR SAMA DENGAN KARTU OPD --- */
     .filter-container {
-      width: calc(50% - 10px); /* Rumus lebar yang sama persis dengan kartu OPD */
+      width: calc(50% - 10px); 
       max-width: 100%; 
-      margin: 0 auto 25px auto; /* Tetap berada di tengah halaman */
-      text-align: left;
+      margin: 0 auto 15px auto; 
+      text-align: center;
       box-sizing: border-box;
-      
     }
     
     .filter-label {
@@ -99,22 +95,24 @@
     }
     .opd-select {
       width: 100%;
-      padding: 14px 45px 14px 20px; /* Jarak kanan dilebarkan untuk ruang ikon panah */
+      padding: 14px 20px; 
       font-size: 16px;
       font-weight: 800;
       color: #0740aa;
       background-color: var(--card);
-      border: 3px solid #ff00b7; /* Warna border pink cerah agar kontras */
+      border: 3px solid #ff00b7;
       border-radius: 40px;
       outline: none;
       cursor: pointer;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3); /* Bayangan lebih tegas agar terlihat timbul */
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
       font-family: "Inter", sans-serif;
-      appearance: none; /* Menghilangkan panah bawaan browser yang kaku */
+      appearance: none;
       -webkit-appearance: none;
       -moz-appearance: none;
+      text-align: center;
+      text-align-last: center; 
     }
-    /* Membuat ikon panah kustom menggantikan bawaan browser */
+
     .select-wrapper::after {
       content: "▼";
       font-size: 12px;
@@ -123,14 +121,12 @@
       right: 20px;
       top: 50%;
       transform: translateY(-50%);
-      pointer-events: none; /* Klik tembus ke select di bawahnya */
+      pointer-events: none; 
     }
-    /* Efek sedikit membesar saat dropdown disentuh/diklik */
     .opd-select:focus {
       border-color: var(--accent-green);
       box-shadow: 0 8px 25px rgba(7, 170, 31, 0.4);
     }
-    /* -------------------------------------------------- */
 
     .container {
       display: flex;
@@ -145,7 +141,7 @@
       background: var(--card);
       border-radius: 20px;
       padding: var(--pad);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+      box-shadow: 0 6px 18 rgba(0,0,0,0.12);
       position: relative;
       overflow: visible;
       width: calc(50% - 10px);
@@ -233,8 +229,15 @@
     .pie-wrapper { position: relative; padding: 10px; }
     .pie-canvas { width: 100% !important; max-width: 400px; margin: 0 auto; }
 
+    /* ======================================= */
+    /* PENYESUAIAN ANTISIPASI TOMBOL HP     */
+    /* ======================================= */
     @media (max-width: 768px) {
-      .opd-card, .filter-container { width: 100%; } /* Otomatis keduanya jadi full-width di HP */
+      body {
+        /* Memberikan bantalan ekstra di bawah agar konten terbawah tidak mentok/tertutup sistem bar navigasi HP */
+        padding-bottom: 80px !important; 
+      }
+      .opd-card, .filter-container { width: 100%; } 
       .pie-canvas { max-width: 350px; }
     }
 
@@ -265,7 +268,7 @@
   </div>
 
   <div class="filter-container">
-    <label for="opdFilter" class="filter-label">PILIH ATAU GANTI OPD DI SINI:</label>
+    <label for="opdFilter" class="filter-label">PILIH ATAU GANTI OPD :</label>
     <div class="select-wrapper">
       <select id="opdFilter" class="opd-select">
         <option value="all">-- TAMPILKAN SEMUA OPD --</option>
@@ -420,9 +423,6 @@
         });
     }
 
-    // ===================================
-    // INITIALIZATION (SINKRON DENGAN INDEX)
-    // ===================================
     async function initDashboard() {
         let selectedOpdId = getUrlParameter('opd');
         if (!selectedOpdId && window.location.hash) {
@@ -444,22 +444,21 @@
             if (foundOPD) {
                 document.getElementById('opdFilter').value = foundOPD.opdName;
                 renderAllOPD([foundOPD]);
-                hideLoading(); // <-- MATIKAN LOADING SCREEN
+                hideLoading(); 
                 return; 
             }
         }
 
         renderAllOPD(globalOPDData);
-        hideLoading(); // <-- MATIKAN LOADING SCREEN
+        hideLoading(); 
     }
 
-    // --- FUNGSI BARU UNTUK MENUTUP SCREEN LOADING ---
     function hideLoading() {
         const loader = document.getElementById('loading-screen');
         if(loader) {
             loader.style.opacity = '0';
             loader.style.visibility = 'hidden';
-            setTimeout(() => loader.remove(), 400); // Hapus elemen dari DOM setelah animasi transisi selesai
+            setTimeout(() => loader.remove(), 400); 
         }
     }
 
@@ -487,14 +486,18 @@
 
   <div style="
     position: fixed;
-    bottom: 20px;
-    left: 20px;
+    bottom: 15px;
+    left: 15px;
     z-index: 999;
     text-align: center;
     font-family: Arial, sans-serif;
     cursor: pointer;
-    user-select: none;">
-    <a href="index.html" style="font-size: 15px; font-weight: bold; text-decoration: none; display: block; line-height: 40px;">👈BACK</a>
+    user-select: none;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2px 10px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+    <a href="index.html" style="font-size: 13px; font-weight: bold; text-decoration: none; color: #0740aa; display: block; line-height: 32px;">👈 BACK</a>
   </div>
 
 </body>
