@@ -310,17 +310,16 @@
     
     let globalOPDData = []; 
 
-        // --- FITUR AUDIO/SUARA TAP KLIK ---
-        // Anda bisa mengganti URL di bawah ini dengan file suara lokal Anda sendiri, contoh: 'suara-klik.mp3'
-        const audioKlik = new Audio('tap_sound.mp3');
-        
-        function putarSuara() {
-            audioKlik.currentTime = 0; // Mengulang dari awal jika diklik dengan cepat
-            audioKlik.play().catch(error => {
-                // Mencegah error bawaan browser jika user belum melakukan interaksi awal
-                console.log("Audio dimainkan setelah interaksi pertama.");
-            });
-        }
+    // --- FITUR AUDIO/SUARA TAP KLIK ---
+    const audioKlik = new Audio('tap_sound.mp3');
+    
+    function putarSuara() {
+        audioKlik.currentTime = 0; // Mengulang dari awal jika diklik dengan cepat
+        audioKlik.play().catch(error => {
+            // Mencegah error bawaan browser jika user belum melakukan interaksi awal
+            console.log("Audio dimainkan setelah interaksi pertama.");
+        });
+    }
     
     function getUrlParameter(name) {
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
@@ -395,7 +394,7 @@
                 </div>
             </div>
 
-            <a href="detail.html?opd=${encodeURIComponent(opd.opdName)}" class="btn-detail-full">
+            <a href="detail.html?opd=${encodeURIComponent(opd.opdName)}" class="btn-detail-full" onclick="putarSuara()">
                LIHAT DETAIL DATA ➔
             </a>
         `;
@@ -446,24 +445,25 @@
     }
 
     function populateDropdown(dataOPD) {
-        const select = document.getElementById('opdFilter');
-        dataOPD.forEach((opd) => {
-            const option = document.createElement('option');
-            option.value = opd.opdName;
-            option.textContent = `${opd.emoji} ${opd.opdName}`;
-            select.appendChild(option);
-        });
+    const select = document.getElementById('opdFilter');
+    dataOPD.forEach((opd) => {
+        const option = document.createElement('option');
+        option.value = opd.opdName;
+        option.textContent = `${opd.emoji} ${opd.opdName}`;
+        select.appendChild(option);
+    });
 
-        select.addEventListener('change', (e) => {
-            const selectedValue = e.target.value;
-            if (selectedValue === 'all') {
-                renderAllOPD(globalOPDData);
-            } else {
-                const filteredData = globalOPDData.filter(opd => opd.opdName === selectedValue);
-                renderAllOPD(filteredData);
-            }
-        });
-    }
+    select.addEventListener('change', (e) => {
+        putarSuara(); // Efek suara berbunyi saat user memilih OPD baru
+        const selectedValue = e.target.value;
+        if (selectedValue === 'all') {
+            renderAllOPD(globalOPDData);
+        } else {
+            const filteredData = globalOPDData.filter(opd => opd.opdName === selectedValue);
+            renderAllOPD(filteredData);
+        }
+    });
+}
 
     async function initDashboard() {
         let selectedOpdId = getUrlParameter('opd');
@@ -478,19 +478,16 @@
             const normalize = str => str.toLowerCase().replace(/[^a-z0-9]/g, '');
             const targetId = normalize(selectedOpdId);
 
-// --- KODE BARU (Sudah Mengantisipasi Bappeda / Bappelitbangda) ---
-const foundOPD = globalOPDData.find(opd => {
-    const dbName = normalize(opd.opdName);
-    
-    // Jika parameter dari index mencari 'bappeda' dan di database namanya 'bappelitbangda' (atau sebaliknya)
-    if ((targetId === 'bappeda' && dbName === 'bappelitbangda') || 
-        (targetId === 'bappelitbangda' && dbName === 'bappeda')) {
-        return true;
-    }
-    
-    // Pencocokan default untuk 7 OPD lainnya
-    return dbName.includes(targetId) || targetId.includes(dbName);
-});
+            const foundOPD = globalOPDData.find(opd => {
+                const dbName = normalize(opd.opdName);
+                
+                if ((targetId === 'bappeda' && dbName === 'bappelitbangda') || 
+                    (targetId === 'bappelitbangda' && dbName === 'bappeda')) {
+                    return true;
+                }
+                
+                return dbName.includes(targetId) || targetId.includes(dbName);
+            });
             if (foundOPD) {
                 document.getElementById('opdFilter').value = foundOPD.opdName;
                 renderAllOPD([foundOPD]);
@@ -547,7 +544,7 @@ const foundOPD = globalOPDData.find(opd => {
     padding: 2px 10px;
     border-radius: 20px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
-    <a href="index.html" style="font-size: 13px; font-weight: bold; text-decoration: none; color: #0740aa; display: block; line-height: 32px;">👈 BACK</a>
+    <a href="index.html" style="font-size: 13px; font-weight: bold; text-decoration: none; color: #0740aa; display: block; line-height: 32px;" onclick="putarSuara()">👈 BACK</a>
   </div>
 
 </body>
