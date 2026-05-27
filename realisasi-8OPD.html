@@ -310,6 +310,18 @@
     
     let globalOPDData = []; 
 
+        // --- FITUR AUDIO/SUARA TAP KLIK ---
+        // Anda bisa mengganti URL di bawah ini dengan file suara lokal Anda sendiri, contoh: 'suara-klik.mp3'
+        const audioKlik = new Audio('tap_sound.mp3');
+        
+        function putarSuara() {
+            audioKlik.currentTime = 0; // Mengulang dari awal jika diklik dengan cepat
+            audioKlik.play().catch(error => {
+                // Mencegah error bawaan browser jika user belum melakukan interaksi awal
+                console.log("Audio dimainkan setelah interaksi pertama.");
+            });
+        }
+    
     function getUrlParameter(name) {
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
         const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
