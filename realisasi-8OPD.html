@@ -36,7 +36,7 @@
       box-sizing: border-box;
     }
 
-    /* --- STYLE: LOADING SCREEN --- */
+    /* --- LOADING SCREEN --- */
     #loading-screen {
       position: fixed;
       top: 0;
@@ -53,24 +53,16 @@
       transition: opacity 0.4s ease, visibility 0.4s ease;
     }
     .spinner {
-      width: 150px;
-      height: 150px;
+      width: 50px;
+      height: 50px;
       border: 5px solid rgba(255, 255, 255, 0.2);
       border-radius: 50%;
       border-top-color: white;
       animation: spin 1s ease-in-out infinite;
     }
-    .loading-text {
-      margin-top: 15px;
-      font-size: 16px;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* CONTAINER DROPDOWN FILTER */
+    /* FILTER DROPDOWN */
     .filter-container {
       width: calc(50% - 10px); 
       max-width: 100%; 
@@ -78,7 +70,6 @@
       text-align: center;
       box-sizing: border-box;
     }
-    
     .filter-label {
       display: block;
       color: #ffffff;
@@ -88,10 +79,7 @@
       margin-bottom: 6px;
       opacity: 0.9;
     }
-    .select-wrapper {
-      position: relative;
-      width: 100%;
-    }
+    .select-wrapper { position: relative; width: 100%; }
     .opd-select {
       width: 100%;
       padding: 14px 20px; 
@@ -104,14 +92,10 @@
       outline: none;
       cursor: pointer;
       box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-      font-family: "Inter", sans-serif;
       appearance: none;
-      -webkit-appearance: none;
-      -moz-appearance: none;
       text-align: center;
       text-align-last: center; 
     }
-
     .select-wrapper::after {
       content: "▼";
       font-size: 16px;
@@ -122,10 +106,6 @@
       transform: translateY(-50%);
       pointer-events: none; 
     }
-    .opd-select:focus {
-      border-color: var(--accent-green);
-      box-shadow: 0 8px 25px rgba(7, 170, 31, 0.4);
-    }
 
     .container {
       display: flex;
@@ -133,7 +113,6 @@
       gap: 20px;
       justify-content: center;
       margin: 0 auto;
-      padding-bottom: 1px;
     }
 
     .opd-card {
@@ -141,71 +120,54 @@
       border-radius: 20px;
       padding: var(--pad);
       box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-      position: relative;
-      overflow: visible;
       width: calc(50% - 10px);
       box-sizing: border-box;
     }
 
+    .opd-header { display: flex; gap: 10px; align-items: center; margin-top: 5px; }
     .emoji-wrap {
       flex: 0 0 90px;
       border-radius: 12px;
-      background: linear-gradient(180deg,#fff8,#fff0);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 60px;
     }
-
-    .opd-header {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      margin-top: 5px;
-    }
-
-    .opd-body .total-anggaran {
+    .opd-body { flex: 1; }
+    .opd-title { font-weight: 800; font-size: 24px; color: #0b4aa2; margin: 0; line-height: 1; }
+    .sub { color: var(--muted); margin-top: 6px; font-size: 14px; }
+    .total-anggaran {
       background-color: var(--accent-blue);
       color: white;
       font-weight: 700;
       font-size: 16px;
-      padding: 6px 6px;
+      padding: 6px;
       border-radius: 8px;
       margin-top: 8px;
       text-align: center;
-      width: 100%;
-      max-width: 85%;
-      box-sizing: border-box;
+      width: 85%;
     }
-
-    .opd-body { flex: 1; }
-    .opd-title { font-weight: 800; font-size: 24px; color: #0b4aa2; margin: 0; line-height: 1; }
-    .sub { color: var(--muted); margin-top: 6px; font-size: 14px; }
 
     .monthly {
       background: #40AA07;
       border-radius: 16px; 
       padding: 8px; 
       text-align: center;
-      margin-top: 10px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
       width: 92%; 
       margin: 10px auto;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
     }
-
     .monthly h3 { margin: 0; font-size: 12px; color: #ffffff; }
-    .monthly .amount { margin-top: 0; font-size: 22px; font-weight: bold; color: #ffffff; }
+    .monthly .amount { font-size: 22px; font-weight: bold; color: #ffffff; }
 
     .chart-card {
       background: var(--card);
       border-radius: 20px;
       padding: 12px;
-      margin-top: 14px;
       outline: #AA0792 solid 3px;
       width: 89%;
       margin: 14px auto;
     }
-
     .chart-title { font-weight: bold; text-align: center; margin-bottom: 8px; font-size: 14px; }
     .legend { display: flex; gap: 12px; justify-content: center; margin-bottom: 10px; font-size: 13px; color: var(--muted); }
     .dot { width: 18px; height: 10px; border-radius: 6px; display: inline-block; }
@@ -221,51 +183,14 @@
       justify-content: center;
       color: white;
       font-weight: 800;
+      width: 0%; /* Diisi via JS untuk animasi */
       min-width: 40px;
-      transition: width 600ms ease;
     }
 
     .pie-wrapper { position: relative; padding: 10px; }
     .pie-canvas { width: 100% !important; max-width: 400px; margin: 0 auto; }
 
-    /* --- STYLE: ANIMASI PANAH BERPUTAR --- */
-    .panah-animasi {
-      display: inline-block;
-      font-size: 14px;
-      font-weight: bold;
-      color: #ffffff;
-      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .panah-animasi.putar {
-      transform: rotate(180deg);
-      color: #ff00b7;
-    }
-
-    /* ======================================= */
-    /* PENYESUAIAN ANTISIPASI TOMBOL HP        */
-    /* ======================================= */
-    @media (max-width: 768px) {
-      body {
-        padding-bottom: 80px !important; 
-      }
-      .opd-card, .filter-container { width: 100%; } 
-      .pie-canvas { max-width: 350px; }
-    }
-
-    @media (max-width: 420px) {
-      .opd-card { padding: 12px; }
-      .big-amount { font-size: 18px; }
-      .monthly .amount { font-size: 22px; }
-      .pie-canvas { max-width: 300px; }
-    }
-
-    .hingga-bg {
-      background-color: #AA0792; 
-      padding: 1px 4px; 
-      border-radius: 5px; 
-      font-weight: bold;
-      color: #ffffff; 
-    }
+    .hingga-bg { background-color: #AA0792; padding: 1px 4px; border-radius: 5px; font-weight: bold; color: #ffffff; }
 
     .btn-detail-full {
       display: block;
@@ -285,19 +210,17 @@
       transition: all 0.2s ease-in-out;
       cursor: pointer;
     }
-    .btn-detail-full:hover {
-      background: #AA0792;
-      color: white;
-      box-shadow: 0 6px 15px rgba(170, 7, 146, 0.25);
-    }
 
+    @media (max-width: 768px) {
+      body { padding-bottom: 80px !important; }
+      .opd-card, .filter-container { width: 100%; } 
+    }
     footer { text-align: center; color: white; padding: 25px; font-size: 11px; }
   </style>
 </head>
-
 <body>
 
-   <div id="loading-screen">
+  <div id="loading-screen">
     <div class="spinner"></div>
     <div style="margin-top: 15px; text-align: center; font-weight: bold; line-height: 2; letter-spacing: 1px;">TABEʻ, LAGI MEMUAT... <br> DATA DASHBOARD <br>
       SABAR KIʻ NDAG LAMA JI...</div>
@@ -317,18 +240,12 @@
   <script>
     const APPSCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyYScBrl0u_uouNkBg1TI38ZyuJRK4VxlxC-_S1LiCsgrxVzS5jNM1TPlTngtOao62vCQ/exec'; 
     const formatRupiah = (n) => new Intl.NumberFormat('id-ID').format(n);
-    
     let globalOPDData = []; 
-    let activeCharts = {}; // Wadah instansi Chart.js aman dari tumpang tindih
 
-    // --- FITUR AUDIO/SUARA TAP KLIK ---
     const audioKlik = new Audio('tap_sound.mp3');
-    
     function putarSuara() {
         audioKlik.currentTime = 0; 
-        audioKlik.play().catch(error => {
-            console.log("Audio aktif setelah interaksi pertama.");
-        });
+        audioKlik.play().catch(() => {});
     }
     
     function getUrlParameter(name) {
@@ -343,7 +260,7 @@
             const response = await fetch(APPSCRIPT_URL);
             return await response.json(); 
         } catch (error) {
-            console.error("Gagal mengambil data dari Apps Script:", error);
+            console.error(error);
             return []; 
         }
     }
@@ -367,68 +284,6 @@
         }
     };
 
-    // --- TOGGLE AKORDION + ANIMASI GRAFIK + AUTO SCROLL ---
-    function toggleTimeSeries(idx) {
-        const wrapper = document.getElementById(`wrapperTimeSeries${idx}`);
-        const panah = document.getElementById(`panahBulanan${idx}`);
-        
-        if (wrapper.style.maxHeight === '0px' || !wrapper.style.maxHeight) {
-            // 1. Buka wadah & Putar Panah Indikator
-            wrapper.style.maxHeight = '400px'; 
-            panah.classList.add('putar');
-            
-            // 2. Beri jeda agar ruang canvas selesai disiapkan oleh browser
-            setTimeout(() => {
-                const ctxTime = document.getElementById(`timeSeries${idx}`).getContext('2d');
-                const dataBulanan = JSON.parse(wrapper.dataset.progres);
-
-                if (activeCharts[idx]) {
-                    activeCharts[idx].destroy();
-                }
-
-                // 3. Render Grafik Baru dengan Efek Animasi Melesat Halus
-                activeCharts[idx] = new Chart(ctxTime, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
-                        datasets: [{
-                            data: dataBulanan,
-                            backgroundColor: '#AA0792',
-                            borderRadius: 5
-                        }]
-                    },
-                    options: {
-                        indexAxis: 'y',
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        animation: {
-                            duration: 1100,
-                            easing: 'easeOutQuart'
-                        },
-                        plugins: { legend: { display: false } },
-                        scales: {
-                            x: { beginAtZero: true, max: 100, ticks: { font: { size: 10 }, callback: v => v + '%' } },
-                            y: { ticks: { font: { size: 11, weight: 'bold' } } }
-                        }
-                    }
-                });
-
-                // 4. AUTO-SCROLL: Dorong grafik otomatis naik ke posisi tengah layar HP
-                setTimeout(() => {
-                    wrapper.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'center'
-                    });
-                }, 100);
-
-            }, 150);
-        } else {
-            // Tutup kembali jika diklik ulang
-            wrapper.style.maxHeight = '0px'; 
-            panah.classList.remove('putar');
-        }
-    }
-
     function createOPDCard(opd, idx) {
         const card = document.createElement('div');
         card.className = 'opd-card';
@@ -449,7 +304,6 @@
 
             <div class="chart-card">
                 <div class="chart-title">TOTAL REALISASI <span class="hingga-bg">HINGGA</span> 20 MEI</div>
-                
                 <div class="legend">
                     <div><span class="dot" style="background:var(--accent-green)"></span> Realisasi</div>
                     <div><span class="dot" style="background:var(--accent-blue)"></span> Sisa Dana</div>
@@ -458,25 +312,16 @@
 
                 <div class="progress-row">
                     <div class="progress-label">Realisasi Keuangan (%)</div>
-                    <div class="progress-bar"><div class="progress-fill" id="finance${idx}" style="width:0;background:var(--accent-green)">0%</div></div>
+                    <div class="progress-bar"><div class="progress-fill" id="finance${idx}" style="background:var(--accent-green)">0%</div></div>
                 </div>
                 <div class="progress-row">
                     <div class="progress-label">Realisasi Fisik (%)</div>
-                    <div class="progress-bar"><div class="progress-fill" id="physical${idx}" style="width:0;background:var(--accent-pink)">0%</div></div>
-                </div>
-
-                <button class="btn-detail-full" style="background:#40AA07; border-color:#40AA07; margin-top:15px; display: flex; justify-content: center; align-items: center; gap: 8px;" onclick="putarSuara(); toggleTimeSeries(${idx})">
-                    <span>LIHAT TREN BULANAN</span>
-                    <span id="panahBulanan${idx}" class="panah-animasi">▼</span>
-                </button>
-                <div id="wrapperTimeSeries${idx}" style="max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; margin-top: 10px;">
-                    <div style="font-weight:bold; text-align:center; font-size:12px; margin: 10px 0; color:#0740aa;">PROGRES FISIK KUMULATIF PER BULAN</div>
-                    <div style="position:relative; height:320px;"><canvas id="timeSeries${idx}"></canvas></div>
+                    <div class="progress-bar"><div class="progress-fill" id="physical${idx}" style="background:var(--accent-pink)">0%</div></div>
                 </div>
             </div>
 
             <a href="detail.html?opd=${encodeURIComponent(opd.opdName)}" class="btn-detail-full" onclick="putarSuara()">
-               LIHAT DETAIL DATA ➔
+               LIHAT DETAIL DATA & TREN BULANAN ➔
             </a>
         `;
         return card;
@@ -484,8 +329,11 @@
 
     function setProgress(el, percent) {
         const val = Math.max(0, Math.min(100, percent)); 
-        el.style.width = val + '%';
-        el.textContent = val.toFixed(2).replace(/\.00$/, '') + '%'; 
+        setTimeout(() => {
+            el.style.transition = "width 1.2s cubic-bezier(0.4, 0, 0.2, 1)";
+            el.style.width = val + '%';
+            el.textContent = val.toFixed(2).replace(/\.00$/, '') + '%'; 
+        }, 150);
     }
 
     function renderAllOPD(dataOPD) {
@@ -493,14 +341,12 @@
         container.innerHTML = '';
         
         dataOPD.forEach((opd, idx) => {
-            const card = createOPDCard(opd, idx);
-            container.appendChild(card);
+            container.appendChild(createOPDCard(opd, idx));
 
             const total = opd.realisasiTotal; 
             const sisa = opd.totalBudget - total;
             const persenKeuangan = (total / (opd.totalBudget || 1)) * 100;
 
-            // Render Pie Chart Utama
             const ctx = document.getElementById(`pie${idx}`).getContext('2d');
             new Chart(ctx, {
                 type: 'pie',
@@ -520,10 +366,6 @@
                 },
                 plugins: [pieLabelPlugin]
             });
-
-            // Menyimpan string data array progres ke data-attribute DOM agar aman dari error asinkronus
-            const wrapper = document.getElementById(`wrapperTimeSeries${idx}`);
-            wrapper.dataset.progres = JSON.stringify(opd.progresBulanan || [10, 15, 22, 30, 42, 50, 58, 62, 70, 78, 85, 95]);
 
             setProgress(document.getElementById(`finance${idx}`), persenKeuangan);
             setProgress(document.getElementById(`physical${idx}`), opd.percentPhysical);
@@ -552,26 +394,15 @@
     }
 
     async function initDashboard() {
-        let selectedOpdId = getUrlParameter('opd');
-        if (!selectedOpdId && window.location.hash) {
-            selectedOpdId = window.location.hash.substring(1);
-        }
-
         globalOPDData = await fetchOPDData();
         populateDropdown(globalOPDData);
 
+        let selectedOpdId = getUrlParameter('opd') || (window.location.hash ? window.location.hash.substring(1) : '');
         if (selectedOpdId) {
             const normalize = str => str.toLowerCase().replace(/[^a-z0-9]/g, '');
             const targetId = normalize(selectedOpdId);
-
-            const foundOPD = globalOPDData.find(opd => {
-                const dbName = normalize(opd.opdName);
-                if ((targetId === 'bappeda' && dbName === 'bappelitbangda') || 
-                    (targetId === 'bappelitbangda' && dbName === 'bappeda')) {
-                    return true;
-                }
-                return dbName.includes(targetId) || targetId.includes(dbName);
-            });
+            const foundOPD = globalOPDData.find(opd => normalize(opd.opdName).includes(targetId));
+            
             if (foundOPD) {
                 document.getElementById('opdFilter').value = foundOPD.opdName;
                 renderAllOPD([foundOPD]);
@@ -579,7 +410,6 @@
                 return; 
             }
         }
-
         renderAllOPD(globalOPDData);
         hideLoading(); 
     }
@@ -592,30 +422,23 @@
             setTimeout(() => loader.remove(), 400); 
         }
     }
-
     initDashboard();
   </script>
 
   <footer>
     Data Extract &rarr; https://sulselprov.e-planning.id <br>
     27 Mei 2026 | 21.30 WITA | &copy; Copyright by @zuwlend
-    <div id="visitorCount" style="margin-top:6px; color:#fff; font-size:11px;"></div>
+    <div id="visitorCount" style="margin-top:6px; color:#fff;"></div>
   </footer>
 
   <script>
     const VISITOR_URL = 'https://script.google.com/macros/s/AKfycbwfbbXioNyRK2EiFO2_6Ok6Ahp_8n9kidDbLiru2K2KMuiD3TB9zmqJiz5PGihrwA/exec'; 
-    fetch(VISITOR_URL)
-      .then(res => res.json())
-      .then(data => {
+    fetch(VISITOR_URL).then(res => res.json()).then(data => {
         document.getElementById('visitorCount').textContent = `👁️ : ${data.visits}`;
-      })
-      .catch(err => {
-        console.error('Gagal memuat counter:', err);
-        document.getElementById('visitorCount').textContent = '👁️ Counter offline';
-      });
+    }).catch(() => { document.getElementById('visitorCount').textContent = '👁️ Counter offline'; });
   </script>
 
-  <div style="
+<div style="
     position: fixed;
     bottom: 15px;
     left: 15px;
