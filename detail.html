@@ -1,458 +1,1010 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Dashboard OPD — Progres Realisasi Keuangan & Fisik</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Multi-OPD Terintegrasi Provinsi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <style>
+        /* CSS UTAMA */
+        * {
+            box-sizing: border-box;
+        }
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XGZ0G9ZM3K"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-XXXXXXXXXX'); 
-  </script>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(180deg, #eaf4ff, #f7fbff);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <style>
-    :root {
-      --bg: #0740aa;
-      --card: #ffffff;
-      --muted: #6b7280;
-      --accent-green: #07AA1F;
-      --accent-blue: #1149b8;
-      --accent-pink: #AA0792;
-      --radius: 18px;
-      --pad: 14px;
-    }
+        /* Header */
+        .header {
+            background: linear-gradient(90deg, #0f3c78, #0c6bdc);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+        }
 
-    html,body{height:100%}
-    body {
-      margin: 0;
-      background: var(--bg);
-      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      color: #0740aa;
-      padding: 20px;
-      box-sizing: border-box;
-    }
+        .header-logo {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
 
-    /* --- LOADING SCREEN --- */
-    #loading-screen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--bg);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 10000;
-      color: white;
-      transition: opacity 0.4s ease, visibility 0.4s ease;
-    }
-    .spinner {
-      width: 50px;
-      height: 50px;
-      border: 5px solid rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-      border-top-color: white;
-      animation: spin 1s ease-in-out infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+        .header-text h1 {
+            margin: 0;
+            font-size: 18px;
+            line-height: 1.2;
+        }
 
-    /* FILTER DROPDOWN */
-    .filter-container {
-      width: calc(50% - 10px); 
-      max-width: 100%; 
-      margin: 0 auto 15px auto; 
-      text-align: center;
-      box-sizing: border-box;
-    }
-    .filter-label {
-      display: block;
-      color: #ffffff;
-      font-size: 12px;
-      font-weight: bold;
-      letter-spacing: 1px;
-      margin-bottom: 6px;
-      opacity: 0.9;
-    }
-    .select-wrapper { position: relative; width: 100%; }
-    .opd-select {
-      width: 100%;
-      padding: 14px 20px; 
-      font-size: 16px;
-      font-weight: 800;
-      color: #0740aa;
-      background-color: var(--card);
-      border: 3px solid #ff00b7;
-      border-radius: 40px;
-      outline: none;
-      cursor: pointer;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-      appearance: none;
-      text-align: center;
-      text-align-last: center; 
-    }
-    .select-wrapper::after {
-      content: "▼";
-      font-size: 16px;
-      color: #0740aa;
-      position: absolute;
-      right: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      pointer-events: none; 
-    }
+        .header-text p {
+            margin: 5px 0 0 0;
+            opacity: 0.9;
+            font-size: 12px;
+        }
 
-    .container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: center;
-      margin: 0 auto;
-    }
+        .container {
+            padding: 15px;
+            flex: 1;
+        }
 
-    .opd-card {
-      background: var(--card);
-      border-radius: 20px;
-      padding: var(--pad);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-      width: calc(50% - 10px);
-      box-sizing: border-box;
-    }
+        /* =========================================
+           CARD STYLE (SESUAI REQUEST HTML PENDEK)
+        =========================================== */
+        .card {
+            background: linear-gradient(180deg, #ffffff, #eef7ff);
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow:
+                0 12px 30px rgba(15, 60, 120, 0.12),
+                0 4px 12px rgba(15, 60, 120, 0.08);
+            margin-bottom: 15px;
+            transition: all 0.25s ease;
+        }
 
-    .opd-header { display: flex; gap: 10px; align-items: center; margin-top: 5px; }
-    .emoji-wrap {
-      flex: 0 0 90px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 60px;
-    }
-    .opd-body { flex: 1; }
-    .opd-title { font-weight: 800; font-size: 24px; color: #0b4aa2; margin: 0; line-height: 1; }
-    .sub { color: var(--muted); margin-top: 6px; font-size: 14px; }
-    .total-anggaran {
-      background-color: var(--accent-blue);
-      color: white;
-      font-weight: 700;
-      font-size: 16px;
-      padding: 6px;
-      border-radius: 8px;
-      margin-top: 8px;
-      text-align: center;
-      width: 85%;
-    }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 18px 40px rgba(15, 60, 120, 0.18),
+                0 8px 18px rgba(15, 60, 120, 0.12);
+        }
 
-    .monthly {
-      background: #40AA07;
-      border-radius: 16px; 
-      padding: 8px; 
-      text-align: center;
-      width: 92%; 
-      margin: 10px auto;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-    }
-    .monthly h3 { margin: 0; font-size: 12px; color: #ffffff; }
-    .monthly .amount { font-size: 22px; font-weight: bold; color: #ffffff; }
+        /* =========================================
+           INNER CARD STYLE (SESUAI REQUEST HTML PENDEK)
+        =========================================== */
+        .inner-card {
+            border: 1.5px solid #e3e6f0;
+            box-shadow:
+                0 10px 25px rgba(15, 60, 120, 0.10),
+                0 4px 10px rgba(15, 60, 120, 0.06);
+            transition: all 0.25s ease;
+        }
 
-    .chart-card {
-      background: var(--card);
-      border-radius: 20px;
-      padding: 12px;
-      outline: #AA0792 solid 3px;
-      width: 89%;
-      margin: 14px auto;
-    }
-    .chart-title { font-weight: bold; text-align: center; margin-bottom: 8px; font-size: 14px; }
-    .legend { display: flex; gap: 12px; justify-content: center; margin-bottom: 10px; font-size: 13px; color: var(--muted); }
-    .dot { width: 18px; height: 10px; border-radius: 6px; display: inline-block; }
+        .inner-card:hover {
+            border-color: #0c6bdc;
+            transform: translateY(-2px);
+            box-shadow:
+                0 16px 35px rgba(15, 60, 120, 0.18),
+                0 8px 18px rgba(15, 60, 120, 0.12);
+        }
 
-    .progress-row { margin-top: 8px; font-size: 14px; color: #111; }
-    .progress-label { color: var(--muted); font-size: 13px; }
-    .progress-bar { background: #e6e6e6; border-radius: 999px; height: 22px; overflow: hidden; display: flex; align-items: center; padding: 3px; }
-    .progress-fill {
-      height: 100%;
-      border-radius: 999px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 800;
-      width: 0%; /* Diisi via JS untuk animasi */
-      min-width: 40px;
-    }
+        /* TEXT */
+        .card h4 {
+            margin: 0;
+            font-size: 11px;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
-    .pie-wrapper { position: relative; padding: 10px; }
-    .pie-canvas { width: 100% !important; max-width: 400px; margin: 0 auto; }
+        .card h2 {
+            margin: 8px 0 0 0;
+            font-size: 18px;
+            color: #1a1a1a;
+            font-weight: 700;
+        }
 
-    .hingga-bg { background-color: #AA0792; padding: 1px 4px; border-radius: 5px; font-weight: bold; color: #ffffff; }
+        .card-flex {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-    .btn-detail-full {
-      display: block;
-      width: 100%;
-      box-sizing: border-box;
-      background:#AA0792;
-      color: #ffffff;
-      border: 2px solid #AA0792;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 800;
-      padding: 12px 0;
-      border-radius: 15px;
-      text-align: center;
-      letter-spacing: 0.5px;
-      margin-top: 20px;
-      transition: all 0.2s ease-in-out;
-      cursor: pointer;
-    }
+        .icon-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            color: white;
+            flex-shrink: 0;
+        }
 
-    @media (max-width: 768px) {
-      body { padding-bottom: 80px !important; }
-      .opd-card, .filter-container { width: 100%; } 
-    }
-    footer { text-align: center; color: white; padding: 25px; font-size: 11px; }
-  </style>
+        .icon-blue {
+            background: #0c6bdc;
+        }
+
+        .icon-green {
+            background: #28a745;
+        }
+
+        .icon-orange {
+            background: #ff9800;
+        }
+
+        .icon-red {
+            background: #e53935;
+        }
+
+        /* Container Section Title */
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #0f3c78;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e3e6f0;
+            padding-bottom: 8px;
+        }
+
+        .wrapper-title {
+            text-align: center;
+            font-size: 13px;
+            margin-bottom: 15px;
+            color: #0f3c78;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 8px;
+            background: #eee;
+            border-radius: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 1.5s ease-in-out;
+        }
+
+        /* Accordion Program */
+        .program-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .program-header h3 {
+            margin: 0;
+            font-size: 14px;
+            color: #0f3c78;
+            flex: 1;
+            padding-right: 15px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: stretch;
+            min-width: 80px;
+        }
+
+        .toggle-btn {
+            background: #0c6bdc;
+            color: white;
+            border: 1px solid #0a56b2;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            transition: background 0.2s, color 0.2s;
+            text-align: center;
+        }
+
+        .kegiatan-btn {
+            background: #28a745;
+            color: white;
+            border: 1px solid #1e7e34;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+            display: none;
+            transition: background 0.2s;
+        }
+
+        .program-content {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .sub-kegiatan-wrapper {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border-left: 4px solid #28a745;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .sub-kegiatan-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1e7e34;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sub-kegiatan-block {
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 15px;
+        }
+
+        .sub-kegiatan-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .sub-kegiatan-name-header {
+            font-size: 13px;
+            font-weight: bold;
+            color: #334155;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .sub-kegiatan-name-text {
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        .sub-detail-btn {
+            background: #28a745;
+            color: white;
+            border: 1px solid #1e7e34;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+
+        .sub-kegiatan-cards-content {
+            display: none;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #cbd5e1;
+        }
+
+        /* GRAFIK TRIGGER BUTTONS */
+        .btn-grafik-trigger,
+        .btn-grafik-trigger-keu {
+            width: 100%;
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            letter-spacing: 0.3px;
+        }
+
+        .btn-grafik-trigger {
+            background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%);
+            color: #0c6bdc;
+            border: 2px solid #0c6bdc;
+            box-shadow: 0 4px 6px rgba(12, 107, 220, 0.05);
+        }
+
+        .btn-grafik-trigger:hover {
+            background: linear-gradient(135deg, #0c6bdc 0%, #0f3c78 100%);
+            color: #ffffff;
+            box-shadow: 0 6px 15px rgba(12, 107, 220, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-grafik-trigger-keu {
+            background: linear-gradient(135deg, #ffffff 0%, #f0fff4 100%);
+            color: #28a745;
+            border: 2px solid #28a745;
+            box-shadow: 0 4px 6px rgba(40, 167, 69, 0.05);
+        }
+
+        .btn-grafik-trigger-keu:hover {
+            background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+            color: #ffffff;
+            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-grafik-trigger:active,
+        .btn-grafik-trigger-keu:active {
+            transform: translateY(1px);
+        }
+
+        .btn-grafik-trigger.aktif,
+        .btn-grafik-trigger-keu.aktif {
+            background: linear-gradient(135deg, #e53935 0%, #b71c1c 100%) !important;
+            color: #ffffff !important;
+            border-color: #b71c1c !important;
+            box-shadow: 0 6px 15px rgba(229, 57, 53, 0.25) !important;
+        }
+
+        .grafik-expand-content {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transform: scaleY(0.95);
+            transform-origin: top;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), margin-top 0.4s ease;
+            background: #ffffff;
+        }
+
+        .grafik-expand-content.terbuka {
+            max-height: 340px !important;
+            opacity: 1;
+            transform: scaleY(1);
+            margin-top: 10px;
+            margin-bottom: 15px;
+            padding-top: 10px;
+            border-top: 1px dashed #cbd5e1;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 270px;
+            width: 100%;
+        }
+
+        .footer {
+            background: #0f3c78;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 11px;
+            margin-top: auto;
+        }
+
+        @media (max-width: 992px) {
+            .grid-4 {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .grid-4 {
+                grid-template-columns: 1fr !important;
+                gap: 15px !important;
+            }
+
+            .grid-4 .card,
+            .grid-4 .inner-card {
+                margin-bottom: 0 !important;
+            }
+
+            .sub-kegiatan-name-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .sub-detail-btn {
+                align-self: flex-end;
+            }
+        }
+
+        /* Wrapper untuk memposisikan ikon */
+        .custom-select-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        /* Styling Selektor */
+        #opd-selector {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            /* Ditambah padding kanan agar teks tidak menabrak ikon */
+            border-radius: 10px;
+            border: 1.5px solid #cbd5e1;
+            font-size: 15px;
+            font-weight: 600;
+            color: #3b2f1e;
+            background: white;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s;
+
+            /* TRICK UTAMA: Menyembunyikan panah asli bawaan browser */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        /* Efek Focus saat selektor diklik */
+        #opd-selector:focus {
+            border-color: #0c6bdc;
+            box-shadow: 0 0 0 3px rgba(12, 107, 220, 0.15);
+        }
+
+        /* Styling Ikon Panah Baru */
+        .select-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #1366da;
+            /* Warna abu-abu elegan */
+            pointer-events: none;
+            /* Biar kalau ikonnya tidak sengaja diklik, dropdown tetap terbuka */
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        /* Mengubah warna ikon saat selektor aktif */
+        .custom-select-wrapper:focus-within .select-icon {
+            color: #0c6bdc;
+        }
+    </style>
 </head>
+
 <body>
 
-  <div id="loading-screen">
-    <div class="spinner"></div>
-    <div style="margin-top: 15px; text-align: center; font-weight: bold; line-height: 2; letter-spacing: 1px;">TABEʻ, LAGI MEMUAT... <br> DATA DASHBOARD <br>
-      SABAR KIʻ NDAG LAMA JI...</div>
-  </div>
-
-  <div class="filter-container">
-    <label for="opdFilter" class="filter-label">PILIH ATAU GANTI OPD :</label>
-    <div class="select-wrapper">
-      <select id="opdFilter" class="opd-select">
-        <option value="all">-- TAMPILKAN SEMUA OPD --</option>
-      </select>
+    <div class="header">
+        <img src="assets/logo-infras.png" alt="Logo" class="header-logo" id="header-logo-img">
+        <div class="header-text">
+            <h1 id="header-title-text">Dashboard Progres Realisasi Fisik & Keuangan 8 OPD Mitra</h1>
+            <p><i class="fa-regular fa-calendar-check"></i> Data Realisasi per Mei 2026</p>
+        </div>
     </div>
-  </div>
 
-  <div class="container" id="containerOPD"></div>
+    <div class="container">
 
-  <script>
-    const APPSCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyYScBrl0u_uouNkBg1TI38ZyuJRK4VxlxC-_S1LiCsgrxVzS5jNM1TPlTngtOao62vCQ/exec'; 
-    const formatRupiah = (n) => new Intl.NumberFormat('id-ID').format(n);
-    let globalOPDData = []; 
+        <!-- SELEKTOR OPD -->
+        <div class="card inner-card" style="border-left: 5px solid #0c6bdc; background: #fdfdfd; margin-bottom: 20px; border-radius: 20px; padding: 15px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <i class="fa-solid fa-building-shield" style="color: #0c6bdc; font-size: 18px;"></i>
+                <h4 style="margin: 0; color: #554533; font-size: 15px;">PILIH PERANGKAT DAERAH (OPD)</h4>
+            </div>
 
-    const audioKlik = new Audio('tap_sound.mp3');
-    function putarSuara() {
-        audioKlik.currentTime = 0; 
-        audioKlik.play().catch(() => {});
-    }
-    
-    function getUrlParameter(name) {
-        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-        const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-        const results = regex.exec(location.search);
-        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-    }
+            <div class="custom-select-wrapper">
+                <select id="opd-selector" onchange="gantiOPD(this.value)">
+                    <option value="">-- Pilih Perangkat Daerah --</option>
+                    <option value="bappeda">BAPPELITBANGDA</option>
+                    <option value="bpbd">BPBD</option>
+                    <option value="bmbk">BM & BK</option>
+                    <option value="sdacktr">SDA & CKTR</option>
+                    <option value="perkimtan">PERKIMTAN</option>
+                    <option value="kominfo">DISKOMINFO</option>
+                    <option value="dishub">DISHUB</option>
+                    <option value="barjas">BARJAS</option>
+                </select>
+                <i class="fa-solid fa-chevron-down select-icon"></i>
+            </div>
+        </div>
 
-    async function fetchOPDData() {
-        try {
-            const response = await fetch(APPSCRIPT_URL);
-            return await response.json(); 
-        } catch (error) {
-            console.error(error);
-            return []; 
+        <!-- KARTU RINGKASAN ANGGARAN UTAMA -->
+        <div class="card inner-card">
+            <div class="card-flex">
+                <div class="icon-box icon-blue"><i class="fa-solid fa-wallet"></i></div>
+                <div class="card-text">
+                    <h4>Total Pagu OPD</h4>
+                    <h2 id="total-pagu-label">Rp 0</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="card inner-card">
+            <div class="card-flex">
+                <div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div>
+                <div class="card-text">
+                    <h4>Total Realisasi Hingga Bulan Ini</h4>
+                    <h2 id="total-realisasi-label">Rp 0</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="card inner-card">
+            <div class="card-flex">
+                <div class="icon-box icon-red"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                <div class="card-text">
+                    <h4>Sisa Pagu Keseluruhan</h4>
+                    <h2 id="sisa-pagu-label">Rp 0</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- KARTU INDIKATOR PROGRAM & KEGIATAN -->
+        <div style="display: flex; gap: 15px; width: 100%; margin-bottom: 15px;">
+            <div class="card inner-card" style="flex: 1; margin-bottom: 0; padding: 15px;">
+                <div class="card-flex">
+                    <div class="icon-box icon-orange"><i class="fa-solid fa-folder-open"></i></div>
+                    <div class="card-text" style="min-width: 0;">
+                        <h4>TOTAL PROGRAM</h4>
+                        <h2 id="total-program-badge"
+                            style="margin: 8px 0 0 0; font-size: 16px; color: #1a1a1a; font-weight: 700;">0 Program</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="card inner-card" style="flex: 1; margin-bottom: 0; padding: 15px;">
+                <div class="card-flex">
+                    <div class="icon-box icon-blue"><i class="fa-solid fa-list-check"></i></div>
+                    <div class="card-text" style="min-width: 0;">
+                        <h4>TOTAL KEGIATAN</h4>
+                        <h2 id="total-kegiatan-badge"
+                            style="margin: 8px 0 0 0; font-size: 16px; color: #1a1a1a; font-weight: 700;">0 Kegiatan
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CARD GRAFIK TREN (FISIK & KEUANGAN) -->
+        <div class="card" id="global-chart-card" style="display: none;">
+            <div style="display: flex; flex-direction: column; gap: 0px;">
+
+                <!-- Tombol Tren Fisik -->
+                <button class="btn-grafik-trigger" id="btn-toggle-grafik"
+                    onclick="putarSuara(); aksitoggleGrafikGlobal('fisik')">
+                    <i class="fa-solid fa-chart-line" id="icon-tombol-grafik"></i>
+                    <span id="teks-tombol-grafik">Lihat Grafik Tren Fisik Bulanan OPD</span>
+                    <span>🔽</span>
+                </button>
+
+                <div class="grafik-expand-content" id="wadah-grafik-expand">
+                    <div class="chart-container">
+                        <canvas id="globalTrendChart"></canvas>
+                    </div>
+                </div>
+
+                <div style="margin-top: 10px;"></div>
+
+                <!-- Tombol Tren Keuangan -->
+                <button class="btn-grafik-trigger-keu" id="btn-toggle-grafik-keu"
+                    onclick="putarSuara(); aksitoggleGrafikGlobal('keuangan')">
+                    <i class="fa-solid fa-money-bill-trend-up" id="icon-tombol-grafik-keu"></i>
+                    <span id="teks-tombol-grafik-keu">Lihat Grafik Tren Keuangan Bulanan OPD</span>
+                    <span>🔽</span>
+                </button>
+
+                <div class="grafik-expand-content" id="wadah-grafik-expand-keuangan">
+                    <div class="chart-container">
+                        <canvas id="globalTrendChartKeuangan"></canvas>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- DAFTAR RINCIAN PROGRAM -->
+        <div class="card">
+            <div class="section-title" id="nama-opd-title">Rincian Progres Per Program</div>
+            <div id="program-list"></div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        Sumber Data: <a href="https://sulselprov.e-planning.id"
+            style="color:#6ab0ff; text-decoration:none;">sulselprov.e-planning.id</a> <br>
+        &copy; 2026 by @zuwlend. All Rights Reserved.
+        <div id="visitorCount" style="margin-top:8px; opacity:0.8;"></div>
+    </div>
+
+    <!-- LOGIKA JAVASCRIPT -->
+    <script>
+        const audioKlik = new Audio('tap_sound.mp3');
+
+        function putarSuara() {
+            audioKlik.currentTime = 0;
+            audioKlik.play().catch(e => { });
         }
-    }
 
-    const pieLabelPlugin = {
-        id: 'pieLabelPlugin',
-        afterDraw(chart) {
-            const { ctx } = chart;
-            const meta = chart.getDatasetMeta(0);
-            const data = chart.data.datasets[0].data;
-            ctx.save();
-            ctx.font = 'bold 11px Inter';
-            ctx.fillStyle = '#fff';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            meta.data.forEach((arc, i) => {
-                const pos = arc.tooltipPosition();
-                ctx.fillText('Rp. ' + formatRupiah(data[i]), pos.x, pos.y);
-            });
-            ctx.restore();
+        // 1. STATE GLOBAL
+        let seluruhDataOPD = {};
+        let seluruhDataTrenOPD = {};
+        let opdAktif = "";
+        let dataTrenFisik = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        let dataTrenKeuangan = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        let chartInstanceFisik = null;
+        let chartInstanceKeuangan = null;
+
+        // 2. MEMUAT DATABASE JSON
+        document.addEventListener("DOMContentLoaded", function () {
+            Promise.all([
+                fetch('data-opd.json').then(res => res.json()),
+                fetch('data-trendOPD.json').then(res => res.json())
+            ])
+                .then(([dataOPD, dataTren]) => {
+                    seluruhDataOPD = dataOPD;
+                    seluruhDataTrenOPD = dataTren;
+                    console.log("Database Sukses Dimuat.");
+                })
+                .catch(err => {
+                    console.error("Gagal load JSON:", err);
+                });
+        });
+
+        // 3. DROPDOWN HANDLER
+        function gantiOPD(pilihan) {
+            putarSuara();
+            opdAktif = pilihan;
+
+            if (opdAktif && seluruhDataTrenOPD[opdAktif]) {
+                dataTrenFisik = seluruhDataTrenOPD[opdAktif].tren_fisik || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                dataTrenKeuangan = seluruhDataTrenOPD[opdAktif].tren_keuangan || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            } else {
+                dataTrenFisik = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                dataTrenKeuangan = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            }
+
+            renderDashboard();
         }
-    };
 
-    function createOPDCard(opd, idx) {
-        const card = document.createElement('div');
-        card.className = 'opd-card';
-        card.innerHTML = `
-            <div class="opd-header">
-                <div class="emoji-wrap">${opd.emoji}</div>
-                <div class="opd-body">
-                    <h1 class="opd-title">${opd.opdName}</h1>
-                    <div class="sub">Total Anggaran :</div>
-                    <div class="big-amount total-anggaran">Rp. ${formatRupiah(opd.totalBudget)}</div>
-                </div>
-            </div>
+        // 4. RENDERING DASHBOARD UTAMA
+        function renderDashboard() {
+            let grandTotalPagu = 0;
+            let grandTotalRealisasi = 0;
+            let totalKegiatanCount = 0;
 
-            <div class="monthly">
-                <h3>REALISASI BULAN MEI</h3>
-                <div class="amount">Rp. ${formatRupiah(opd.realisasiBulanMei)}</div>
-            </div>
+            const mainContainer = document.getElementById('program-list');
+            const chartCard = document.getElementById('global-chart-card');
 
-            <div class="chart-card">
-                <div class="chart-title">TOTAL REALISASI <span class="hingga-bg">HINGGA</span> 20 MEI</div>
-                <div class="legend">
-                    <div><span class="dot" style="background:var(--accent-green)"></span> Realisasi</div>
-                    <div><span class="dot" style="background:var(--accent-blue)"></span> Sisa Dana</div>
-                </div>
-                <div class="pie-wrapper"><canvas id="pie${idx}" class="pie-canvas" width="400" height="400"></canvas></div>
+            const wadahFisik = document.getElementById('wadah-grafik-expand');
+            const btnFisik = document.getElementById('btn-toggle-grafik');
+            const iconFisik = document.getElementById('icon-tombol-grafik');
+            const teksFisik = document.getElementById('teks-tombol-grafik');
 
-                <div class="progress-row">
-                    <div class="progress-label">Realisasi Keuangan (%)</div>
-                    <div class="progress-bar"><div class="progress-fill" id="finance${idx}" style="background:var(--accent-green)">0%</div></div>
-                </div>
-                <div class="progress-row">
-                    <div class="progress-label">Realisasi Fisik (%)</div>
-                    <div class="progress-bar"><div class="progress-fill" id="physical${idx}" style="background:var(--accent-pink)">0%</div></div>
-                </div>
-            </div>
+            const wadahKeuangan = document.getElementById('wadah-grafik-expand-keuangan');
+            const btnKeuangan = document.getElementById('btn-toggle-grafik-keu');
+            const iconKeuangan = document.getElementById('icon-tombol-grafik-keu');
+            const teksKeuangan = document.getElementById('teks-tombol-grafik-keu');
 
-            <a href="detail.html?opd=${encodeURIComponent(opd.opdName)}" class="btn-detail-full" onclick="putarSuara()">
-               LIHAT DETAIL DATA & TREN BULANAN ➔
-            </a>
-        `;
-        return card;
-    }
+            mainContainer.innerHTML = '';
 
-    function setProgress(el, percent) {
-        const val = Math.max(0, Math.min(100, percent)); 
-        setTimeout(() => {
-            el.style.transition = "width 1.2s cubic-bezier(0.4, 0, 0.2, 1)";
-            el.style.width = val + '%';
-            el.textContent = val.toFixed(2).replace(/\.00$/, '') + '%'; 
-        }, 150);
-    }
+            if (wadahFisik) wadahFisik.style.display = "none";
+            if (btnFisik && btnFisik.querySelector('span:last-child')) btnFisik.querySelector('span:last-child').textContent = '🔽';
+            if (iconFisik) iconFisik.className = "fa-solid fa-chart-line";
+            if (teksFisik) teksFisik.textContent = "Lihat Grafik Tren Realisasi Fisik Bulanan OPD";
 
-    function renderAllOPD(dataOPD) {
-        const container = document.getElementById('containerOPD');
-        container.innerHTML = '';
-        
-        dataOPD.forEach((opd, idx) => {
-            container.appendChild(createOPDCard(opd, idx));
+            if (wadahKeuangan) wadahKeuangan.style.display = "none";
+            if (btnKeuangan && btnKeuangan.querySelector('span:last-child')) btnKeuangan.querySelector('span:last-child').textContent = '🔽';
+            if (iconKeuangan) iconKeuangan.className = "fa-solid fa-chart-line";
+            if (teksKeuangan) teksKeuangan.textContent = "Lihat Grafik Tren Realisasi Keuangan Bulanan OPD";
 
-            const total = opd.realisasiTotal; 
-            const sisa = opd.totalBudget - total;
-            const persenKeuangan = (total / (opd.totalBudget || 1)) * 100;
+            if (chartInstanceFisik) { chartInstanceFisik.destroy(); chartInstanceFisik = null; }
+            if (chartInstanceKeuangan) { chartInstanceKeuangan.destroy(); chartInstanceKeuangan = null; }
 
-            const ctx = document.getElementById(`pie${idx}`).getContext('2d');
-            new Chart(ctx, {
-                type: 'pie',
-                data: { 
-                    labels: ['Realisasi', 'Sisa Dana'], 
-                    datasets: [{ 
-                        data: [total, sisa],
-                        backgroundColor: ['#07AA1F', '#0740AA'],
-                        borderColor: '#fff', 
-                        borderWidth: 1 
-                    }] 
+            const selector = document.getElementById('opd-selector');
+            const headerLogo = document.getElementById('header-logo-img');
+            const headerTitle = document.getElementById('header-title-text');
+
+            // 1. JIKA BELUM MEMILIH OPD
+            if (opdAktif === "") {
+                if (chartCard) chartCard.style.display = "none";
+                if (headerLogo) headerLogo.src = "logo-infras.png";
+                if (headerTitle) headerTitle.textContent = "Dashboard Progres Realisasi Fisik & Keuangan 8 OPD Mitra";
+                document.getElementById('total-pagu-label').textContent = "Rp 0";
+                document.getElementById('total-realisasi-label').textContent = "Rp 0";
+                document.getElementById('sisa-pagu-label').textContent = "Rp 0";
+                document.getElementById('total-program-badge').textContent = "0 Program";
+                document.getElementById('total-kegiatan-badge').textContent = "0 Kegiatan";
+                document.getElementById('nama-opd-title').textContent = "Rincian Progres per Program: Silahkan pilih OPD terlebih dahulu";
+                mainContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: #64748b; font-style: italic;">Belum ada OPD yang dipilih. Silakan pilih OPD pada menu di atas.</div>';
+                return;
+            }
+
+            // 2. JIKA OPD DIKLIK (PAKSA SEMUA OPD MENAMPILKAN DATA BELUM TERSEDIA)
+            const namaOPDTerpilih = selector.options[selector.selectedIndex].text;
+            headerTitle.textContent = `Dashboard Progres Realisasi Fisik & Keuangan ${namaOPDTerpilih}`;
+            headerLogo.src = "logo-infras.png";
+
+            if (chartCard) chartCard.style.display = "none"; // Sembunyikan grafik tren
+            
+            // Reset semua label ringkasan ke angka 0
+            document.getElementById('total-pagu-label').textContent = "Rp 0";
+            document.getElementById('total-realisasi-label').textContent = "Rp 0";
+            document.getElementById('sisa-pagu-label').textContent = "Rp 0";
+            document.getElementById('total-program-badge').textContent = "0 Program";
+            document.getElementById('total-kegiatan-badge').textContent = "0 Kegiatan";
+            document.getElementById('nama-opd-title').textContent = `Rincian Progres per Program: ${namaOPDTerpilih}`;
+            
+            // Suntikkan pesan error/notifikasi massal
+            mainContainer.innerHTML = `
+                <div style="text-align: center; padding: 40px 20px; background: #fff5f5; border: 1px dashed #e53935; border-radius: 12px; margin: 10px 0;">
+                    <i class="fa-solid fa-triangle-exclamation" style="color: #e53935; font-size: 35px; margin-bottom: 12px;"></i>
+                    <div style="color: #e53935; font-weight: bold; font-size: 16px; letter-spacing: 0.5px;">DATA TIDAK / BELUM TERSEDIA</div>
+                    <div style="color: #64748b; font-size: 13px; margin-top: 6px; line-height: 1.5;">
+                        Maaf, seluruh data rincian progres untuk <b>${namaOPDTerpilih}</b> saat ini belum tersedia di dalam sistem atau sedang dalam proses pemeliharaan.
+                    </div>
+                </div>`;
+            return; // Menghentikan kode agar tidak membaca looping data di bawahnya
+        }
+
+        // 5. SYNCHRONIZED TOGGLE FUNCTION
+        function aksitoggleGrafikGlobal(jenis) {
+            const wadahFisik = document.getElementById('wadah-grafik-expand');
+            const btnFisik = document.getElementById('btn-toggle-grafik');
+
+            const wadahKeuangan = document.getElementById('wadah-grafik-expand-keuangan');
+            const btnKeuangan = document.getElementById('btn-toggle-grafik-keu');
+
+            // --- 1. JIKA TOMBOL FISIK DIKLIK ---
+            if (jenis === 'fisik') {
+                if (btnKeuangan) btnKeuangan.classList.remove('aktif');
+                if (wadahKeuangan) {
+                    wadahKeuangan.classList.remove('terbuka');
+                    wadahKeuangan.style.display = 'none';
+                }
+                if (chartInstanceKeuangan) { chartInstanceKeuangan.destroy(); chartInstanceKeuangan = null; }
+                if (btnKeuangan && btnKeuangan.querySelector('span:last-child')) btnKeuangan.querySelector('span:last-child').textContent = '🔽';
+
+                btnFisik.classList.toggle('aktif');
+
+                if (btnFisik.classList.contains('aktif')) {
+                    wadahFisik.style.display = 'block';
+                    setTimeout(() => {
+                        wadahFisik.classList.add('terbuka');
+                        if (btnFisik.querySelector('span:last-child')) btnFisik.querySelector('span:last-child').textContent = '🔼';
+                        initChartFisik();
+                    }, 50);
+                } else {
+                    wadahFisik.classList.remove('terbuka');
+                    wadahFisik.style.display = 'none';
+                    if (btnFisik.querySelector('span:last-child')) btnFisik.querySelector('span:last-child').textContent = '🔽';
+                    if (chartInstanceFisik) { chartInstanceFisik.destroy(); chartInstanceFisik = null; }
+                }
+            }
+
+            // --- 2. JIKA TOMBOL KEUANGAN DIKLIK ---
+            if (jenis === 'keuangan') {
+                if (btnFisik) btnFisik.classList.remove('aktif');
+                if (wadahFisik) {
+                    wadahFisik.classList.remove('terbuka');
+                    wadahFisik.style.display = 'none';
+                }
+                if (chartInstanceFisik) { chartInstanceFisik.destroy(); chartInstanceFisik = null; }
+                if (btnFisik && btnFisik.querySelector('span:last-child')) btnFisik.querySelector('span:last-child').textContent = '🔽';
+
+                btnKeuangan.classList.toggle('aktif');
+
+                if (btnKeuangan.classList.contains('aktif')) {
+                    wadahKeuangan.style.display = 'block';
+                    setTimeout(() => {
+                        wadahKeuangan.classList.add('terbuka');
+                        if (btnKeuangan.querySelector('span:last-child')) btnKeuangan.querySelector('span:last-child').textContent = '🔼';
+                        initChartKeuangan();
+                    }, 50);
+                } else {
+                    wadahKeuangan.classList.remove('terbuka');
+                    wadahKeuangan.style.display = 'none';
+                    if (btnKeuangan.querySelector('span:last-child')) btnKeuangan.querySelector('span:last-child').textContent = '🔽';
+                    if (chartInstanceKeuangan) { chartInstanceKeuangan.destroy(); chartInstanceKeuangan = null; }
+                }
+            }
+        }
+
+        // 6. INITIALIZATION GRAFIK
+        function initChartFisik() {
+            const canvas = document.getElementById('globalTrendChart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            if (chartInstanceFisik) chartInstanceFisik.destroy();
+
+            const gradientGreen = ctx.createLinearGradient(0, 0, 300, 0);
+            gradientGreen.addColorStop(0, 'rgba(40, 167, 69, 0.2)');
+            gradientGreen.addColorStop(1, 'rgba(40, 167, 69, 0.0)');
+
+            chartInstanceFisik = new Chart(ctx, {
+                type: 'line',
+                plugins: [ChartDataLabels],
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'],
+                    datasets: [{
+                        label: 'Progres Fisik (%)',
+                        data: dataTrenFisik,
+                        borderColor: '#28a745',
+                        borderWidth: 3,
+                        backgroundColor: gradientGreen,
+                        fill: true,
+                        tension: 0.3,
+                        pointBackgroundColor: '#28a745',
+                        pointRadius: 3
+                    }]
                 },
                 options: {
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    plugins: { legend: { display: false }, tooltip: { enabled: false } } 
-                },
-                plugins: [pieLabelPlugin]
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: {
+                            display: (context) => context.dataset.data[context.dataIndex] > 0,
+                            align: 'right', offset: 4, color: '#334155', font: { weight: 'bold', size: 10 },
+                            formatter: (value) => value + '%'
+                        }
+                    },
+                    scales: {
+                        x: { beginAtZero: true, max: 110, ticks: { callback: (v) => v <= 100 ? v + '%' : '' } },
+                        y: { reverse: true, ticks: { color: '#334155', font: { weight: 'bold' } } }
+                    }
+                }
             });
+        }
 
-            setProgress(document.getElementById(`finance${idx}`), persenKeuangan);
-            setProgress(document.getElementById(`physical${idx}`), opd.percentPhysical);
-        });
-    }
+        function initChartKeuangan() {
+            const canvas = document.getElementById('globalTrendChartKeuangan');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
 
-    function populateDropdown(dataOPD) {
-        const select = document.getElementById('opdFilter');
-        dataOPD.forEach((opd) => {
-            const option = document.createElement('option');
-            option.value = opd.opdName;
-            option.textContent = `${opd.emoji} ${opd.opdName}`;
-            select.appendChild(option);
-        });
+            if (chartInstanceKeuangan) chartInstanceKeuangan.destroy();
 
-        select.addEventListener('change', (e) => {
-            putarSuara(); 
-            const selectedValue = e.target.value;
-            if (selectedValue === 'all') {
-                renderAllOPD(globalOPDData);
+            const gradientBlue = ctx.createLinearGradient(0, 0, 300, 0);
+            gradientBlue.addColorStop(0, 'rgba(12, 107, 220, 0.2)');
+            gradientBlue.addColorStop(1, 'rgba(12, 107, 220, 0.0)');
+
+            chartInstanceKeuangan = new Chart(ctx, {
+                type: 'line',
+                plugins: [ChartDataLabels],
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'],
+                    datasets: [{
+                        label: 'Progres Keuangan (%)',
+                        data: dataTrenKeuangan,
+                        borderColor: '#0c6bdc',
+                        borderWidth: 3,
+                        backgroundColor: gradientBlue,
+                        fill: true,
+                        tension: 0.3,
+                        pointBackgroundColor: '#0c6bdc',
+                        pointRadius: 3
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: {
+                            display: (context) => context.dataset.data[context.dataIndex] > 0,
+                            align: 'right', offset: 4, color: '#334155', font: { weight: 'bold', size: 10 },
+                            formatter: (value) => value + '%'
+                        }
+                    },
+                    scales: {
+                        x: { beginAtZero: true, max: 110, ticks: { callback: (v) => v <= 100 ? v + '%' : '' } },
+                        y: { reverse: true, ticks: { color: '#334155', font: { weight: 'bold' } } }
+                    }
+                }
+            });
+        }
+
+        // 7. ANIMASI AKORDION ORIGINAL
+        function toggleProgram(header, index) {
+            const content = document.getElementById(`keg-${index}`);
+            const btnDetail = header.querySelector('.toggle-btn');
+            const btnKeg = header.querySelector('.kegiatan-btn');
+            const wrapper = document.getElementById(`sub-list-${index}`);
+            header.classList.toggle('active');
+            if (header.classList.contains('active')) {
+                if (btnDetail) btnDetail.textContent = "Tutup";
+                if (btnKeg) btnKeg.style.display = "inline-block";
+                content.style.display = 'block';
             } else {
-                const filteredData = globalOPDData.filter(opd => opd.opdName === selectedValue);
-                renderAllOPD(filteredData);
-            }
-        });
-    }
-
-    async function initDashboard() {
-        globalOPDData = await fetchOPDData();
-        populateDropdown(globalOPDData);
-
-        let selectedOpdId = getUrlParameter('opd') || (window.location.hash ? window.location.hash.substring(1) : '');
-        if (selectedOpdId) {
-            const normalize = str => str.toLowerCase().replace(/[^a-z0-9]/g, '');
-            const targetId = normalize(selectedOpdId);
-            const foundOPD = globalOPDData.find(opd => normalize(opd.opdName).includes(targetId));
-            
-            if (foundOPD) {
-                document.getElementById('opdFilter').value = foundOPD.opdName;
-                renderAllOPD([foundOPD]);
-                hideLoading(); 
-                return; 
+                if (btnDetail) btnDetail.textContent = "Detail";
+                if (btnKeg) {
+                    btnKeg.style.display = "none";
+                    btnKeg.classList.remove('aktif');
+                    btnKeg.style.backgroundColor = "";
+                    btnKeg.style.borderColor = "";
+                    btnKeg.style.color = "";
+                }
+                content.style.display = 'none';
+                if (wrapper) wrapper.style.display = 'none';
             }
         }
-        renderAllOPD(globalOPDData);
-        hideLoading(); 
-    }
 
-    function hideLoading() {
-        const loader = document.getElementById('loading-screen');
-        if(loader) {
-            loader.style.opacity = '0';
-            loader.style.visibility = 'hidden';
-            setTimeout(() => loader.remove(), 400); 
+        function toggleProgramFromBtn(btn, index) {
+            const header = btn.closest('.program-header');
+            if (header) toggleProgram(header, index);
         }
-    }
-    initDashboard();
-  </script>
 
-  <footer>
-    Data Extract &rarr; https://sulselprov.e-planning.id <br>
-    27 Mei 2026 | 21.30 WITA | &copy; Copyright by @zuwlend
-    <div id="visitorCount" style="margin-top:6px; color:#fff;"></div>
-  </footer>
+        function toggleKegiatanData(btn, index) {
+            const wrapper = document.getElementById(`sub-list-${index}`);
+            const content = document.getElementById(`keg-${index}`);
+            btn.classList.toggle('aktif');
 
-  <script>
-    const VISITOR_URL = 'https://script.google.com/macros/s/AKfycbwfbbXioNyRK2EiFO2_6Ok6Ahp_8n9kidDbLiru2K2KMuiD3TB9zmqJiz5PGihrwA/exec'; 
-    fetch(VISITOR_URL).then(res => res.json()).then(data => {
-        document.getElementById('visitorCount').textContent = `👁️ : ${data.visits}`;
-    }).catch(() => { document.getElementById('visitorCount').textContent = '👁️ Counter offline'; });
-  </script>
+            if (btn.classList.contains('aktif')) {
+                btn.textContent = "Tutup Kegiatan";
+                if (content) content.style.display = 'none';
+                if (wrapper) wrapper.style.display = 'block';
 
-<div style="
-    position: fixed;
-    bottom: 15px;
-    left: 15px;
-    z-index: 999;
-    text-align: center;
-    font-family: Arial, sans-serif;
-    cursor: pointer;
-    user-select: none;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 2px 10px;
-    border-radius: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
-    <a href="index.html" style="font-size: 13px; font-weight: bold; text-decoration: none; color: #0740aa; display: block; line-height: 32px;" onclick="putarSuara()">👈 BACK</a>
-  </div>
+                btn.style.backgroundColor = "#fa8107";
+                btn.style.borderColor = "#d66e04";
+                btn.style.color = "#ffffff";
+            } else {
+                btn.textContent = "Kegiatan";
+                if (wrapper) wrapper.style.display = 'none';
 
+                btn.style.backgroundColor = "";
+                btn.style.borderColor = "";
+                btn.style.color = "";
+            }
+        }
+
+        // 8. FUNGSI TOGGLE DETAIL SUB-KEGIATAN
+        function toggleSubDetailCard(btn) {
+            const block = btn.closest('.sub-kegiatan-block');
+            if (!block) return;
+
+            const content = block.querySelector('.sub-kegiatan-cards-content');
+            if (!content) return;
+
+            if (content.style.display === 'none' || content.style.display === '') {
+                content.style.display = 'block';
+                btn.textContent = "Tutup";
+                btn.style.background = "#fa8107";
+                btn.style.borderColor = "#b71c1c";
+            } else {
+                content.style.display = 'none';
+                btn.textContent = "Detail";
+                btn.style.background = "#28a745";
+                btn.style.borderColor = "#1e7e34";
+            }
+        }
+    </script>
 </body>
+
 </html>
