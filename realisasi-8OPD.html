@@ -62,10 +62,12 @@
       animation: spin 1s ease-in-out infinite;
     }
     .loading-text {
-      margin-top: 15px;
+      margin-top: 20px;
       font-size: 16px;
       font-weight: bold;
       letter-spacing: 1px;
+      text-align: center; /* Biar kalau teksnya text-wrap, tetap rata tengah */
+}
     }
     @keyframes spin {
       to { transform: rotate(360deg); }
@@ -290,7 +292,7 @@
 
   <div id="loading-screen">
     <div class="spinner"></div>
-    <div class="loading-text">TABEʻ, LAGI MEMUAT DATA DASHBOARD, SABARKIʻ DIʻ NDAG LAMA JI...</div>
+    <div class="loading-text">Tabeʻ...Lagi Memuat Data Dashboard, Sabarkiʻ Ndag Lama ji...</div>
   </div>
 
   <div class="filter-container">
