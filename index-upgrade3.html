@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Progres Realisasi Fisik & Keuangan 8 OPD Mitra</title>
+
+  <meta property="og:title" content="Dashboard Progres Realisasi Fisik & Keuangan 8 OPD Mitra (31 Mei 2026)" />
+  <meta property="og:description" content="Lihat grafik interaktif progres realisasi fisik & keuangan hingga tanggal 31 Mei 2026. Ekstrasi data: 31 Mei 2026 | 21.30 WITA. (Best view via smartphone/tablet)" />
+  <meta property="og:image" content="https://binfraswilzulsel.my.id/thumbnail.jpg" />
+  <meta property="og:url" content="https://binfraswilzulsel.my.id/" />
+  <meta property="og:type" content="website" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #0740aa;
+      margin: 0;
+      padding: 40px 15px;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* KONTEN LUAR: Menyatukan Menu dan Maskot Samping */
+    .main-layout {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 40px; /* Jarak antara menu dan maskot di PC */
+      max-width: 950px;
+      width: 100%;
+      margin: auto;
+    }
+
+    .wrapper {
+      max-width: 650px;
+      width: 100%;
+    }
+
+    /* HEADER */
+    .header-card {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .header-card h1 {
+      font-size: 30px;
+      line-height: 1.2;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .header-card h2 {
+      font-size: 14px;
+      font-weight: normal;
+      opacity: 0.9;
+      margin-top: 0;
+    }
+
+    /* KONTEN MASKOT 9:20 (DESKTOP) */
+    .mascot-side-container {
+      width: 200px; /* Lebar proporsional untuk rasio 9:20 di PC */
+      height: 444px; /* Tinggi disesuaikan dengan rasio 9:20 (200x444) */
+      position: relative;
+      flex-shrink: 0;
+      display: block;
+    }
+
+    .mascot-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(5px 5px 15px rgba(0,0,0,0.3));
+    }
+
+    /* GRID CARD */
+    .card-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .card-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .card {
+      background: #f5f5f5;
+      border-radius: 24px;
+      padding: 20px 12px;
+      min-height: 145px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transition: 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      background: white;
+    }
+
+    .icon {
+      font-size: 52px;
+      margin-bottom: 10px;
+    }
+
+    .title {
+      font-size: 17px;
+      font-weight: bold;
+      color: #052c75;
+      text-align: center;
+    }
+
+    /* KARTU FULL WIDTH REKAP */
+    .full-width {
+      grid-column: span 2;
+    }
+
+    .rekap-card {
+      min-height: 120px;
+      background: linear-gradient(135deg, #ffffff, #e9eefc);
+    }
+
+    .rekap-card .icon {
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+
+    .rekap-card .title {
+      font-size: 20px;
+      color: #052c75;
+    }
+
+    .rekap-subtitle {
+      font-size: 12px;
+      color: #444;
+      margin-top: 5px;
+    }
+
+    footer {
+      text-align: center;
+      color: white;
+      padding: 30px 10px 10px;
+      font-size: 12px;
+      line-height: 1.6;
+      opacity: 0.95;
+    }
+
+    /* ======================================= */
+    /* RESPONSIVE LAYOUT UNTUK HP / MOBILE    */
+    /* ======================================= */
+    @media(max-width: 850px) {
+      /* Sembunyikan maskot samping versi desktop */
+      .mascot-side-container {
+        display: none;
+      }
+
+      body {
+        padding-bottom: 100px; /* Ruang ekstra di bawah agar konten tidak tertutup maskot sticky */
+      }
+
+      /* Ubah sistem penempatan maskot menjadi melayang di pojok bawah HP */
+      .main-layout::after {
+        content: "";
+        position: fixed;
+        bottom: 0;
+        right: 5px;
+        width: 85px;  /* Ukuran pas mengintip di layar HP */
+        height: 188px; /* Tetap menjaga aspek rasio 9:20 */
+        background: url('maskot-9-20.png') no-repeat bottom right;
+        background-size: contain;
+        z-index: 999;
+        pointer-events: none; /* Klik tembus ke menu di belakangnya */
+        filter: drop-shadow(0 -2px 10px rgba(0,0,0,0.3));
+      }
+    }
+
+    @media(max-width: 480px) {
+      body {
+        padding-top: 20px;
+      }
+
+      .header-card h1 {
+        font-size: 26px;
+      }
+
+      .card {
+        min-height: 130px;
+        border-radius: 20px;
+      }
+
+      .icon {
+        font-size: 45px;
+      }
+
+      .title {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- LAYOUT UTAMA (FLEXBOX DESKTOP) -->
+<div class="main-layout">
+
+  <!-- WRAPPER MENU -->
+  <div class="wrapper">
+
+    <!-- HEADER -->
+    <div class="header-card">
+      <h1>
+        Dashboard Progres Realisasi <br>
+        Fisik & Keuangan 8 OPD <br>
+        Mitra Bidang Infraswil <br>
+        per 31 Mei 2026
+      </h1>
+
+      <h2>
+        &gt; Pilih satu Kartu OPD untuk melihat grafik realisasi &lt;
+      </h2>
+    </div>
+
+    <!-- GRID CARD -->
+    <div class="card-container">
+
+      <a href="realisasi-8OPD?opd=bappelitbangda" class="card-link" target="_blank">
+        <div class="card">
+          <span class="icon">🏛️</span>
+          <div class="title">BAPPELITBANGDA</div>
+        </div>
+      </a>
+
+      <a href="realisasi-8OPD?opd=bpbd" class="card-link" target="_blank">
+        <div class="card">
+          <span class="icon">🛡️</span>
+          <div class="title">BPBD</div>
+        </div>
+      </a>
+
+      <a href="realisasi-8OPD?opd=bmbk" class="card-link" target="_blank">
+        <div class="card">
+          <span class="icon">🚧</span>
+          <div class="title">BM & BK</div>
+        </div>
+      </a>
+
+      <a href="realisasi-8OPD?opd=sdacktr" class="card-link" target="_blank">
+        <div class="card">
+          <span class="icon">💦</span>
+          <div class="title">SDA & CKTR</div>
+        </div>
+      </a>
+
+      <a href="realisasi-8OPD?opd=perkimtan" class="card-link" target="_blank">
+        <div class="card">
+          <span class="icon">🏡</span>
+          <div class="title">PERKIMTAN</div>
+        </div>
+      </a>
+
+      <a href="realisasi-8OPD?opd=kominfo" class="card-link" target="_blank">
+        <div class="card">
+          <span class="icon">📡</span>
+          <div class="title">KOMINFO</div>
+        </div>
+      </a>
+
+      <a href="realisasi-8OPD?opd=dishub" class="card-link" target="_blank">
+        <div class="card">
+          <span class="icon">🚍</span>
+          <div class="title">DISHUB</div>
+        </div>
+      </a>
+
+      <a href="realisasi-8OPD?opd=barjas" class="card-link" target="_blank">
+        <div class="card">
+          <span class="icon">🛒</span>
+          <div class="title">BARJAS</div>
+        </div>
+      </a>
+
+      <!-- FULL WIDTH DATA REKAP -->
+      <a href="https://docs.google.com/spreadsheets/d/1q0ez1fyLLy-d2vfrb641JICHMVz-HR4tjNy6kZNQ_F4/edit?gid=1240336235#gid=1240336235"
+         class="card-link full-width"
+         target="_blank">
+        <div class="card rekap-card">
+          <span class="icon">📊</span>
+          <div class="title">DATA REKAP KESELURUHAN</div>
+          <div class="rekap-subtitle">Monitoring Realisasi 8 OPD Mitra</div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      Data Extract &rarr; https://sulselprov.e-planning.id
+      <br>
+      31 Mei 2026 | 21.30 WITA
+      <br>
+      &copy; Copyright by @zuwlend
+    </footer>
+
+  </div>
+
+  <!-- CONTAINER MASKOT VERTIKAL 9:20 (HANYA MUNCUL DI PC) -->
+  <div class="mascot-side-container">
+    <img src="maskot-9-20.png" alt="Maskot Full Body" class="mascot-image">
+  </div>
+
+</div>
+
+<!-- SOUND EFFECT -->
+<script>
+const tapSound = new Audio("tap_sound.mp3");
+tapSound.preload = "auto";
+tapSound.volume = 0.3;
+
+let touchStartX = 0;
+let touchStartY = 0;
+let touchMoved = false;
+let lastPlayTime = 0;
+
+document.addEventListener("touchstart", (e) => {
+    const t = e.touches[0];
+    touchStartX = t.clientX;
+    touchStartY = t.clientY;
+    touchMoved = false;
+});
+
+document.addEventListener("touchmove", (e) => {
+    const t = e.touches[0];
+    const dx = Math.abs(t.clientX - touchStartX);
+    const dy = Math.abs(t.clientY - touchStartY);
+
+    if (dx > 10 || dy > 10){
+      touchMoved = true;
+    }
+});
+
+document.addEventListener("touchend", () => {
+    if (!touchMoved){
+      playTapSound();
+    }
+});
+
+document.addEventListener("click", (e) => {
+    if (e.pointerType !== "touch"){
+      playTapSound();
+    }
+});
+
+function playTapSound() {
+    const now = Date.now();
+    if (now - lastPlayTime < 200){
+      return;
+    }
+    lastPlayTime = now;
+    tapSound.currentTime = 0;
+    tapSound.play().catch(() => {});
+}
+</script>
+
+</body>
+</html>
