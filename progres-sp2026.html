@@ -13,7 +13,7 @@
         }
         .container {
             width: 100%; max-width: 650px; margin: 0 auto;
-            background-color: #f8fafc; min-height: 100vh; box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            background-color: #f8fafc; min-height: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.08);
             display: flex; flex-direction: column;
         }
         
@@ -45,26 +45,39 @@
         header h1 { font-size: 20px; font-weight: 800; margin-bottom: 2px; line-height: 1.2; letter-spacing: -0.3px; } 
         header p { font-size: 11px; opacity: 0.9; font-weight: 400; }
         
-        .search-container { padding: 24px 20px 12px 20px; }
+        .search-container { padding: 12px 20px 0px 20px; }
         .search-flex { display: flex; gap: 10px; align-items: center; }
         
         .btn-filter-toggle {
-            background-color: #ffffff; border: 2px solid #e2e8f0;
-            border-radius: 14px; height: 54px; width: 54px; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-            flex-shrink: 0;
-        }
+    background-color: #ffffff; 
+    border: 2px solid #e2e8f0;
+    border-radius: 14px; 
+    height: 44px; /* DIUBAH: samakan dengan tinggi input (44px) */
+    width: 44px;  /* DIUBAH: samakan lebar agar tetap kotak presisi (44px) */
+    cursor: pointer;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    transition: all 0.3s ease; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    flex-shrink: 0;
+}
         .btn-filter-toggle:hover, .btn-filter-toggle.active { 
             border-color: #0740aa; background-color: #eff6ff; 
         }
         
         .search-input {
-            flex: 1; padding: 15px 20px; border: 2px solid #e2e8f0;
-            border-radius: 14px; font-size: 16px; font-family: inherit;
-            outline: none; transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02); height: 54px;
-        }
+    flex: 1; 
+    padding: 10px 15px; /* DIUBAH: sebelumnya 15px 20px agar teks tidak terlalu tenggelam */
+    border: 2px solid #e2e8f0;
+    border-radius: 14px; 
+    font-size: 16px; 
+    font-family: inherit;
+    outline: none; 
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02); 
+    height: 44px; /* DIUBAH: sebelumnya 54px agar lebih tipis/ramping */
+}
         .search-input:focus { border-color: #0740aa; box-shadow: 0 0 0 4px rgba(7, 64, 170, 0.15); }
 
         .filter-panel {
@@ -81,10 +94,10 @@
         }
         .filter-select:focus { border-color: #0740aa; }
 
-        main { padding: 10px 20px 20px 20px; flex: 1; }
+        main { padding: 10px 20px 0px 20px; flex: 1; }
         .opd-card {
             background-color: #ffffff; border-radius: 18px; padding: 10px;
-            margin-bottom: 20px; border: 1px solid #0740aa;
+            margin-bottom: 15px; border: 1px solid #0740aa;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.03);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
@@ -163,7 +176,7 @@
             <div class="header-text-cell">
                 <h1>Progres Strong Point<br> 
                 Mitra Bidang Infraswil  Triwulan II 2026</h1>
-                <p>Sistem Monitoring & Evaluasi Capaian Kinerja</p>
+                <p>Sistem Monitoring & Evaluasi (SIMONEV) BINFRASWIL</p>
             </div>
         </div>
     </header>
@@ -215,7 +228,7 @@
     </main>
     
     <footer>
-        Strong Point Progress by @binfraswil Copyright 2026
+        Strong Point Progress 2026 © Copyright by @zuwlend
     </footer>
 </div>
 
@@ -811,7 +824,7 @@
     "kegiatan": "Redesain Jembatan Barombong di Kota Makassar",
     "anggaran": "Rp 980.272.580",
     "durasi": "-",
-    "metode": "Swakelola Type II",
+    "metode": "Swakelola Type 2",
     "kontrak": "-",
     "tgl_kontrak": "-",
     "status": "-",
@@ -2219,8 +2232,7 @@
             opdCard.innerHTML = `
                 <div class="opd-main-info">
                     <div class="opd-logo-cell">
-                        <img class="opd-logo" src="${namaOPD}.png" alt="Logo ${namaOPD}" onerror="this.onerror=null; this.src='https://placehold.co/70x70?text=${inisial}';">
-                    </div>
+<img class="opd-logo" src="${namaOPD.toLowerCase()}.png" alt="Logo ${namaOPD}" onerror="this.onerror=null; this.src='https://placehold.co/70x70?text=${inisial}';">                    </div>
                     <div class="opd-details-cell">
                         <div class="opd-title">${namaOPD}</div>
                         <div class="opd-meta">
