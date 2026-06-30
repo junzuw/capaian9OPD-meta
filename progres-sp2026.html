@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Progres Program Prioritas Triwulan II 2026</title>
+
+  <meta property="og:title" content="Progres Program Prioritas Triwulan II Tahun 2026" />
+  <meta property="og:description" content="Lihat progres realisasi fisik & keuangan Triwulan II 2026. Ekstrasi data : 30 Juni 2026 (Best view via smartphone/tablet)" />
+  <meta property="og:image" content="https://binfraswilzulsel.my.id/thumbnail-OG-sp2026.jpg" />
+  <meta property="og:url" content="https://binfraswilzulsel.my.id/" />
+  <meta property="og:type" content="website" />
+
+    
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -31,8 +39,8 @@
         .header-wrap { display: table; width: 100%; }
         .header-logo-cell { display: table-cell; vertical-align: middle; width: 55px; } 
         .header-logo {
-            width: 100px; 
-            height: 100px; 
+            width: 95px; 
+            height: 95px; 
             background: rgba(255, 255, 255, 0.15); 
             border: 1.5px solid rgba(255, 255, 255, 0.3); 
             border-radius: 20px;
@@ -163,6 +171,30 @@
             line-height: 1.4;
             letter-spacing: 0.5px;
         }
+/* ======================================================= */
+/* PERUBAHAN: Mode Landscape HP & Layar Lebar (Min 650px)  */
+/* ======================================================= */
+@media screen and (min-width: 650px) {
+    /* 1. Izinkan container melebar */
+    .container {
+        max-width: 100% !important; /* Mengikuti lebar layar/browser */
+    }
+
+    /* 2. Ubah area kartu menjadi 2 kolom grid */
+    main {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px; /* Jarak antar kartu (kanan-kiri & atas-bawah) */
+        padding: 15px 20px;
+    }
+
+    /* 3. Reset margin bawah bawaan kartu agar seragam menggunakan gap dari grid */
+    .opd-card {
+        margin-bottom: 0 !important;
+        height: max-content; /* Mencegah kartu ketarik tinggi sebelah */
+    }
+}
+
     </style>
 </head>
 <body>
@@ -247,6 +279,7 @@
     "keuangan": "Rp 0",
     "keterangan": "-"
   },
+
   {
     "opd": "BAPPELITBANGDA",
     "kegiatan": "Uji Coba dan Penerapan Inovasi",
@@ -2145,7 +2178,7 @@
     "keuangan": "Rp 0",
     "keterangan": "Berproses sesuai dengan pelaksanaan dokumentasi pimpinan dan program prioritas"
   },
-  {
+    {
     "opd": "KOMINFO-SP",
     "kegiatan": "Brelanja Jasa Tenaga Informasi dan Teknologi (Gaji Komisioner Komisi Informasi Sulsel)",
     "anggaran": "Rp 528.000.000",
