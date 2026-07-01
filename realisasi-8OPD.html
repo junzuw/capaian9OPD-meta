@@ -141,7 +141,7 @@
       background: var(--card);
       border-radius: 20px;
       padding: var(--pad);
-      box-shadow: 0 6px 18 rgba(0,0,0,0.12);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
       position: relative;
       overflow: visible;
       width: calc(50% - 10px);
@@ -234,7 +234,6 @@
     /* ======================================= */
     @media (max-width: 768px) {
       body {
-        /* Memberikan bantalan ekstra di bawah agar konten terbawah tidak mentok/tertutup sistem bar navigasi HP */
         padding-bottom: 80px !important; 
       }
       .opd-card, .filter-container { width: 100%; } 
@@ -259,10 +258,10 @@
     /* --- STYLE TOMBOL DETAIL FULL-WIDTH --- */
     .btn-detail-full {
       display: block;
-      width: 100%; /* Memenuhi lebar penuh kartu OPD */
+      width: 100%; 
       box-sizing: border-box;
       background:#AA0792;
-      color: #ffffff; /* Warna pink khas tema */
+      color: #ffffff; 
       border: 2px solid #AA0792;
       text-decoration: none;
       font-size: 14px;
@@ -271,11 +270,10 @@
       border-radius: 15px;
       text-align: center;
       letter-spacing: 0.5px;
-      margin-top: 20px; /* Memberikan jarak yang pas dari kotak chart di atasnya */
+      margin-top: 20px; 
       transition: all 0.2s ease-in-out;
     }
 
-    /* Efek hover saat kursor di atas tombol atau saat ditekan di HP */
     .btn-detail-full:hover {
       background: #AA0792;
       color: white;
@@ -459,7 +457,10 @@
             selectedOpdId = window.location.hash.substring(1);
         }
 
-        globalOPDData = await fetchOPDData();
+        // BAGIAN DIUBAH: Mengambil data asal dan langsung memotongnya hanya mengambil 8 data teratas
+        const rawData = await fetchOPDData();
+        globalOPDData = rawData.slice(0, 8); 
+        
         populateDropdown(globalOPDData);
 
         if (selectedOpdId) {
