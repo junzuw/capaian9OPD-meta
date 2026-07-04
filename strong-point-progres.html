@@ -605,7 +605,10 @@
         <main id="mainContent">
         </main>
 
-       </div>
+        <footer>
+            Strong Point Progress 2026 © Copyright by @zuwlend
+        </footer>
+    </div>
 
     <script>
         const proyekData = [
@@ -2794,22 +2797,6 @@
             tapSound.play().catch(() => { });
         }
     </script>
-<footer id="footer">
-     Strong Point 2026. &COPY; All rights reserved by @zuwlend<p>(Best view via Smartphone/Tablet).</p>
-    </p><div id="visitorCount" style="margin-top:6px; color:#fff; font-size:11px;"></div>
-    </footer>
-
-<script>
-  const VISITOR_URL = 'https://script.google.com/macros/s/AKfycbxoWc8twCO3elTRj-eI5dngKIcy_x5GOi2l9J1B4BNN11bkw0zXHODhp8-w2-2oey95/exec'; // ganti dgn URL kamu
-  fetch(VISITOR_URL)
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById('visitorCount').textContent = `👁️ : ${data.visits}`;
-    })
-    .catch(err => {
-      console.error('Gagal memuat counter:', err);
-      document.getElementById('visitorCount').textContent = '👁️ Counter offline';
-    });
-</script>   
 </body>
+
 </html>
