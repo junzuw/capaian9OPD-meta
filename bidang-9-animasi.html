@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Binfraswil</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+
+            /* 1. Gunakan 'background' atau 'background-image', bukan background-color */
+            background: radial-gradient(circle, #0740aa, #012d7e);
+            /* 2. Pastikan gradasi tidak mengulang/patah saat di-scroll */
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        /* Header */
+        .header {
+            background: linear-gradient(180deg, #012d7e, #0740aa);
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+            /* --- TAMBAHKAN 3 BARIS INI --- */
+            position: -webkit-sticky; /* Dukungan untuk browser Safari kuno */
+            position: sticky;         /* Membuat header melayang/sticky */
+            top: 0;                   /* Menempel tepat di batas paling atas layar */
+            z-index: 999;             /* Memastikan header berada di lapisan paling depan */
+        }
+
+        .header-logo {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .header-text h1 {
+            margin: 0;
+            font-size: 18px;
+            line-height: 1.2;
+        }
+
+        .header-text p {
+            margin: 5px 0 0 0;
+            opacity: 0.9;
+            font-size: 12px;
+        }
+
+        .container {
+            padding: 15px;
+            flex: 1;
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            padding: 10px;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 15px;
+        }
+
+        /* --- TAMBAHAN ANIMASI JATUH & MANTUL --- */
+        .animated-card {
+            opacity: 0;
+            transform: translateY(-50px) scale(0.9);
+            animation: fallBounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes fallBounce {
+            0% {
+                opacity: 0;
+                transform: translateY(-80px) scale(0.8);
+            }
+            60% {
+                opacity: 1;
+                transform: translateY(10px) scale(1.02);
+            }
+            80% {
+                transform: translateY(-5px) scale(0.99);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .inner-card {
+            border: 1.5px solid #07aefc;
+            box-shadow: none;
+            transition: border-color 0.2s;
+        }
+
+        .inner-card:hover {
+            border-color: #0c6bdc;
+        }
+
+        .card h4 {
+            margin: 0;
+            font-size: 11px;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card h2 {
+            margin: 8px 0 0 0;
+            font-size: 18px;
+            color: #1a1a1a;
+            font-weight: 700;
+        }
+
+        .card-flex {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .icon-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .icon-blue {
+            background: #0c6bdc;
+        }
+
+        .icon-green {
+            background: #28a745;
+        }
+
+        .icon-orange {
+            background: #ff9800;
+        }
+
+        .icon-red {
+            background: #e53935;
+        }
+
+        /* Container Section Title */
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #0f3c78;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e3e6f0;
+            padding-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-view-data {
+            background: #0f3c78;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            font-size: 11px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .btn-view-data:hover {
+            background: #0c6bdc;
+        }
+
+        .wrapper-title {
+            text-align: center;
+            font-size: 13px;
+            margin-bottom: 15px;
+            color: #0f3c78;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* CSS Highlight Kata HINGGA */
+        .badge-hingga {
+            background-color: #ff7300;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 11px;
+            display: inline-block;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 8px;
+            background: #eee;
+            border-radius: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 1.5s ease-in-out;
+        }
+
+        /* Accordion */
+        .program-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .program-header h3 {
+            margin: 0;
+            font-size: 14px;
+            color: #0f3c78;
+            flex: 1;
+            padding-right: 15px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: stretch;
+            min-width: 80px;
+        }
+
+        .toggle-btn {
+            background: #0c6bdc;
+            color: white;
+            border: 1px solid #0a56b2;
+            padding: 9px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            transition: background 0.2s, color 0.2s;
+            text-align: center;
+        }
+
+        .kegiatan-btn {
+            background: #28a745;
+            color: white;
+            border: 1px solid #1e7e34;
+            padding: 9px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+            display: none;
+            transition: background 0.2s;
+        }
+
+        .program-content {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        /* Kegiatan List Wrapper */
+        .sub-kegiatan-wrapper {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border-left: 4px solid #28a745;
+        }
+
+        .sub-kegiatan-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1e7e34;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sub-kegiatan-block {
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 15px;
+        }
+
+        .sub-kegiatan-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .sub-kegiatan-name-header {
+            font-size: 13px;
+            font-weight: bold;
+            color: #334155;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .sub-kegiatan-name-text {
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        .sub-detail-btn {
+            background: #28a745;
+            color: white;
+            border: 1px solid #1e7e34;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+
+        .sub-kegiatan-cards-content {
+            display: none;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #cbd5e1;
+        }
+
+        .no-data-msg {
+            color: #64748b;
+            font-style: italic;
+            font-size: 12px;
+            padding: 5px 0;
+        }
+
+        .footer {
+            background: linear-gradient(0deg, #012d7e, #0740aa);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 11px;
+            margin-top: auto;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 320px;
+        }
+
+        @media (max-width: 992px) {
+            .grid-4 {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .grid-4 {
+                grid-template-columns: 1fr !important;
+                gap: 15px !important;
+            }
+
+            .grid-4 .card,
+            .grid-4 .inner-card {
+                margin-bottom: 0 !important;
+            }
+
+            .sub-kegiatan-name-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .sub-detail-btn {
+                align-self: flex-end;
+            }
+
+            .chart-container {
+                height: 240px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <img src="logo.png" alt="Logo" class="header-logo">
+        <div class="header-text">
+            <h1>Progres Realisasi FisKeu Kegiatan Internal Bidang Infraswil</h1>
+            <p><i class="fa-regular fa-calendar-check"></i> Data Realisasi per Juni 2026</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card inner-card animated-card" id="main-card-1">
+            <div class="card-flex">
+                <div class="icon-box icon-blue"><i class="fa-solid fa-wallet"></i></div>
+                <div class="card-text">
+                    <h4>Total Pagu</h4>
+                    <h2 id="total-pagu-label">Rp 0</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="card inner-card animated-card" id="main-card-2">
+            <div class="card-flex">
+                <div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div>
+                <div class="card-text">
+                    <h4>Total Realisasi <span class="badge-hingga">Hingga</span> Bulan Ini</h4>
+                    <h2 id="total-realisasi-label">Rp 0</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="card inner-card animated-card" id="main-card-3">
+            <div class="card-flex">
+                <div class="icon-box icon-red"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                <div class="card-text">
+                    <h4>Sisa Pagu Keseluruhan</h4>
+                    <h2 id="sisa-pagu-label">Rp 0</h2>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: flex; flex-direction: row; gap: 15px; width: 100%; margin-bottom: 15px;">
+            <div class="card inner-card animated-card" id="main-card-4" style="flex: 1; margin-bottom: 0; padding: 15px;">
+                <div class="card-flex">
+                    <div class="icon-box icon-orange"><i class="fa-solid fa-folder-open"></i></div>
+                    <div class="card-text" style="min-width: 0;">
+                        <h4>TOTAL KEGIATAN</h4>
+                        <h2 id="total-program-badge"
+                            style="margin: 1px 0 0 0; font-size: 20px; color: #1a1a1a; font-weight: 700;">0 Kegiatan
+                        </h2>
+                    </div>
+                </div>
+            </div>
+            <div class="card inner-card animated-card" id="main-card-5" style="flex: 1; margin-bottom: 0; padding: 15px;">
+                <div class="card-flex">
+                    <div class="icon-box icon-blue"><i class="fa-solid fa-list-check"></i></div>
+                    <div class="card-text" style="min-width: 0;">
+                        <h4>TOTAL SUB-KEGIATAN</h4>
+                        <h2 id="total-kegiatan-badge"
+                            style="margin: 1px 0 0 0; font-size: 20px; color: #1a1a1a; font-weight: 700;">0 Sub-Kegiatan
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card animated-card" id="main-card-6">
+            <div class="section-title">
+                <span><i class="fa-solid fa-chart-line"></i> Trend Capaian Bulanan</span>
+                <button class="btn-view-data" id="btnToggleAngka" onclick="toggleAngkaGrafik()"><i
+                        class="fa-solid fa-eye"></i> Lihat Nilai</button>
+            </div>
+            <div class="chart-container">
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card animated-card" id="main-card-7">
+            <div class="section-title" id="nama-opd-title">Progres per Kegiatan</div>
+            <div id="program-list"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        Sumber Data: <a href="https://sulselprov.e-planning.id"
+            style="color:#6ab0ff; text-decoration:none;">sulselprov.e-planning.id</a> <br>
+        &copy; 2026 by @zuwlend. All Rights Reserved.
+        <div id="visitorCount" style="margin-top:8px; opacity:0.8;"></div>
+    </div>
+
+    <script>
+        const dataBidangInfraswil = [
+            {
+                "namaKegiatan": "Koordinasi Perencanaan Bidang Infrastruktur dan Kewilayahan",
+                "pagu": 606291800,
+                "realisasiBulanIni": 23262645,
+                "realisasiTot": 36059986,
+                "fisikPersen": 9.44,
+                "subKegiatan": []
+            },
+            {
+                "namaKegiatan": "Pelaksanaan Monitoring dan Evaluasi Penyusunan Dokumen Perencanaan Pembangunan Perangkat Daerah Bidang Infrastruktur",
+                "pagu": 122634800,
+                "realisasiBulanIni": 0,
+                "realisasiTot": 0,
+                "fisikPersen": 0.0,
+                "subKegiatan": [
+                    { "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor-Alat Tulis Kantor", "pagu": 2882800, "realisasiBulanIni": 0, "realisasi": 0, "fisik": 0.0 },
+                    { "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor- Kertas dan Cover", "pagu": 2584000, "realisasiBulanIni": 0, "realisasi": 0, "fisik": 0.0 },
+                ]
+            },
+        ];
+
+        const namaBulan = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Juni', 'Juli', 'Agus', 'Sept', 'Okt', 'Nov', 'Des'];
+        const dataTrendKeuangan = [1.20, 2.50, 3.80, 4.20, 5.50, 5.96, 0, 0, 0, 0, 0, 0];
+        const dataTrendFisik = [2.00, 4.50, 6.00, 8.50, 10.00, 10.25, 0, 0, 0, 0, 0, 0];
+
+        const VISITOR_URL = 'https://script.google.com/macros/s/AKfycbw4heB0YjxHIH31Mn6C_JRGHzdnWdCvrahsgGjZ3D8ZX9CQGDftb1Rmyy-3trQdgyt0/exec';
+
+        // Variabel global untuk menampung instance Chart agar bisa diupdate
+        let myTrendChart;
+        let tunjukkanAngka = false; // Status awal angka disembunyikan
+
+        function initChart() {
+            const ctx = document.getElementById('trendChart').getContext('2d');
+
+            // Daftarkan plugin datalabels khusus untuk grafik ini
+            Chart.register(ChartDataLabels);
+
+            myTrendChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: namaBulan,
+                    datasets: [
+                        {
+                            label: 'Keuangan (%)',
+                            data: dataTrendKeuangan,
+                            borderColor: '#28a745',
+                            backgroundColor: 'rgba(40, 167, 69, 0.05)',
+                            borderWidth: 3,
+                            tension: 0.2,
+                            fill: true
+                        },
+                        {
+                            label: 'Fisik (%)',
+                            data: dataTrendFisik,
+                            borderColor: '#ff9800',
+                            backgroundColor: 'rgba(255, 152, 0, 0.05)',
+                            borderWidth: 3,
+                            tension: 0.2,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: { font: { size: 12, family: 'Segoe UI' } }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) { return context.dataset.label + ': ' + context.raw + '%'; }
+                            }
+                        },
+                        // MODIFIKASI: Pengaturan penampilan angka di atas titik
+                        datalabels: {
+                            display: function () {
+                                return tunjukkanAngka; // Hanya muncul jika status tunjukkanAngka = true
+                            },
+                            align: 'top',
+                            anchor: 'end',
+                            backgroundColor: function (context) {
+                                return context.dataset.borderColor; // Background angka mengikuti warna garis
+                            },
+                            borderRadius: 4,
+                            color: 'white',
+                            font: {
+                                weight: 'bold',
+                                size: 10
+                            },
+                            formatter: function (value) {
+                                return value + '%'; // Format teks angka yang muncul
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { callback: function (value) { return value + '%'; } }
+                        }
+                    }
+                }
+            });
+        }
+
+        // MODIFIKASI: Fungsi toggle untuk tombol "Lihat Nilai"
+        function toggleAngkaGrafik() {
+            tunjukkanAngka = !tunjukkanAngka; // Balikkan status true/false
+
+            const btn = document.getElementById('btnToggleAngka');
+            if (tunjukkanAngka) {
+                btn.innerHTML = `<i class="fa-solid fa-eye-slash"></i>Tutup`;
+                btn.style.background = '#ff7300';
+            } else {
+                btn.innerHTML = `<i class="fa-solid fa-eye"></i> Lihat Nilai`;
+                btn.style.background = '#0f3c78';
+            }
+
+            // Update chart untuk merefresh penampilan datalabels
+            myTrendChart.update();
+        }
+
+        /* --- FUNGSI AUDIO GENERATOR (WEB AUDIO API) --- */
+        function playPopupSound() {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                
+                osc.type = 'sine';
+                // Membuat pitch naik tipis dari 400Hz ke 600Hz untuk suara "pop" yang bersih
+                osc.frequency.setValueAtTime(400, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.1);
+                
+                // Mengatur volume meluruh cepat (fade out)
+                gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+                
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                
+                osc.start();
+                osc.stop(ctx.currentTime + 0.12);
+            } catch (e) {
+                // Mencegah error jika web audio diblokir browser sebelum interaksi pengguna
+            }
+        }
+
+        /* --- FUNGSI PICU ANIMASI BERURUTAN --- */
+        function triggerSequenceAnimations() {
+            const cards = document.querySelectorAll('.animated-card');
+            cards.forEach((card, index) => {
+                const delay = index * 150; // Jeda 150 milidetik antar kartu
+                card.style.animationDelay = `${delay}ms`;
+                
+                // Putar efek suara saat kartu masuk ke frame layar
+                setTimeout(() => {
+                    playPopupSound();
+                }, delay);
+            });
+        }
+
+        function renderDashboard() {
+            let grandTotalPagu = 0;
+            let grandTotalRealisasi = 0;
+            let totalKegiatanCount = dataBidangInfraswil.length;
+            let totalSubKegiatanCount = 0;
+
+            const mainContainer = document.getElementById('program-list');
+            mainContainer.innerHTML = '';
+
+            dataBidangInfraswil.forEach((item, index) => {
+                const keuPersen = item.pagu > 0 ? ((item.realisasiTot / item.pagu) * 100).toFixed(2) : 0;
+                const sisa = item.pagu - item.realisasiTot;
+
+                grandTotalPagu += item.pagu;
+                grandTotalRealisasi += item.realisasiTot;
+                totalSubKegiatanCount += item.subKegiatan.length;
+
+                const programCard = document.createElement('div');
+                programCard.className = 'card inner-card';
+                programCard.innerHTML = `
+            <div class="program-header" onclick="toggleProgram(this)">
+                <div>
+                    <h3>${item.namaKegiatan}</h3>
+                    <p style="margin:6px 0 0 0; font-size:15px; color:#0c6bdc; font-weight:700;">Pagu: Rp ${item.pagu.toLocaleString('id-ID')}</p>
+                </div>
+                <div class="btn-container" onclick="event.stopPropagation();">
+                    <button class="toggle-btn" onclick="toggleProgramFromBtn(this)">Detail</button>
+                    <button class="kegiatan-btn" onclick="toggleKegiatanData(this, ${index})">Sub-Kegiatan</button>
+                </div>
+            </div>
+            
+            <div class="program-content" id="keg-${index}">
+                <div class="card inner-card">
+                    <div class="card-flex">
+                        <div class="icon-box icon-green"><i class="fa-solid fa-calendar-day"></i></div>
+                        <div>
+                            <h4>Realisasi Bulan Ini (Rp)</h4>
+                            <h2 class="txt-realisasi-bulan">Rp ${item.realisasiBulanIni.toLocaleString('id-ID')}</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="card inner-card" style="background: #fafafa;">
+                    <div class="wrapper-title">REALISASI TOTAL <span class="badge-hingga">HINGGA</span> BULAN INI</div>
+                    <div class="grid-4">
+                        <div class="card inner-card" style="background: white;">
+                            <div class="card-flex">
+                                <div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div>
+                                <div><h4>Total Realisasi</h4><h2>Rp ${item.realisasiTot.toLocaleString('id-ID')}</h2></div>
+                            </div>
+                        </div>
+                        <div class="card inner-card" style="background: white;">
+                            <div class="card-flex">
+                                <div class="icon-box icon-blue"><i class="fa-solid fa-chart-line"></i></div>
+                                <div><h4>Keuangan (%)</h4><h2>${keuPersen}%</h2></div>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" style="width: ${keuPersen}%; background:#0c6bdc;"></div></div>
+                        </div>
+                        <div class="card inner-card" style="background: white;">
+                            <div class="card-flex">
+                                <div class="icon-box icon-orange"><i class="fa-solid fa-building"></i></div>
+                                <div><h4>Fisik (%)</h4><h2>${item.fisikPersen}%</h2></div>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" style="width: ${item.fisikPersen}%; background:#ff9800;"></div></div>
+                        </div>
+                        <div class="card inner-card" style="background: white;">
+                            <div class="card-flex">
+                                <div class="icon-box icon-red"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                                <div><h4>Sisa Dana</h4><h2>Rp ${sisa.toLocaleString('id-ID')}</h2></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sub-kegiatan-wrapper" id="sub-list-${index}">
+                <div class="sub-kegiatan-title"><i class="fa-solid fa-list-check"></i> Daftar Sub-Kegiatan Dalam Kegiatan</div>
+                <div class="sub-kegiatan-container"></div>
+            </div>
+        `;
+                mainContainer.appendChild(programCard);
+
+                const subContainer = programCard.querySelector(`#sub-list-${index} .sub-kegiatan-container`);
+
+                if (item.subKegiatan.length === 0) {
+                    subContainer.innerHTML = `<div class="no-data-msg"><i class="fa-solid fa-circle-info"></i> Kegiatan ini tidak memiliki rincian sub-kegiatan belanja.</div>`;
+                } else {
+                    item.subKegiatan.forEach((sub) => {
+                        const subKeuPct = sub.pagu > 0 ? ((sub.realisasi / sub.pagu) * 100).toFixed(2) : 0;
+                        const subSisa = sub.pagu - sub.realisasi;
+
+                        subContainer.innerHTML += `
+                    <div class="sub-kegiatan-block">
+                        <div class="sub-kegiatan-name-header">
+                            <div class="sub-kegiatan-name-text">
+                                <i class="fa-solid fa-circle-dot" style="color:#28a745; font-size:10px;"></i> <b>${sub.nama}</b>
+                                <div style="font-size:11px; color:#64748b; margin-top:3px;">Pagu: Rp ${sub.pagu.toLocaleString('id-ID')}</div>
+                            </div>
+                            <button class="sub-detail-btn" onclick="toggleSubDetailCard(this)">Detail</button>
+                        </div>
+                        
+                        <div class="sub-kegiatan-cards-content">
+                            <div class="card inner-card" style="padding:10px; margin-bottom:10px;">
+                                <div class="card-flex">
+                                    <div class="icon-box icon-green" style="width:30px; height:30px; font-size:12px;"><i class="fa-solid fa-calendar-day"></i></div>
+                                    <div><h4>Realisasi Bulan Ini (Rp)</h4><h2 style="font-size:14px; margin-top:2px;">Rp ${sub.realisasiBulanIni.toLocaleString('id-ID')}</h2></div>
+                                </div>
+                            </div>
+                            <div class="card inner-card" style="background: #fafafa; padding:12px; margin-bottom:0;">
+                                <div class="wrapper-title" style="font-size:11px; margin-bottom:10px;">REALISASI TOTAL <span class="badge-hingga">HINGGA</span> BULAN INI</div>
+                                <div class="grid-4">
+                                    <div class="card inner-card" style="background: white; padding:10px;"><div class="card-flex"><div class="icon-box icon-green" style="width:30px; height:30px; font-size:12px;"><i class="fa-solid fa-money-bill"></i></div><div><h4 style="font-size:10px;">Total Realisasi</h4><h2 style="font-size:13px;">Rp ${sub.realisasi.toLocaleString('id-ID')}</h2></div></div></div>
+                                    <div class="card inner-card" style="background: white; padding:10px;"><div class="card-flex"><div class="icon-box icon-blue" style="width:30px; height:30px; font-size:12px;"><i class="fa-solid fa-chart-line"></i></div><div><h4 style="font-size:10px;">Keuangan (%)</h4><h2 style="font-size:13px;">${subKeuPct}%</h2></div></div><div class="progress-bar" style="height:5px;"><div class="progress-fill" style="width:${subKeuPct}%; background:#0c6bdc;"></div></div></div>
+                                    <div class="card inner-card" style="background: white; padding:10px;"><div class="card-flex"><div class="icon-box icon-orange" style="width:30px; height:30px; font-size:12px;"><i class="fa-solid fa-building"></i></div><div><h4 style="font-size:10px;">Fisik (%)</h4><h2 style="font-size:13px;">${sub.fisik}%</h2></div></div><div class="progress-bar" style="height:5px;"><div class="progress-fill" style="width:${sub.fisik}%; background:#ff9800;"></div></div></div>
+                                    <div class="card inner-card" style="background: white; padding:10px;"><div class="card-flex"><div class="icon-box icon-red" style="width:30px; height:30px; font-size:12px;"><i class="fa-solid fa-hand-holding-dollar"></i></div><div><h4 style="font-size:10px;">Sisa Dana</h4><h2 style="font-size:13px;">Rp ${subSisa.toLocaleString('id-ID')}</h2></div></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                    });
+                }
+            });
+
+            document.getElementById('total-pagu-label').textContent = `Rp ${grandTotalPagu.toLocaleString('id-ID')}`;
+            document.getElementById('total-realisasi-label').textContent = `Rp ${grandTotalRealisasi.toLocaleString('id-ID')}`;
+            document.getElementById('sisa-pagu-label').textContent = `Rp ${(grandTotalPagu - grandTotalRealisasi).toLocaleString('id-ID')}`;
+
+            // REVISI DI SINI: Menghilangkan string " Kegiatan" dan " Sub-Kegiatan"
+            document.getElementById('total-program-badge').textContent = totalKegiatanCount;
+            document.getElementById('total-kegiatan-badge').textContent = totalSubKegiatanCount;
+
+            document.getElementById('nama-opd-title').textContent = `Progres per Kegiatan: Internal Bidang Infraswil`;
+        }
+        function toggleSubDetailCard(btn) {
+            const cardContent = btn.closest('.sub-kegiatan-block').querySelector('.sub-kegiatan-cards-content');
+            if (cardContent.style.display === "block") {
+                cardContent.style.display = "none"; btn.textContent = "Detail";
+                btn.style.background = "#28a745"; btn.style.borderColor = "#1e7e34";
+            } else {
+                cardContent.style.display = "block"; btn.textContent = "Tutup";
+                btn.style.background = "#ff7300"; btn.style.borderColor = "#ff7300";
+                playPopupSound(); // Tambahan opsional: efek suara saat sub-detail dibuka
+            }
+        }
+        function toggleProgramFromBtn(btn) { toggleProgram(btn.closest('.program-header')); }
+        function toggleProgram(header) {
+            const content = header.nextElementSibling;
+            const button = header.querySelector(".toggle-btn");
+            const kegButton = header.querySelector(".kegiatan-btn");
+            const subWrapper = header.parentElement.querySelector(".sub-kegiatan-wrapper");
+            if (content.style.display === "block") {
+                content.style.display = "none"; subWrapper.style.display = "none";
+                button.textContent = "Detail"; button.style.background = "#0c6bdc"; button.style.borderColor = "#0a56b2";
+                kegButton.style.display = "none";
+            } else {
+                content.style.display = "block"; subWrapper.style.display = "none";
+                button.textContent = "Tutup"; button.style.background = "#ff7300"; button.style.borderColor = "#ff7300";
+                kegButton.style.display = "block"; kegButton.innerHTML = "Sub-Kegiatan";
+                kegButton.style.background = "#28a745"; kegButton.style.borderColor = "#1e7e34";
+                playPopupSound(); // Tambahan opsional: efek suara saat detail program dibuka
+            }
+        }
+        function toggleKegiatanData(button, index) {
+            const programContent = document.getElementById(`keg-${index}`);
+            const subWrapper = document.getElementById(`sub-list-${index}`);
+            if (subWrapper.style.display === "block") {
+                subWrapper.style.display = "none"; programContent.style.display = "block";
+                button.style.background = "#28a745"; button.style.borderColor = "#1e7e34"; button.innerHTML = "Sub-Kegiatan";
+            } else {
+                subWrapper.style.display = "block"; programContent.style.display = "none";
+                button.style.background = "#ff7300"; button.style.borderColor = "#ff7300"; button.innerHTML = "Tutup Sub-Kegiatan";
+                playPopupSound(); // Tambahan opsional: efek suara saat sub-kegiatan dibuka
+            }
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+            renderDashboard();
+            initChart();
+            triggerSequenceAnimations(); // Jalankan barisan animasi berjatuhan & audio pop
+            
+            fetch(VISITOR_URL + '?t=' + new Date().getTime())
+                .then(res => res.json()).then(data => {
+                    document.getElementById('visitorCount').innerHTML = `<i class="fa-solid fa-eye"></i> : ${data.visits}`;
+                }).catch(() => { });
+        });
+    </script>
+</body>
+</html>
