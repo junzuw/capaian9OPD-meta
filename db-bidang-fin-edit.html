@@ -48,18 +48,25 @@
             color: white;
             transition: opacity 0.5s ease, visibility 0.5s;
             text-align: center;
-            padding: 20px;
+            padding: 2px;
         }
 
+        /* --- STYLE CONTAINER DENGAN GAMBAR LATAR BELAKANG --- */
         .logo-container {
             width: 100%;
-            max-width: 200px;
-            height: 220px;
-            /* Ditambah sedikit agar memberi ruang saat logo naik */
+            max-width: 200px; /* Ukuran maksimal logo tetap */
+            height: 200px;    /* Berikan tinggi pasti agar gambar latar belakang punya ruang yang proporsional */
             display: flex;
             justify-content: center;
             align-items: center;
             margin: 0 auto;
+            padding: 0;
+            
+            /* Tambahkan baris di bawah ini untuk gambar latar belakang */
+            background-image: url('logo-sulsel.png'); /* Ganti dengan nama file gambar latar Anda */
+            background-size: contain;     /* Memastikan gambar latar pas di dalam kotak */
+            background-position: center;  /* Posisi gambar latar tepat di tengah */
+            background-repeat: no-repeat; /* Mencegah gambar latar berulang (tiling) */
         }
 
         /* Class Animasi Melayang Naik-Turun (SUDAH BERSIH DARI BINGKAI KOTAK) */
@@ -82,7 +89,7 @@
             height: auto;
             object-fit: contain;
             margin-top: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 50px;
             filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.6));
             /* Efek bayangan emas */
         }
@@ -569,14 +576,17 @@
 
     <!-- GANTI BAGIAN INI SECARA UTUH -->
     <div id="splash-screen">
-        <!-- 2. Gambar Kaligrafi Bismillah Emas (Tetap Diam) -->
-        <img src="bismillah.png" alt="Bismillaah" class="static-bismillah-img">       
-        <!-- 1. Container Logo Utama (Melayang) -->
+        <img src="bismillah.png" alt="Bismillaah" class="static-bismillah-img">
+
         <div class="logo-container">
-            <img src="sappurecca-new-2.png" alt="Logo" class="floating-logo">
-        </div>  
-        <!-- 3. Teks Petunjuk & Tombol Masuk -->
-        <p>Selamat Datang di Halaman Dashboard<br>Progres Realisasi FisKeu Bidang Infraswil, <br>klik tombol di bawah untuk melanjutkan.</p>
+            <img src="sappurecca-2.png" alt="Logo" class="floating-logo">
+        </div>
+        
+        <p style="margin-top: 5px; margin-bottom: 20px; line-height: 1.5;">
+            <b>Selamat Datang,</b> di Halaman Dashboard<br>
+            Progres Realisasi FisKeu Bidang <b>INFRASWIL</b>.<br>
+            Klik tombol di bawah untuk melanjutkan.
+        </p>
         <button class="btn-start" onclick="startDashboard()">Masuk Dashboard</button>
     </div>
 
@@ -692,129 +702,7 @@
                         "realisasi": 0,
                         "fisik": 0
                     },
-                    {
-                        "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor- Kertas dan Cover",
-                        "pagu": 2584000,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 0,
-                        "fisik": 0
-                    },
-                    {
-                        "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor-Bahan Komputer",
-                        "pagu": 2448000,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 0,
-                        "fisik": 0
-                    },
-                    {
-                        "nama": "Belanja Makanan dan Minuman Rapat",
-                        "pagu": 16400000,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 0,
-                        "fisik": 0
-                    },
-                    {
-                        "nama": "Belanja Perjalanan Dinas Biasa",
-                        "pagu": 98320000,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 0,
-                        "fisik": 0
-                    }
-                ]
-            },
-            {
-                "namaKegiatan": "Koordinasi Penyusunan Dokumen Perencanaan Pembangunan Daerah Bidang Kewilayahan (RPJPD, RPJMD dan RKPD)",
-                "pagu": 66974000,
-                "realisasiBulanIni": 7765000,
-                "realisasiTot": 9155000,
-                "fisikPersen": 16.56,
-                "subKegiatan": [
-                    {
-                        "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor-Alat Tulis Kantor",
-                        "pagu": 2742800,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 0,
-                        "fisik": 0
-                    },
-                    {
-                        "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor- Kertas dan Cover",
-                        "pagu": 2713200,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 0,
-                        "fisik": 0
-                    },
-                    {
-                        "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor-Bahan Komputer",
-                        "pagu": 2448000,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 0,
-                        "fisik": 0
-                    },
-                    {
-                        "nama": "Belanja Makanan dan Minuman Rapat",
-                        "pagu": 16400000,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 0,
-                        "fisik": 0
-                    },
-                    {
-                        "nama": "Belanja Perjalanan Dinas Biasa",
-                        "pagu": 42670000,
-                        "realisasiBulanIni": 7765000,
-                        "realisasi": 9155000,
-                        "fisik": 26
-                    }
-                ]
-            },
-            {
-                "namaKegiatan": "Koordinasi Pelaksanaan Sinergitas dan Harmonisasi Perencanaan Pembangunan Daerah Bidang Kewilayahan",
-                "pagu": 416683000,
-                "realisasiBulanIni": 15497645,
-                "realisasiTot": 26904986,
-                "fisikPersen": 14.37,
-                "subKegiatan": [
-                    {
-                        "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor-Alat Tulis Kantor",
-                        "pagu": 2565000,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 0,
-                        "fisik": 0
-                    },
-                    {
-                        "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor- Kertas dan Cover",
-                        "pagu": 2584000,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 0,
-                        "fisik": 0
-                    },
-                    {
-                        "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor-Bahan Komputer",
-                        "pagu": 2448000,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 0,
-                        "fisik": 0
-                    },
-                    {
-                        "nama": "Belanja Makanan dan Minuman Rapat",
-                        "pagu": 16400000,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 0,
-                        "fisik": 0
-                    },
-                    {
-                        "nama": "Honorarium Narasumber atau Pembahas, Moderator, Pembawa Acara, dan Panitia",
-                        "pagu": 324000000,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 2700000,
-                        "fisik": 10
-                    },
-                    {
-                        "nama": "Belanja Perjalanan Dinas Biasa",
-                        "pagu": 68686000,
-                        "realisasiBulanIni": 15497645,
-                        "realisasi": 24204986,
-                        "fisik": 40
-                    }
+                    
                 ]
             }
         ];
