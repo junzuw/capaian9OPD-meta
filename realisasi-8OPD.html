@@ -503,7 +503,8 @@
   </footer>
 
   <script>
-    const VISITOR_URL = 'https://script.google.com/macros/s/AKfycbyq5BLYvXuHr4flq4ZAnhotC14RdIlLt9GhITfn_SERYGBpYKYUgAP5gAvL0Qbe5afEhA/exec'; 
+    // KODE BARU YANG SUDAH DIPERBAIKI:
+    const VISITOR_URL = APPSCRIPT_URL + '?type=visitor'; 
     fetch(VISITOR_URL)
       .then(res => res.json())
       .then(data => {
