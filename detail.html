@@ -1,0 +1,4118 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Multi-OPD Terintegrasi Provinsi Sulsel</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* CSS UTAMA */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: linear-gradient(180deg, #eaf4ff, #f7fbff);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(90deg, #0f3c78, #0c6bdc);
+      color: white;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    }
+
+    .header-logo {
+      width: 90px;
+      height: 90px;
+      object-fit: contain;
+      border-radius: 12px;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .header-text h1 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    .header-text p {
+      margin: 5px 0 0 0;
+      opacity: 0.9;
+      font-size: 12px;
+    }
+
+    .container {
+      padding: 15px;
+      flex: 1;
+    }
+
+    /* =========================================
+           CARD STYLE (SESUAI REQUEST HTML PENDEK)
+        =========================================== */
+    .card {
+      background: linear-gradient(180deg, #ffffff, #eef7ff);
+      padding: 15px;
+      border-radius: 20px;
+      box-shadow:
+        0 12px 30px rgba(15, 60, 120, 0.12),
+        0 4px 12px rgba(15, 60, 120, 0.08);
+      margin-bottom: 15px;
+      transition: all 0.25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 18px 40px rgba(15, 60, 120, 0.18),
+        0 8px 18px rgba(15, 60, 120, 0.12);
+    }
+
+    /* =========================================
+           INNER CARD STYLE (SESUAI REQUEST HTML PENDEK)
+        =========================================== */
+    .inner-card {
+      border: 1.5px solid #e3e6f0;
+      box-shadow:
+        0 10px 25px rgba(15, 60, 120, 0.10),
+        0 4px 10px rgba(15, 60, 120, 0.06);
+      transition: all 0.25s ease;
+    }
+
+    .inner-card:hover {
+      border-color: #0c6bdc;
+      transform: translateY(-2px);
+      box-shadow:
+        0 16px 35px rgba(15, 60, 120, 0.18),
+        0 8px 18px rgba(15, 60, 120, 0.12);
+    }
+
+    /* TEXT */
+    .card h4 {
+      margin: 0;
+      font-size: 11px;
+      color: #777;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .card h2 {
+      margin: 8px 0 0 0;
+      font-size: 18px;
+      color: #1a1a1a;
+      font-weight: 700;
+    }
+
+    .card-flex {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-box {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .icon-blue {
+      background: #0c6bdc;
+    }
+
+    .icon-green {
+      background: #28a745;
+    }
+
+    .icon-orange {
+      background: #ff9800;
+    }
+
+    .icon-red {
+      background: #e53935;
+    }
+
+    /* Container Section Title */
+    .section-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #0f3c78;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #e3e6f0;
+      padding-bottom: 8px;
+    }
+
+    .wrapper-title {
+      text-align: center;
+      font-size: 13px;
+      margin-bottom: 15px;
+      color: #0f3c78;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    /* Progress Bar */
+    .progress-bar {
+      height: 8px;
+      background: #eee;
+      border-radius: 10px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      transition: width 1.5s ease-in-out;
+    }
+
+    /* Accordion Program */
+    .program-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .program-header h3 {
+      margin: 0;
+      font-size: 14px;
+      color: #0f3c78;
+      flex: 1;
+      padding-right: 15px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .btn-container {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: stretch;
+      min-width: 80px;
+    }
+
+    .toggle-btn {
+      background: #0c6bdc;
+      color: white;
+      border: 1px solid #0a56b2;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 600;
+      transition: background 0.2s, color 0.2s;
+      text-align: center;
+    }
+
+    .kegiatan-btn {
+      background: #28a745;
+      color: white;
+      border: 1px solid #1e7e34;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 600;
+      text-align: center;
+      display: none;
+      transition: background 0.2s;
+    }
+
+    .program-content {
+      display: none;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+
+    .sub-kegiatan-wrapper {
+      display: none;
+      margin-top: 15px;
+      padding: 15px;
+      background: #f8fafc;
+      border-radius: 12px;
+      border-left: 4px solid #28a745;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+
+    .sub-kegiatan-title {
+      font-size: 14px;
+      font-weight: bold;
+      color: #1e7e34;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sub-kegiatan-block {
+      background: #ffffff;
+      padding: 15px;
+      border-radius: 16px;
+      border: 1px solid #e2e8f0;
+      margin-bottom: 15px;
+    }
+
+    .sub-kegiatan-block:last-child {
+      margin-bottom: 0;
+    }
+
+    .sub-kegiatan-name-header {
+      font-size: 13px;
+      font-weight: bold;
+      color: #334155;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .sub-kegiatan-name-text {
+      flex: 1;
+      line-height: 1.4;
+    }
+
+    .sub-detail-btn {
+      background: #28a745;
+      color: white;
+      border: 1px solid #1e7e34;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+
+    .sub-kegiatan-cards-content {
+      display: none;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed #cbd5e1;
+    }
+
+    /* GRAFIK TRIGGER BUTTONS */
+    .btn-grafik-trigger,
+    .btn-grafik-trigger-keu {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      letter-spacing: 0.3px;
+    }
+
+    .btn-grafik-trigger {
+      background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%);
+      color: #0c6bdc;
+      border: 2px solid #0c6bdc;
+      box-shadow: 0 4px 6px rgba(12, 107, 220, 0.05);
+    }
+
+    .btn-grafik-trigger:hover {
+      background: linear-gradient(135deg, #0c6bdc 0%, #0f3c78 100%);
+      color: #ffffff;
+      box-shadow: 0 6px 15px rgba(12, 107, 220, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .btn-grafik-trigger-keu {
+      background: linear-gradient(135deg, #ffffff 0%, #f0fff4 100%);
+      color: #28a745;
+      border: 2px solid #28a745;
+      box-shadow: 0 4px 6px rgba(40, 167, 69, 0.05);
+    }
+
+    .btn-grafik-trigger-keu:hover {
+      background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+      color: #ffffff;
+      box-shadow: 0 6px 15px rgba(40, 167, 69, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .btn-grafik-trigger:active,
+    .btn-grafik-trigger-keu:active {
+      transform: translateY(1px);
+    }
+
+    .btn-grafik-trigger.aktif,
+    .btn-grafik-trigger-keu.aktif {
+      background: linear-gradient(135deg, #e53935 0%, #b71c1c 100%) !important;
+      color: #ffffff !important;
+      border-color: #b71c1c !important;
+      box-shadow: 0 6px 15px rgba(229, 57, 53, 0.25) !important;
+    }
+
+    .grafik-expand-content {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transform: scaleY(0.95);
+      transform-origin: top;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), margin-top 0.4s ease;
+      background: #ffffff;
+    }
+
+    .grafik-expand-content.terbuka {
+      max-height: 340px !important;
+      opacity: 1;
+      transform: scaleY(1);
+      margin-top: 10px;
+      margin-bottom: 15px;
+      padding-top: 10px;
+      border-top: 1px dashed #cbd5e1;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 270px;
+      width: 100%;
+    }
+
+    .footer {
+      background: #0f3c78;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      font-size: 11px;
+      margin-top: auto;
+    }
+
+    @media (max-width: 992px) {
+      .grid-4 {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .grid-4 {
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+      }
+
+      .grid-4 .card,
+      .grid-4 .inner-card {
+        margin-bottom: 0 !important;
+      }
+
+      .sub-kegiatan-name-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .sub-detail-btn {
+        align-self: flex-end;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <img src="deepblueori.png" alt="Logo" class="header-logo" id="header-logo-img">
+    <div class="header-text">
+      <h1 id="header-title-text">Dashboard Progres Realisasi Fisik &amp; Keuangan 8 OPD Mitra</h1>
+      <p><i class="fa-regular fa-calendar-check"></i> Data Realisasi per 30 Juni 2026</p>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- SELEKTOR OPD -->
+    <div class="card inner-card" style="border-left: 5px solid #0c6bdc; background: #fdfdfd; margin-bottom: 20px;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+        <i class="fa-solid fa-building-shield" style="color: #0c6bdc; font-size: 18px;"></i>
+        <h4 style="margin: 0; color: #334155; font-size: 15px;">PILIH PERANGKAT DAERAH (OPD)</h4>
+      </div>
+      <select id="opd-selector" onchange="gantiOPD(this.value)"
+        style="width: 100%; padding: 12px 15px; border-radius: 8px; border: 1.5px solid #cbd5e1; font-size: 15px; font-weight: 600; color: #1e293b; background: white; cursor: pointer; outline: none; transition: all 0.2s;">
+        <option value="">-- Pilih Perangkat Daerah --</option>
+        <option value="bappeda">BAPPELITBANGDA</option>
+        <option value="bpbd">BPBD</option>
+        <option value="bmbk">BM & BK</option>
+        <option value="sdacktr">SDA & CKTR</option>
+        <option value="perkimtan">PERKIMTAN</option>
+        <option value="kominfo">DISKOMINFO</option>
+        <option value="dishub">DISHUB</option>
+        <option value="barjas">BARJAS</option>
+      </select>
+    </div>
+
+    <!-- KARTU RINGKASAN ANGGARAN UTAMA -->
+    <div class="card inner-card">
+      <div class="card-flex">
+        <div class="icon-box icon-blue"><i class="fa-solid fa-wallet"></i></div>
+        <div class="card-text">
+          <h4>Total Pagu OPD</h4>
+          <h2 id="total-pagu-label">Rp 0</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="card inner-card">
+      <div class="card-flex">
+        <div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div>
+        <div class="card-text">
+          <h4>Total Realisasi Hingga Bulan Ini</h4>
+          <h2 id="total-realisasi-label">Rp 0</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="card inner-card">
+      <div class="card-flex">
+        <div class="icon-box icon-red"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+        <div class="card-text">
+          <h4>Sisa Pagu Keseluruhan</h4>
+          <h2 id="sisa-pagu-label">Rp 0</h2>
+        </div>
+      </div>
+    </div>
+
+    <!-- KARTU INDIKATOR PROGRAM & KEGIATAN -->
+    <div style="display: flex; gap: 15px; width: 100%; margin-bottom: 15px;">
+      <div class="card inner-card" style="flex: 1; margin-bottom: 0; padding: 15px;">
+        <div class="card-flex">
+          <div class="icon-box icon-orange"><i class="fa-solid fa-folder-open"></i></div>
+          <div class="card-text" style="min-width: 0;">
+            <h4>TOTAL PROGRAM</h4>
+            <h2 id="total-program-badge" style="margin: 8px 0 0 0; font-size: 16px; color: #1a1a1a; font-weight: 700;">0
+              Program</h2>
+          </div>
+        </div>
+      </div>
+      <div class="card inner-card" style="flex: 1; margin-bottom: 0; padding: 15px;">
+        <div class="card-flex">
+          <div class="icon-box icon-blue"><i class="fa-solid fa-list-check"></i></div>
+          <div class="card-text" style="min-width: 0;">
+            <h4>TOTAL KEGIATAN</h4>
+            <h2 id="total-kegiatan-badge" style="margin: 8px 0 0 0; font-size: 16px; color: #1a1a1a; font-weight: 700;">
+              0 Kegiatan
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAFTAR RINCIAN PROGRAM -->
+    <div class="card">
+      <div class="section-title" id="nama-opd-title">Rincian Progres Per Program</div>
+      <div id="program-list"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    Sumber Data: <a href="https://sulselprov.e-planning.id"
+      style="color:#6ab0ff; text-decoration:none;">sulselprov.e-planning.id</a> <br>
+    &copy; 2026 by @zuwlend. All Rights Reserved.
+    <div id="visitorCount" style="margin-top:8px; opacity:0.8;"></div>
+  </div>
+
+
+  <!-- LOGIKA JAVASCRIPT -->
+  <script>
+    // ==========================================================
+    // DATABASE UTAMA (DISUNTIKKAN SECARA OTOMATIS OLEH COMPILER)
+    // ==========================================================
+    let seluruhDataOPD = {
+      "bappeda": [
+        {
+          "namaProgram": "PROGRAM PENUNJANG URUSAN PEMERINTAHAN DAERAH PROVINSI",
+          "pagu": 31976763521.38,
+          "realisasiTot": 15189881007,
+          "realisasiBulanIni": 3579951668,
+          "fisikPersen": 49.55,
+          "subKegiatan": [
+            {
+              "nama": "Perencanaan, Penganggaran, dan Evaluasi Kinerja Perangkat Daerah",
+              "pagu": 111127550,
+              "realisasi": 15957000,
+              "realisasiBulanIni": 15957000,
+              "fisik": 15.86
+            },
+            {
+              "nama": "Penyusunan Dokumen Perencanaan Perangkat Daerah",
+              "pagu": 20003750,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan DPA-SKPD",
+              "pagu": 19999850,
+              "realisasi": 5122000,
+              "realisasiBulanIni": 5122000,
+              "fisik": 29
+            },
+            {
+              "nama": "Evaluasi Kinerja Perangkat Daerah",
+              "pagu": 71123950,
+              "realisasi": 10835000,
+              "realisasiBulanIni": 10835000,
+              "fisik": 16.63
+            },
+            {
+              "nama": "Administrasi Keuangan Perangkat Daerah",
+              "pagu": 29808088329.38,
+              "realisasi": 14961147737,
+              "realisasiBulanIni": 3527355198,
+              "fisik": 52.29
+            },
+            {
+              "nama": "Penyediaan Gaji dan Tunjangan ASN",
+              "pagu": 29733199129.38,
+              "realisasi": 14940862587,
+              "realisasiBulanIni": 3516736698,
+              "fisik": 52.38
+            },
+            {
+              "nama": "Pelaksanaan Penatausahaan dan Pengujian/Verifikasi Keuangan SKPD",
+              "pagu": 2322200,
+              "realisasi": 1402500,
+              "realisasiBulanIni": 1402500,
+              "fisik": 62.37
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan Laporan Keuangan Akhir Tahun SKPD",
+              "pagu": 1073600,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pengelolaan dan Penyiapan Bahan Tanggapan Pemeriksaan",
+              "pagu": 31110800,
+              "realisasi": 4887650,
+              "realisasiBulanIni": 0,
+              "fisik": 17.22
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan Laporan Keuangan Bulanan/ Triwulanan/Semesteran SKPD",
+              "pagu": 40382600,
+              "realisasi": 13995000,
+              "realisasiBulanIni": 9216000,
+              "fisik": 15.35
+            },
+            {
+              "nama": "Administrasi Barang Milik Daerah pada Perangkat Daerah",
+              "pagu": 30443750,
+              "realisasi": 18949000,
+              "realisasiBulanIni": 9006500,
+              "fisik": 63.79
+            },
+            {
+              "nama": "Penyusunan Perencanaan Kebutuhan Barang Milik Daerah SKPD",
+              "pagu": 8444000,
+              "realisasi": 4421000,
+              "realisasiBulanIni": 1314000,
+              "fisik": 54.33
+            },
+            {
+              "nama": "Rekonsiliasi dan Penyusunan Laporan Barang Milik Daerah pada SKPD",
+              "pagu": 14000000,
+              "realisasi": 11454000,
+              "realisasiBulanIni": 5582000,
+              "fisik": 83.91
+            },
+            {
+              "nama": "Penatausahaan Barang Milik Daerah pada SKPD",
+              "pagu": 7999750,
+              "realisasi": 3074000,
+              "realisasiBulanIni": 2110500,
+              "fisik": 38.54
+            },
+            {
+              "nama": "Administrasi Kepegawaian Perangkat Daerah",
+              "pagu": 48993000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pendataan dan Pengolahan Administrasi Kepegawaian",
+              "pagu": 2500000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pendidikan dan Pelatihan Pegawai Berdasarkan Tugas dan Fungsi",
+              "pagu": 44494000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Bimbingan Teknis Implementasi Peraturan Perundang-Undangan",
+              "pagu": 1999000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Administrasi Umum Perangkat Daerah",
+              "pagu": 510865900,
+              "realisasi": 56480790,
+              "realisasiBulanIni": 0,
+              "fisik": 14.74
+            },
+            {
+              "nama": "Penyediaan Komponen Instalasi Listrik/Penerangan Bangunan Kantor",
+              "pagu": 10189500,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyediaan Peralatan dan Perlengkapan Kantor",
+              "pagu": 10133000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Fasilitasi Kunjungan Tamu",
+              "pagu": 31388000,
+              "realisasi": 9927500,
+              "realisasiBulanIni": 0,
+              "fisik": 37
+            },
+            {
+              "nama": "Penyelenggaraan Rapat Koordinasi dan Konsultasi SKPD",
+              "pagu": 458359800,
+              "realisasi": 46553290,
+              "realisasiBulanIni": 0,
+              "fisik": 13.9
+            },
+            {
+              "nama": "Penatausahaan Arsip Dinamis pada SKPD",
+              "pagu": 795600,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyediaan Jasa Penunjang Urusan Pemerintahan Daerah",
+              "pagu": 1182203440,
+              "realisasi": 85114480,
+              "realisasiBulanIni": 27632970,
+              "fisik": 7.56
+            },
+            {
+              "nama": "Penyediaan Jasa Pelayanan Umum Kantor",
+              "pagu": 1182203440,
+              "realisasi": 85114480,
+              "realisasiBulanIni": 27632970,
+              "fisik": 7.56
+            },
+            {
+              "nama": "Pemeliharaan Barang Milik Daerah Penunjang Urusan Pemerintahan Daerah",
+              "pagu": 285041552,
+              "realisasi": 52232000,
+              "realisasiBulanIni": 0,
+              "fisik": 19.55
+            },
+            {
+              "nama": "Penyediaan Jasa Pemeliharaan, Biaya Pemeliharaan dan Pajak Kendaraan Perorangan Dinas atau Kendaraan Dinas Jabatan",
+              "pagu": 24999700,
+              "realisasi": 8064000,
+              "realisasiBulanIni": 0,
+              "fisik": 37.95
+            },
+            {
+              "nama": "Penyediaan Jasa Pemeliharaan, Biaya Pemeliharaan, Pajak dan Perizinan Kendaraan Dinas Operasional atau Lapangan",
+              "pagu": 44843000,
+              "realisasi": 9968000,
+              "realisasiBulanIni": 0,
+              "fisik": 25.83
+            },
+            {
+              "nama": "Pemeliharaan Aset Tak Berwujud",
+              "pagu": 67013852,
+              "realisasi": 34200000,
+              "realisasiBulanIni": 0,
+              "fisik": 51.73
+            },
+            {
+              "nama": "Pemeliharaan/Rehabilitasi Gedung Kantor dan Bangunan Lainnya",
+              "pagu": 16720000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pemeliharaan/Rehabilitasi Sarana dan Prasarana Gedung Kantor atau Bangunan Lainnya",
+              "pagu": 131465000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            }
+          ]
+        },
+        {
+          "namaProgram": "PROGRAM PERENCANAAN PENGENDALIAN, DAN EVALUASI PEMBANGUNAN DAERAH",
+          "pagu": 6318553764,
+          "realisasiTot": 969487419,
+          "realisasiBulanIni": 195232024,
+          "fisikPersen": 17.38,
+          "subKegiatan": [
+            {
+              "nama": "Penyusunan Perencanaan dan Pendanaan",
+              "pagu": 339609650,
+              "realisasi": 55743830,
+              "realisasiBulanIni": 25850000,
+              "fisik": 20.78
+            },
+            {
+              "nama": "Koordinasi Penyusunan dan Penetapan Dokumen Perencanaan Pembangunan Daerah Provinsi",
+              "pagu": 339609650,
+              "realisasi": 55743830,
+              "realisasiBulanIni": 25850000,
+              "fisik": 20.78
+            },
+            {
+              "nama": "Pengendalian, Evaluasi dan Pelaporan Bidang Perencanaan Pembangunan Daerah",
+              "pagu": 5978944114,
+              "realisasi": 913743589,
+              "realisasiBulanIni": 169382024,
+              "fisik": 17.18
+            },
+            {
+              "nama": "Koordinasi Pengendalian Perencanaan dan Pelaksanaan Pembangunan Daerah di Provinsi",
+              "pagu": 5859388064,
+              "realisasi": 913743589,
+              "realisasiBulanIni": 169382024,
+              "fisik": 17.53
+            },
+            {
+              "nama": "Monitoring, Evaluasi dan Penyusunan Laporan Berkala Pelaksanaan Pembangunan Daerah",
+              "pagu": 91786050,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Fasilitasi/Evaluasi Dokumen Perencanaan Pembangunan Daerah Kabupaten/Kota",
+              "pagu": 27770000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            }
+          ]
+        },
+        {
+          "namaProgram": "PROGRAM KOORDINASI DAN SINKRONISASI PERENCANAAN PEMBANGUNAN DAERAH",
+          "pagu": 1927599450,
+          "realisasiTot": 210997888,
+          "realisasiBulanIni": 105443386,
+          "fisikPersen": 14.99,
+          "subKegiatan": [
+            {
+              "nama": "Koordinasi Perencanaan Bidang Pemerintahan dan Pembangunan Manusia",
+              "pagu": 716958000,
+              "realisasi": 100192482,
+              "realisasiBulanIni": 48933081,
+              "fisik": 17.55
+            },
+            {
+              "nama": "Koordinasi Penyusunan Dokumen Perencanaan Pembangunan Daerah Bidang Pemerintahan (RPJPD, RPJMD dan RKPD)",
+              "pagu": 107708000,
+              "realisasi": 2185000,
+              "realisasiBulanIni": 0,
+              "fisik": 6.56
+            },
+            {
+              "nama": "Pelaksanaan Monitoring dan Evaluasi Penyusunan Dokumen Perencanaan Pembangunan Perangkat Daerah Bidang Pembangunan Manusia",
+              "pagu": 518050000,
+              "realisasi": 96397482,
+              "realisasiBulanIni": 48933081,
+              "fisik": 21.32
+            },
+            {
+              "nama": "Koordinasi Pelaksanaan Sinergitas dan Harmonisasi Perencanaan Pembangunan Daerah Bidang Pembangunan Manusia",
+              "pagu": 91200000,
+              "realisasi": 1610000,
+              "realisasiBulanIni": 0,
+              "fisik": 9.1
+            },
+            {
+              "nama": "Koordinasi Perencanaan Bidang Perekonomian dan SDA (Sumber Daya Alam)",
+              "pagu": 604349650,
+              "realisasi": 74745420,
+              "realisasiBulanIni": 33247660,
+              "fisik": 17.53
+            },
+            {
+              "nama": "Koordinasi Penyusunan Dokumen Perencanaan Pembangunan Daerah Bidang Perekonomian (RPJPD, RPJMD dan RKPD)",
+              "pagu": 110518300,
+              "realisasi": 6881000,
+              "realisasiBulanIni": 0,
+              "fisik": 7.54
+            },
+            {
+              "nama": "Pelaksanaan Monitoring dan Evaluasi Penyusunan Dokumen Perencanaan Pembangunan Perangkat Daerah Bidang Perekonomian",
+              "pagu": 84133000,
+              "realisasi": 12687660,
+              "realisasiBulanIni": 11647660,
+              "fisik": 19.31
+            },
+            {
+              "nama": "Koordinasi Pelaksanaan Sinergitas dan Harmonisasi Perencanaan Pembangunan Daerah Bidang SDA",
+              "pagu": 409698350,
+              "realisasi": 55176760,
+              "realisasiBulanIni": 21600000,
+              "fisik": 19.86
+            },
+            {
+              "nama": "Koordinasi Perencanaan Bidang Infrastruktur dan Kewilayahan",
+              "pagu": 606291800,
+              "realisasi": 36059986,
+              "realisasiBulanIni": 23262645,
+              "fisik": 9.44
+            },
+            {
+              "nama": "Pelaksanaan Monitoring dan Evaluasi Penyusunan Dokumen Perencanaan Pembangunan Perangkat Daerah Bidang Infrastruktur",
+              "pagu": 122634800,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Koordinasi Penyusunan Dokumen Perencanaan Pembangunan Daerah Bidang Kewilayahan (RPJPD, RPJMD dan RKPD)",
+              "pagu": 66974000,
+              "realisasi": 9155000,
+              "realisasiBulanIni": 7765000,
+              "fisik": 16.56
+            },
+            {
+              "nama": "Koordinasi Pelaksanaan Sinergitas dan Harmonisasi Perencanaan Pembangunan Daerah Bidang Kewilayahan",
+              "pagu": 416683000,
+              "realisasi": 26904986,
+              "realisasiBulanIni": 15497645,
+              "fisik": 11.07
+            }
+          ]
+        },
+        {
+          "namaProgram": "PROGRAM PENELITIAN DAN PENGEMBANGAN DAERAH",
+          "pagu": 2293988850,
+          "realisasiTot": 0,
+          "realisasiBulanIni": 0,
+          "fisikPersen": 0,
+          "subKegiatan": [
+            {
+              "nama": "Penelitian dan Pengembangan Bidang Penyelenggaraan Pemerintahan dan Pengkajian Peraturan",
+              "pagu": 183271100,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Fasilitasi, Pelaksanaan dan Evaluasi Penelitian dan Pengembangan Bidang Pemerintahan Umum",
+              "pagu": 183271100,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pengembangan Inovasi dan Teknologi",
+              "pagu": 2110717750,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Diseminasi Jenis, Prosedur dan Metode Penyelenggaraan Pemerintahan Daerah yang Bersifat Inovatif",
+              "pagu": 2107437750,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Sosialisasi dan Diseminasi Hasil-Hasil Kelitbangan",
+              "pagu": 3280000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            }
+          ]
+        }
+      ],
+      "bmbk": [
+        {
+          "namaProgram": "PROGRAM PENUNJANG URUSAN PEMERINTAHAN DAERAH PROVINSI",
+          "pagu": 53625238807.54,
+          "realisasiTot": 19534790618,
+          "realisasiBulanIni": 4608033952,
+          "fisikPersen": 36.74,
+          "subKegiatan": [
+            {
+              "nama": "Perencanaan, Penganggaran, dan Evaluasi Kinerja Perangkat Daerah",
+              "pagu": 400016300,
+              "realisasi": 44315000,
+              "realisasiBulanIni": 21320000,
+              "fisik": 11.08
+            },
+            {
+              "nama": "Penyusunan Dokumen Perencanaan Perangkat Daerah",
+              "pagu": 175612500,
+              "realisasi": 7770000,
+              "realisasiBulanIni": 7770000,
+              "fisik": 4.42
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan Dokumen RKA- SKPD",
+              "pagu": 15756100,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan Dokumen Perubahan RKA-SKPD",
+              "pagu": 21736100,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan DPA-SKPD",
+              "pagu": 17209200,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan Perubahan DPA- SKPD",
+              "pagu": 22460500,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan Laporan Capaian Kinerja dan Ikhtisar Realisasi Kinerja SKPD",
+              "pagu": 69896100,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Evaluasi Kinerja Perangkat Daerah",
+              "pagu": 77345800,
+              "realisasi": 36545000,
+              "realisasiBulanIni": 13550000,
+              "fisik": 47.25
+            },
+            {
+              "nama": "Administrasi Keuangan Perangkat Daerah",
+              "pagu": 37428356680.13,
+              "realisasi": 18404152859,
+              "realisasiBulanIni": 4374842777,
+              "fisik": 49.17
+            },
+            {
+              "nama": "Penyediaan Gaji dan Tunjangan ASN",
+              "pagu": 36979840830.13,
+              "realisasi": 18269200859,
+              "realisasiBulanIni": 4373122777,
+              "fisik": 49.4
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan Laporan Keuangan Bulanan/ Triwulanan/Semesteran SKPD",
+              "pagu": 448515850,
+              "realisasi": 134952000,
+              "realisasiBulanIni": 1720000,
+              "fisik": 30.09
+            },
+            {
+              "nama": "Administrasi Barang Milik Daerah pada Perangkat Daerah",
+              "pagu": 170590900,
+              "realisasi": 29770000,
+              "realisasiBulanIni": 16230000,
+              "fisik": 17.45
+            },
+            {
+              "nama": "Penyusunan Perencanaan Kebutuhan Barang Milik Daerah SKPD",
+              "pagu": 101488950,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pembinaan, Pengawasan, dan Pengendalian Barang Milik Daerah pada SKPD",
+              "pagu": 43140000,
+              "realisasi": 29770000,
+              "realisasiBulanIni": 16230000,
+              "fisik": 69.01
+            },
+            {
+              "nama": "Penatausahaan Barang Milik Daerah pada SKPD",
+              "pagu": 25961950,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Administrasi Pendapatan Daerah Kewenangan Perangkat Daerah",
+              "pagu": 34408100,
+              "realisasi": 12010000,
+              "realisasiBulanIni": 0,
+              "fisik": 34.91
+            },
+            {
+              "nama": "Pelaporan Pengelolaan Retribusi Daerah",
+              "pagu": 34408100,
+              "realisasi": 12010000,
+              "realisasiBulanIni": 0,
+              "fisik": 34.91
+            },
+            {
+              "nama": "Administrasi Kepegawaian Perangkat Daerah",
+              "pagu": 52014000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pendataan dan Pengolahan Administrasi Kepegawaian",
+              "pagu": 52014000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Administrasi Umum Perangkat Daerah",
+              "pagu": 7755714232,
+              "realisasi": 346399873,
+              "realisasiBulanIni": 54458352,
+              "fisik": 4.3
+            },
+            {
+              "nama": "Penyediaan Komponen Instalasi Listrik/Penerangan Bangunan Kantor",
+              "pagu": 84682450,
+              "realisasi": 3047000,
+              "realisasiBulanIni": 0,
+              "fisik": 3.59
+            },
+            {
+              "nama": "Penyediaan Peralatan dan Perlengkapan Kantor",
+              "pagu": 1085266832,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyediaan Peralatan Rumah Tangga",
+              "pagu": 80311650,
+              "realisasi": 7124000,
+              "realisasiBulanIni": 0,
+              "fisik": 8.87
+            },
+            {
+              "nama": "Penyediaan Barang Cetakan dan Penggandaan",
+              "pagu": 80493000,
+              "realisasi": 4270000,
+              "realisasiBulanIni": 0,
+              "fisik": 5.3
+            },
+            {
+              "nama": "Penyediaan Bahan/Material",
+              "pagu": 4955456400,
+              "realisasi": 26758240,
+              "realisasiBulanIni": 24385000,
+              "fisik": 0.27
+            },
+            {
+              "nama": "Fasilitasi Kunjungan Tamu",
+              "pagu": 66771700,
+              "realisasi": 3877000,
+              "realisasiBulanIni": 3877000,
+              "fisik": 5.81
+            },
+            {
+              "nama": "Penyelenggaraan Rapat Koordinasi dan Konsultasi SKPD",
+              "pagu": 1402732200,
+              "realisasi": 301323633,
+              "realisasiBulanIni": 26196352,
+              "fisik": 21.49
+            },
+            {
+              "nama": "Pengadaan Barang Milik Daerah Penunjang Urusan Pemerintah Daerah",
+              "pagu": 1738895411.41,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pengadaan Alat Besar",
+              "pagu": 1177945000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pengadaan Peralatan dan Mesin Lainnya",
+              "pagu": 560950411.41,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyediaan Jasa Penunjang Urusan Pemerintahan Daerah",
+              "pagu": 2051820114,
+              "realisasi": 440946714,
+              "realisasiBulanIni": 67699187,
+              "fisik": 26.75
+            },
+            {
+              "nama": "Penyediaan Jasa Komunikasi, Sumber Daya Air dan Listrik",
+              "pagu": 1399000130,
+              "realisasi": 291677454,
+              "realisasiBulanIni": 46290611,
+              "fisik": 28.7
+            },
+            {
+              "nama": "Penyediaan Jasa Peralatan dan Perlengkapan Kantor",
+              "pagu": 131660200,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyediaan Jasa Pelayanan Umum Kantor",
+              "pagu": 521159784,
+              "realisasi": 149269260,
+              "realisasiBulanIni": 21408576,
+              "fisik": 28.26
+            },
+            {
+              "nama": "Pemeliharaan Barang Milik Daerah Penunjang Urusan Pemerintahan Daerah",
+              "pagu": 3993423070,
+              "realisasi": 257196172,
+              "realisasiBulanIni": 73483636,
+              "fisik": 8.25
+            },
+            {
+              "nama": "Penyediaan Jasa Pemeliharaan, Biaya Pemeliharaan dan Pajak Kendaraan Perorangan Dinas atau Kendaraan Dinas Jabatan",
+              "pagu": 1576270000,
+              "realisasi": 231029244,
+              "realisasiBulanIni": 54688636,
+              "fisik": 19.8
+            },
+            {
+              "nama": "Penyediaan Jasa Pemeliharaan, Biaya Pemeliharaan, Pajak dan Perizinan Kendaraan Dinas Operasional atau Lapangan",
+              "pagu": 30780000,
+              "realisasi": 5366928,
+              "realisasiBulanIni": 0,
+              "fisik": 17.44
+            },
+            {
+              "nama": "Pemeliharaan Peralatan dan Mesin Lainnya",
+              "pagu": 1886596120,
+              "realisasi": 20800000,
+              "realisasiBulanIni": 18795000,
+              "fisik": 0.63
+            },
+            {
+              "nama": "Pemeliharaan/Rehabilitasi Gedung Kantor dan Bangunan Lainnya",
+              "pagu": 499776950,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            }
+          ]
+        },
+        {
+          "namaProgram": "PROGRAM PENYELENGGARAAN JALAN",
+          "pagu": 1165002100872.84,
+          "realisasiTot": 139945768523,
+          "realisasiBulanIni": 31699484943,
+          "fisikPersen": 12.15,
+          "subKegiatan": [
+            {
+              "nama": "Penyelenggaraan Jalan Provinsi",
+              "pagu": 1165002100872.84,
+              "realisasi": 139945768523,
+              "realisasiBulanIni": 31699484943,
+              "fisik": 12.15
+            },
+            {
+              "nama": "Rekonstruksi Jalan",
+              "pagu": 1108574315480.84,
+              "realisasi": 138884618783,
+              "realisasiBulanIni": 31243005893,
+              "fisik": 12.53
+            },
+            {
+              "nama": "Penyusunan Rencana, Kebijakan, Strategi dan Teknis Pengembangan Jaringan Jalan serta Perencanaan Teknis Penyelenggaraan Jalan dan Jembatan",
+              "pagu": 2965354580,
+              "realisasi": 190172042,
+              "realisasiBulanIni": 143889100,
+              "fisik": 7.76
+            },
+            {
+              "nama": "Survey Kondisi Jalan/Jembatan",
+              "pagu": 405292400,
+              "realisasi": 114781640,
+              "realisasiBulanIni": 53090500,
+              "fisik": 28.79
+            },
+            {
+              "nama": "Pemeliharaan Rutin Jalan",
+              "pagu": 15832884228,
+              "realisasi": 604869638,
+              "realisasiBulanIni": 197567650,
+              "fisik": 6.4
+            },
+            {
+              "nama": "Rehabilitasi Jembatan",
+              "pagu": 1354954400,
+              "realisasi": 23615000,
+              "realisasiBulanIni": 0,
+              "fisik": 1.74
+            },
+            {
+              "nama": "Pengawasan Penyelenggaraan Jalan Kewenangan Provinsi",
+              "pagu": 2876347000,
+              "realisasi": 7305000,
+              "realisasiBulanIni": 4905000,
+              "fisik": 13.96
+            },
+            {
+              "nama": "Pembangunan Jembatan",
+              "pagu": 5744619200,
+              "realisasi": 3419620,
+              "realisasiBulanIni": 0,
+              "fisik": 0.06
+            },
+            {
+              "nama": "Pemeliharaan Rutin Jembatan",
+              "pagu": 1221331584,
+              "realisasi": 11475000,
+              "realisasiBulanIni": 0,
+              "fisik": 13.89
+            },
+            {
+              "nama": "Pembangunan Jalan",
+              "pagu": 25304444800,
+              "realisasi": 60851800,
+              "realisasiBulanIni": 43886800,
+              "fisik": 2.4
+            },
+            {
+              "nama": "Pemantauan dan Evaluasi Penyelenggaraan Jalan/Jembatan Kewenangan Provinsi",
+              "pagu": 722557200,
+              "realisasi": 44660000,
+              "realisasiBulanIni": 13140000,
+              "fisik": 4.39
+            }
+          ]
+        },
+        {
+          "namaProgram": "PROGRAM PENGEMBANGAN JASA KONSTRUKSI",
+          "pagu": 670392400,
+          "realisasiTot": 63333570,
+          "realisasiBulanIni": 21960000,
+          "fisikPersen": 9.45,
+          "subKegiatan": [
+            {
+              "nama": "Penyelenggaraan Pelatihan Tenaga Ahli Konstruksi",
+              "pagu": 563742850,
+              "realisasi": 45905320,
+              "realisasiBulanIni": 17230000,
+              "fisik": 8.14
+            },
+            {
+              "nama": "Pelatihan Tenaga Kerja Konstruksi Kualifikasi Ahli",
+              "pagu": 413742950,
+              "realisasi": 45905320,
+              "realisasiBulanIni": 17230000,
+              "fisik": 11.1
+            },
+            {
+              "nama": "Fasilitasi Sertifikasi Tenaga Kerja Konstruksi Kualifikasi Ahli",
+              "pagu": 149999900,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyelenggaraan Sistem Informasi Jasa Konstruksi (SIPJAKI) Cakupan Daerah Provinsi",
+              "pagu": 31967850,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Peningkatan Kapasitas Pengelolaan SIPJAKI",
+              "pagu": 31967850,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Kebijakan Khusus Terhadap Penyelenggaraan Jasa Konstruksi",
+              "pagu": 74681700,
+              "realisasi": 17428250,
+              "realisasiBulanIni": 4730000,
+              "fisik": 23.34
+            },
+            {
+              "nama": "Pengawasan dan Evaluasi Tertib Penyelenggaraan Jasa Konstruksi Provinsi dan Lintas Kabupaten/Kota",
+              "pagu": 51092350,
+              "realisasi": 17428250,
+              "realisasiBulanIni": 4730000,
+              "fisik": 34.11
+            },
+            {
+              "nama": "Pengawasan dan Evaluasi Tertib Pemanfaatan Produk Jasa Konstruksi Provinsi dan Lintas Kabupaten/Kota",
+              "pagu": 13274350,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pengawasan dan Evaluasi Tertib Usaha Jasa Konstruksi Provinsi dan Lintas Kabupaten/Kota",
+              "pagu": 10315000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            }
+          ]
+        }
+      ],
+      "bpbd": [
+        {
+          "namaProgram": "PROGRAM PENUNJANG URUSAN PEMERINTAHAN DAERAH PROVINSI",
+          "pagu": 7488328499.83,
+          "realisasiTot": 3667914761,
+          "realisasiBulanIni": 871433618,
+          "fisikPersen": 52.57,
+          "subKegiatan": [
+            {
+              "nama": "Perencanaan, Penganggaran, dan Evaluasi Kinerja Perangkat Daerah",
+              "pagu": 5022000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan DPA-SKPD",
+              "pagu": 5022000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Administrasi Keuangan Perangkat Daerah",
+              "pagu": 6265548293.83,
+              "realisasi": 3361875540,
+              "realisasiBulanIni": 796312620,
+              "fisik": 57.95
+            },
+            {
+              "nama": "Penyediaan Gaji dan Tunjangan ASN",
+              "pagu": 6265548293.83,
+              "realisasi": 3361875540,
+              "realisasiBulanIni": 796312620,
+              "fisik": 57.95
+            },
+            {
+              "nama": "Administrasi Kepegawaian Perangkat Daerah",
+              "pagu": 4820250,
+              "realisasi": 2268285,
+              "realisasiBulanIni": 705960,
+              "fisik": 47.06
+            },
+            {
+              "nama": "Pendataan dan Pengolahan Administrasi Kepegawaian",
+              "pagu": 4820250,
+              "realisasi": 2268285,
+              "realisasiBulanIni": 705960,
+              "fisik": 47.06
+            },
+            {
+              "nama": "Administrasi Umum Perangkat Daerah",
+              "pagu": 172003500,
+              "realisasi": 32869833,
+              "realisasiBulanIni": 12537789,
+              "fisik": 19.11
+            },
+            {
+              "nama": "Penyediaan Peralatan dan Perlengkapan Kantor",
+              "pagu": 989400,
+              "realisasi": 987789,
+              "realisasiBulanIni": 987789,
+              "fisik": 99.84
+            },
+            {
+              "nama": "Fasilitasi Kunjungan Tamu",
+              "pagu": 9956500,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyelenggaraan Rapat Koordinasi dan Konsultasi SKPD",
+              "pagu": 161057600,
+              "realisasi": 31882044,
+              "realisasiBulanIni": 11550000,
+              "fisik": 19.8
+            },
+            {
+              "nama": "Penyediaan Jasa Penunjang Urusan Pemerintahan Daerah",
+              "pagu": 958033956,
+              "realisasi": 270901103,
+              "realisasiBulanIni": 61877249,
+              "fisik": 28.28
+            },
+            {
+              "nama": "Penyediaan Jasa Komunikasi, Sumber Daya Air dan Listrik",
+              "pagu": 234275820,
+              "realisasi": 67621103,
+              "realisasiBulanIni": 11057249,
+              "fisik": 28.87
+            },
+            {
+              "nama": "Penyediaan Jasa Pelayanan Umum Kantor",
+              "pagu": 723758136,
+              "realisasi": 203280000,
+              "realisasiBulanIni": 50820000,
+              "fisik": 28.09
+            },
+            {
+              "nama": "Pemeliharaan Barang Milik Daerah Penunjang Urusan Pemerintahan Daerah",
+              "pagu": 82900500,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyediaan Jasa Pemeliharaan, Biaya Pemeliharaan dan Pajak Kendaraan Perorangan Dinas atau Kendaraan Dinas Jabatan",
+              "pagu": 82900500,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            }
+          ]
+        },
+        {
+          "namaProgram": "PROGRAM PENANGGULANGAN BENCANA",
+          "pagu": 2743176300,
+          "realisasiTot": 166297102,
+          "realisasiBulanIni": 1272000,
+          "fisikPersen": 6.06,
+          "subKegiatan": [
+            {
+              "nama": "Pelayanan Pencegahan dan Kesiapsiagaan Terhadap Bencana",
+              "pagu": 410247100,
+              "realisasi": 455320,
+              "realisasiBulanIni": 0,
+              "fisik": 0.11
+            },
+            {
+              "nama": "Penyusunan Rencana Penanggulangan Bencana Provinsi",
+              "pagu": 194370400,
+              "realisasi": 455320,
+              "realisasiBulanIni": 0,
+              "fisik": 0.23
+            },
+            {
+              "nama": "Pengendalian Operasi dan Penyediaan Sarana Prasarana Kesiapsiagaan Terhadap Bencana",
+              "pagu": 215876700,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pelayanan Penyelamatan dan Evakuasi Korban Bencana",
+              "pagu": 2183177400,
+              "realisasi": 148931782,
+              "realisasiBulanIni": 1272000,
+              "fisik": 6.82
+            },
+            {
+              "nama": "Penyediaan Logistik Penyelamatan dan Evakuasi Korban Bencana",
+              "pagu": 1769832600,
+              "realisasi": 50897600,
+              "realisasiBulanIni": 1272000,
+              "fisik": 2.88
+            },
+            {
+              "nama": "Respon Cepat Penanganan Darurat Bencana",
+              "pagu": 413344800,
+              "realisasi": 98034182,
+              "realisasiBulanIni": 0,
+              "fisik": 23.72
+            },
+            {
+              "nama": "Penataan Sistem Dasar Penanggulangan Bencana",
+              "pagu": 149751800,
+              "realisasi": 16910000,
+              "realisasiBulanIni": 0,
+              "fisik": 11.29
+            },
+            {
+              "nama": "Koordinasi Penanganan Pascabencana Provinsi",
+              "pagu": 149751800,
+              "realisasi": 16910000,
+              "realisasiBulanIni": 0,
+              "fisik": 11.29
+            }
+          ]
+        }
+      ],
+      "dishub": [
+        {
+          "namaProgram": "PROGRAM PENUNJANG URUSAN PEMERINTAHAN DAERAH PROVINSI",
+          "pagu": 32669331643.14,
+          "realisasiTot": 15694548376,
+          "realisasiBulanIni": 4000076770,
+          "fisikPersen": 48.05,
+          "subKegiatan": [
+            {
+              "nama": "Perencanaan, Penganggaran, dan Evaluasi Kinerja Perangkat Daerah",
+              "pagu": 127643000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyusunan Dokumen Perencanaan Perangkat Daerah",
+              "pagu": 40321000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan Perubahan DPA- SKPD",
+              "pagu": 3342000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Evaluasi Kinerja Perangkat Daerah",
+              "pagu": 83980000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Administrasi Keuangan Perangkat Daerah",
+              "pagu": 29607558645.14,
+              "realisasi": 15155658909,
+              "realisasiBulanIni": 3724329597,
+              "fisik": 51.19
+            },
+            {
+              "nama": "Penyediaan Gaji dan Tunjangan ASN",
+              "pagu": 29603830445.14,
+              "realisasi": 15155658909,
+              "realisasiBulanIni": 3724329597,
+              "fisik": 51.19
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan Laporan Keuangan Bulanan/ Triwulanan/Semesteran SKPD",
+              "pagu": 3728200,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Administrasi Barang Milik Daerah pada Perangkat Daerah",
+              "pagu": 5900200,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pembinaan, Pengawasan, dan Pengendalian Barang Milik Daerah pada SKPD",
+              "pagu": 5900200,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Administrasi Kepegawaian Perangkat Daerah",
+              "pagu": 4741500,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pendataan dan Pengolahan Administrasi Kepegawaian",
+              "pagu": 4741500,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Administrasi Umum Perangkat Daerah",
+              "pagu": 268881200,
+              "realisasi": 66402741,
+              "realisasiBulanIni": 16485000,
+              "fisik": 25.36
+            },
+            {
+              "nama": "Penyediaan Komponen Instalasi Listrik/Penerangan Bangunan Kantor",
+              "pagu": 15526800,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyediaan Peralatan dan Perlengkapan Kantor",
+              "pagu": 34697000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyediaan Barang Cetakan dan Penggandaan",
+              "pagu": 34236400,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyelenggaraan Rapat Koordinasi dan Konsultasi SKPD",
+              "pagu": 179444000,
+              "realisasi": 66402741,
+              "realisasiBulanIni": 16485000,
+              "fisik": 38
+            },
+            {
+              "nama": "Penatausahaan Arsip Dinamis pada SKPD",
+              "pagu": 4977000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pengadaan Barang Milik Daerah Penunjang Urusan Pemerintah Daerah",
+              "pagu": 49361000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pengadaan Sarana dan Prasarana Pendukung Gedung Kantor atau Bangunan Lainnya",
+              "pagu": 49361000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyediaan Jasa Penunjang Urusan Pemerintahan Daerah",
+              "pagu": 2032084964,
+              "realisasi": 456948726,
+              "realisasiBulanIni": 243724173,
+              "fisik": 22.56
+            },
+            {
+              "nama": "Penyediaan Jasa Komunikasi, Sumber Daya Air dan Listrik",
+              "pagu": 460065140,
+              "realisasi": 134322694,
+              "realisasiBulanIni": 20727506,
+              "fisik": 29.42
+            },
+            {
+              "nama": "Penyediaan Jasa Pelayanan Umum Kantor",
+              "pagu": 1572019824,
+              "realisasi": 322626032,
+              "realisasiBulanIni": 222996667,
+              "fisik": 20.55
+            },
+            {
+              "nama": "Pemeliharaan Barang Milik Daerah Penunjang Urusan Pemerintahan Daerah",
+              "pagu": 573161134,
+              "realisasi": 15538000,
+              "realisasiBulanIni": 15538000,
+              "fisik": 2.73
+            },
+            {
+              "nama": "Penyediaan Jasa Pemeliharaan, Biaya Pemeliharaan, Pajak dan Perizinan Kendaraan Dinas Operasional atau Lapangan",
+              "pagu": 231563900,
+              "realisasi": 15538000,
+              "realisasiBulanIni": 15538000,
+              "fisik": 6.75
+            },
+            {
+              "nama": "Pemeliharaan Aset Tetap Lainnya",
+              "pagu": 32280500,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pemeliharaan/Rehabilitasi Gedung Kantor dan Bangunan Lainnya",
+              "pagu": 309316734,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            }
+          ]
+        },
+        {
+          "namaProgram": "PROGRAM PENYELENGGARAAN LALU LINTAS DAN ANGKUTAN JALAN (LLAJ)",
+          "pagu": 41082732180,
+          "realisasiTot": 16116138098,
+          "realisasiBulanIni": 3226804557,
+          "fisikPersen": 39.23,
+          "subKegiatan": [
+            {
+              "nama": "Penyediaan Perlengkapan Jalan di Jalan Provinsi",
+              "pagu": 500176400,
+              "realisasi": 4300000,
+              "realisasiBulanIni": 4300000,
+              "fisik": 0.86
+            },
+            {
+              "nama": "Penyediaan Perlengkapan Jalan di Jalan Provinsi",
+              "pagu": 500176400,
+              "realisasi": 4300000,
+              "realisasiBulanIni": 4300000,
+              "fisik": 0.86
+            },
+            {
+              "nama": "Pengelolaan Terminal Penumpang Tipe B",
+              "pagu": 55341000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pengawasan Operasional Terminal Penumpang Tipe B",
+              "pagu": 55341000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pelaksanaan Manajemen dan Rekayasa Lalu Lintas untuk Jaringan Jalan Provinsi",
+              "pagu": 46967000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Forum Lalu Lintas dan Angkutan Jalan untuk Jaringan Jalan Provinsi",
+              "pagu": 46967000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Persetujuan Hasil Analisis Dampak Lalu Lintas (Andalalin) untuk Jalan Provinsi",
+              "pagu": 9910000,
+              "realisasi": 2150000,
+              "realisasiBulanIni": 2150000,
+              "fisik": 22
+            },
+            {
+              "nama": "Pengawasan Pelaksanaan Rekomendasi Andalalin",
+              "pagu": 9910000,
+              "realisasi": 2150000,
+              "realisasiBulanIni": 2150000,
+              "fisik": 22
+            },
+            {
+              "nama": "Audit dan Inspeksi Keselamatan LLAJ di Jalan",
+              "pagu": 10180000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pelaksanaan Inspeksi, Audit dan Pemantauan Sistem Manajemen Keselamatan Perusahaan Angkutan Umum",
+              "pagu": 10180000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyediaan Angkutan Umum untuk Jasa Angkutan Orang dan/atau Barang Antar Kota dalam 1 (satu) Daerah Provinsi",
+              "pagu": 40419865780,
+              "realisasi": 16098138098,
+              "realisasiBulanIni": 3208804557,
+              "fisik": 39.83
+            },
+            {
+              "nama": "Pengendalian dan Pengawasan Ketersediaan Angkutan Umum untuk Jasa Angkutan Orang dan/atau Barang Antar Kota dalam 1 (satu) Provinsi",
+              "pagu": 224965780,
+              "realisasi": 196285514,
+              "realisasiBulanIni": 9430000,
+              "fisik": 87.8
+            },
+            {
+              "nama": "Penyediaan Angkutan Umum untuk Jasa Angkutan Orang dan/atau Barang Antar Kota dalam 1 (satu) Daerah Provinsi",
+              "pagu": 40194900000,
+              "realisasi": 15901852584,
+              "realisasiBulanIni": 3199374557,
+              "fisik": 39.56
+            },
+            {
+              "nama": "Penetapan Kawasan Perkotaan untuk Pelayanan Angkutan Perkotaan yang Melampaui Batas 1 (satu) Daerah Kabupaten/Kota dalam 1 (satu) Daerah Provinsi",
+              "pagu": 40292000,
+              "realisasi": 11550000,
+              "realisasiBulanIni": 11550000,
+              "fisik": 28.99
+            },
+            {
+              "nama": "Perumusan Kebijakan Penetapan Kawasan Perkotaan untuk Angkutan Perkotaan Kewenangan Provinsi",
+              "pagu": 40292000,
+              "realisasi": 11550000,
+              "realisasiBulanIni": 11550000,
+              "fisik": 28.99
+            }
+          ]
+        },
+        {
+          "namaProgram": "PROGRAM PENGELOLAAN PELAYARAN",
+          "pagu": 9633662496,
+          "realisasiTot": 336825000,
+          "realisasiBulanIni": 336825000,
+          "fisikPersen": 3.5,
+          "subKegiatan": [
+            {
+              "nama": "Fasilitasi Pemenuhan Persyaratan Perolehan Izin Usaha Angkutan Laut Kewenangan Provinsi dalam Sistem Pelayanan Perizinan Berusaha Terintegrasi Secara Elektronik",
+              "pagu": 28767500,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Fasilitasi Pemenuhan Persyaratan Perolehan Izin Angkutan Laut Pelayaran Rakyat Kewenangan Provinsi dalam Sistem Pelayanan Perizinan Berusaha Terintegrasi Secara Elektronik",
+              "pagu": 1575500,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pembangunan, Penerbitan Izin Pembangunan dan Pengoperasian Pelabuhan Pengumpan Regional",
+              "pagu": 9603319496,
+              "realisasi": 336825000,
+              "realisasiBulanIni": 336825000,
+              "fisik": 3.51
+            },
+            {
+              "nama": "Pembangunan Pelabuhan Pengumpan Regional",
+              "pagu": 9431959696,
+              "realisasi": 336825000,
+              "realisasiBulanIni": 336825000,
+              "fisik": 3.57
+            },
+            {
+              "nama": "Pengoperasian dan Pemeliharaan Pelabuhan Pengumpan Regional",
+              "pagu": 34891000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pengawasan Pengoperasian Pelabuhan Pengumpan Regional",
+              "pagu": 136468800,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            }
+          ]
+        },
+        {
+          "namaProgram": "PROGRAM PENGELOLAAN PERKERETAAPIAN",
+          "pagu": 5968000,
+          "realisasiTot": 0,
+          "realisasiBulanIni": 0,
+          "fisikPersen": 0,
+          "subKegiatan": [
+            {
+              "nama": "Penetapan Jaringan Jalur Kereta Api yang Jaringannya Melebihi Wilayah 1 (satu) Daerah Kabupaten/Kota dalam 1 (satu) Daerah Provinsi",
+              "pagu": 5968000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Perumusan Kebijakan Penetapan Jaringan Jalur Kereta Api yang Jaringannya Kewenangan Provinsi",
+              "pagu": 5968000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            }
+          ]
+        }
+      ],
+      "kominfo": [
+        {
+          "namaProgram": "PROGRAM PENUNJANG URUSAN PEMERINTAHAN DAERAH PROVINSI",
+          "pagu": 15137401951.78,
+          "realisasiTot": 6993209500,
+          "realisasiBulanIni": 1761359301,
+          "fisikPersen": 46.23,
+          "subKegiatan": [
+            {
+              "nama": "Perencanaan, Penganggaran, dan Evaluasi Kinerja Perangkat Daerah",
+              "pagu": 16717700,
+              "realisasi": 3221500,
+              "realisasiBulanIni": 3221500,
+              "fisik": 20.37
+            },
+            {
+              "nama": "Penyusunan Dokumen Perencanaan Perangkat Daerah",
+              "pagu": 15863700,
+              "realisasi": 3221500,
+              "realisasiBulanIni": 3221500,
+              "fisik": 21.47
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan Laporan Capaian Kinerja dan Ikhtisar Realisasi Kinerja SKPD",
+              "pagu": 427000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Evaluasi Kinerja Perangkat Daerah",
+              "pagu": 427000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Administrasi Keuangan Perangkat Daerah",
+              "pagu": 12467769202.78,
+              "realisasi": 6373034588,
+              "realisasiBulanIni": 1519180398,
+              "fisik": 51.12
+            },
+            {
+              "nama": "Penyediaan Gaji dan Tunjangan ASN",
+              "pagu": 12465791402.78,
+              "realisasi": 6371509588,
+              "realisasiBulanIni": 1517655398,
+              "fisik": 51.11
+            },
+            {
+              "nama": "Koordinasi dan Pelaksanaan Akuntansi SKPD",
+              "pagu": 1550800,
+              "realisasi": 1525000,
+              "realisasiBulanIni": 1525000,
+              "fisik": 100
+            },
+            {
+              "nama": "Penyusunan Pelaporan dan Analisis Prognosis Realisasi Anggaran",
+              "pagu": 427000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Administrasi Barang Milik Daerah pada Perangkat Daerah",
+              "pagu": 733800,
+              "realisasi": 420000,
+              "realisasiBulanIni": 420000,
+              "fisik": 58.19
+            },
+            {
+              "nama": "Penyusunan Perencanaan Kebutuhan Barang Milik Daerah SKPD",
+              "pagu": 427000,
+              "realisasi": 420000,
+              "realisasiBulanIni": 420000,
+              "fisik": 100
+            },
+            {
+              "nama": "Penatausahaan Barang Milik Daerah pada SKPD",
+              "pagu": 306800,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Administrasi Kepegawaian Perangkat Daerah",
+              "pagu": 427000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pendataan dan Pengolahan Administrasi Kepegawaian",
+              "pagu": 427000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Administrasi Umum Perangkat Daerah",
+              "pagu": 273155800,
+              "realisasi": 31842874,
+              "realisasiBulanIni": 5847000,
+              "fisik": 12.66
+            },
+            {
+              "nama": "Fasilitasi Kunjungan Tamu",
+              "pagu": 10029200,
+              "realisasi": 5847000,
+              "realisasiBulanIni": 5847000,
+              "fisik": 60
+            },
+            {
+              "nama": "Penyelenggaraan Rapat Koordinasi dan Konsultasi SKPD",
+              "pagu": 262699600,
+              "realisasi": 25995874,
+              "realisasiBulanIni": 0,
+              "fisik": 10.87
+            },
+            {
+              "nama": "Penatausahaan Arsip Dinamis pada SKPD",
+              "pagu": 427000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pengadaan Barang Milik Daerah Penunjang Urusan Pemerintah Daerah",
+              "pagu": 193677653,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pengadaan Sarana dan Prasarana Gedung Kantor atau Bangunan Lainnya",
+              "pagu": 193677653,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyediaan Jasa Penunjang Urusan Pemerintahan Daerah",
+              "pagu": 2036325016,
+              "realisasi": 566651158,
+              "realisasiBulanIni": 214651023,
+              "fisik": 27.83
+            },
+            {
+              "nama": "Penyediaan Jasa Surat Menyurat",
+              "pagu": 427000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyediaan Jasa Pelayanan Umum Kantor",
+              "pagu": 2035898016,
+              "realisasi": 566651158,
+              "realisasiBulanIni": 214651023,
+              "fisik": 27.83
+            },
+            {
+              "nama": "Pemeliharaan Barang Milik Daerah Penunjang Urusan Pemerintahan Daerah",
+              "pagu": 148159780,
+              "realisasi": 18039380,
+              "realisasiBulanIni": 18039380,
+              "fisik": 12.91
+            },
+            {
+              "nama": "Penyediaan Jasa Pemeliharaan, Biaya Pemeliharaan dan Pajak Kendaraan Perorangan Dinas atau Kendaraan Dinas Jabatan",
+              "pagu": 109150780,
+              "realisasi": 10571880,
+              "realisasiBulanIni": 10571880,
+              "fisik": 10.53
+            },
+            {
+              "nama": "Pemeliharaan/Rehabilitasi Sarana dan Prasarana Gedung Kantor atau Bangunan Lainnya",
+              "pagu": 39009000,
+              "realisasi": 7467500,
+              "realisasiBulanIni": 7467500,
+              "fisik": 19.59
+            },
+            {
+              "nama": "Fasilitasi Materi dan Komunikasi Pimpinan",
+              "pagu": 436000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyiapan Materi Pimpinan",
+              "pagu": 436000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            }
+          ]
+        },
+        {
+          "namaProgram": "PROGRAM PENGELOLAAN INFORMASI DAN KOMUNIKASI PUBLIK",
+          "pagu": 12212454696,
+          "realisasiTot": 1491560077,
+          "realisasiBulanIni": 557342867,
+          "fisikPersen": 12.49,
+          "subKegiatan": [
+            {
+              "nama": "Pengelolaan Informasi dan Komunikasi Publik Pemerintah Daerah Provinsi",
+              "pagu": 12212454696,
+              "realisasi": 1491560077,
+              "realisasiBulanIni": 557342867,
+              "fisik": 12.49
+            },
+            {
+              "nama": "Penyusunan Konten",
+              "pagu": 1131167496,
+              "realisasi": 467398701,
+              "realisasiBulanIni": 90342869,
+              "fisik": 41.32
+            },
+            {
+              "nama": "Dukungan Administratif, Keuangan, dan Tata Kelola Komisi Informasi di Daerah dalam Rangka Penyelesaian Sengketa Informasi Publik",
+              "pagu": 1616478900,
+              "realisasi": 712999900,
+              "realisasiBulanIni": 287000000,
+              "fisik": 44.96
+            },
+            {
+              "nama": "Kemitraan Komunikasi dengan Komunitas Informasi Masyarakat",
+              "pagu": 447000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pelayanan Informasi Publik",
+              "pagu": 447000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Monitoring Informasi Kebijakan, Opini, dan Aspirasi Publik",
+              "pagu": 447000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pengelolaan Media Komunikasi Publik",
+              "pagu": 9463467300,
+              "realisasi": 311161476,
+              "realisasiBulanIni": 179999998,
+              "fisik": 3.5
+            }
+          ]
+        },
+        {
+          "namaProgram": "PROGRAM PENGELOLAAN APLIKASI INFORMATIKA",
+          "pagu": 5293172828,
+          "realisasiTot": 1185885209,
+          "realisasiBulanIni": 280735709,
+          "fisikPersen": 23.72,
+          "subKegiatan": [
+            {
+              "nama": "Pengelolaan E-government di Lingkup Pemerintah Daerah Provinsi",
+              "pagu": 5293172828,
+              "realisasi": 1185885209,
+              "realisasiBulanIni": 280735709,
+              "fisik": 23.72
+            },
+            {
+              "nama": "Koordinasi pemanfaatan Portal Pelayanan Pemerintah Daerah yang terintegrasi",
+              "pagu": 28835800,
+              "realisasi": 3346709,
+              "realisasiBulanIni": 3346709,
+              "fisik": 60.95
+            },
+            {
+              "nama": "Koordinasi dan Fasilitasi Penyelenggaraan Provinsi Cerdas",
+              "pagu": 397496248,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyediaan Akses Internet",
+              "pagu": 4566840780,
+              "realisasi": 1182538500,
+              "realisasiBulanIni": 277389000,
+              "fisik": 26.88
+            },
+            {
+              "nama": "Penyelenggaraan Sistem Penghubung Layanan Pemerintah Daerah dalam rangka interopabilitas data dan integrasi layanan",
+              "pagu": 300000000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 3.33
+            }
+          ]
+        },
+        {
+          "namaProgram": "PROGRAM PENYELENGGARAAN STATISTIK SEKTORAL",
+          "pagu": 229888000,
+          "realisasiTot": 1254000,
+          "realisasiBulanIni": 1254000,
+          "fisikPersen": 0.58,
+          "subKegiatan": [
+            {
+              "nama": "Penyelenggaraan Statistik Sektoral di Lingkup Daerah Provinsi",
+              "pagu": 229888000,
+              "realisasi": 1254000,
+              "realisasiBulanIni": 1254000,
+              "fisik": 0.58
+            },
+            {
+              "nama": "Pemenuhan Prinsip Satu Data Indonesia",
+              "pagu": 190447000,
+              "realisasi": 425000,
+              "realisasiBulanIni": 425000,
+              "fisik": 0.23
+            },
+            {
+              "nama": "Peningkatan kualitas statistik sektoral",
+              "pagu": 15247000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Peningkatan Kapasitas Kelembagaan Statistik Sektoral",
+              "pagu": 23747000,
+              "realisasi": 410000,
+              "realisasiBulanIni": 410000,
+              "fisik": 1.88
+            },
+            {
+              "nama": "Koordinasi dan kolaborasi dalam penyelenggaraan statistik sektoral",
+              "pagu": 447000,
+              "realisasi": 419000,
+              "realisasiBulanIni": 419000,
+              "fisik": 100
+            }
+          ]
+        },
+        {
+          "namaProgram": "PROGRAM PENYELENGGARAAN PERSANDIAN UNTUK PENGAMANAN INFORMASI",
+          "pagu": 109011000,
+          "realisasiTot": 0,
+          "realisasiBulanIni": 0,
+          "fisikPersen": 0,
+          "subKegiatan": [
+            {
+              "nama": "Penyelenggaraan Persandian untuk Pengamanan Informasi Pemerintah Daerah Provinsi",
+              "pagu": 47111000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pelaksanaan Keamanan Informasi Pemerintahan Daerah Berbasis Elektronik dan Non Elektronik",
+              "pagu": 969000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyediaan Layanan Keamanan Informasi dan Persandian Pemerintah Daerah",
+              "pagu": 29100000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pengelolaan Sumber Daya Keamanan Informasi dan Persandian Pemerintah Daerah berdasarkan Analisis Kebutuhan",
+              "pagu": 15900000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penetapan Kebijakan Tata Kelola Keamanan Informasi dan Persandian Pemerintah Daerah",
+              "pagu": 1142000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penetapan Pola Hubungan Komunikasi Sandi antar Perangkat Daerah Provinsi",
+              "pagu": 61900000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Operasionalisasi Layanan Keamanan Informasi dan Persandian Pemerintah Daerah",
+              "pagu": 61900000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            }
+          ]
+        }
+      ],
+      "perkimtan": [
+        {
+          "namaProgram": "PROGRAM PENUNJANG URUSAN PEMERINTAHAN DAERAH PROVINSI",
+          "pagu": 14718767011.46,
+          "realisasiTot": 6689148974,
+          "realisasiBulanIni": 1601450489,
+          "fisikPersen": 50.94,
+          "subKegiatan": [
+            {
+              "nama": "Perencanaan, Penganggaran, dan Evaluasi Kinerja Perangkat Daerah",
+              "pagu": 52007200,
+              "realisasi": 12854300,
+              "realisasiBulanIni": 5720000,
+              "fisik": 26.39
+            },
+            {
+              "nama": "Penyusunan Dokumen Perencanaan Perangkat Daerah",
+              "pagu": 15682500,
+              "realisasi": 5981450,
+              "realisasiBulanIni": 3640000,
+              "fisik": 38.14
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan Dokumen RKA- SKPD",
+              "pagu": 5264800,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan Dokumen Perubahan RKA-SKPD",
+              "pagu": 7411800,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan DPA-SKPD",
+              "pagu": 3211800,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan Perubahan DPA- SKPD",
+              "pagu": 3211800,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan Laporan Capaian Kinerja dan Ikhtisar Realisasi Kinerja SKPD",
+              "pagu": 1195200,
+              "realisasi": 197150,
+              "realisasiBulanIni": 0,
+              "fisik": 16.49
+            },
+            {
+              "nama": "Evaluasi Kinerja Perangkat Daerah",
+              "pagu": 10775400,
+              "realisasi": 2292000,
+              "realisasiBulanIni": 2080000,
+              "fisik": 21.27
+            },
+            {
+              "nama": "Pelaksanaan Forum Perangkat Daerah Berdasarkan Bidang Urusan yang Diampu dalam Rangka Penyusunan Dokumen Perencanaan Perangkat Daerah",
+              "pagu": 5253900,
+              "realisasi": 4383700,
+              "realisasiBulanIni": 0,
+              "fisik": 100
+            },
+            {
+              "nama": "Administrasi Keuangan Perangkat Daerah",
+              "pagu": 13194943977.51,
+              "realisasi": 6463104802,
+              "realisasiBulanIni": 1562981516,
+              "fisik": 54.65
+            },
+            {
+              "nama": "Penyediaan Gaji dan Tunjangan ASN",
+              "pagu": 13186658977.51,
+              "realisasi": 6462641802,
+              "realisasiBulanIni": 1562518516,
+              "fisik": 54.68
+            },
+            {
+              "nama": "Penyediaan Administrasi Pelaksanaan Tugas ASN",
+              "pagu": 1814800,
+              "realisasi": 298000,
+              "realisasiBulanIni": 298000,
+              "fisik": 16.42
+            },
+            {
+              "nama": "Pelaksanaan Penatausahaan dan Pengujian/Verifikasi Keuangan SKPD",
+              "pagu": 678800,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Koordinasi dan Pelaksanaan Akuntansi SKPD",
+              "pagu": 766600,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan Laporan Keuangan Akhir Tahun SKPD",
+              "pagu": 746800,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pengelolaan dan Penyiapan Bahan Tanggapan Pemeriksaan",
+              "pagu": 2352200,
+              "realisasi": 165000,
+              "realisasiBulanIni": 165000,
+              "fisik": 7.01
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan Laporan Keuangan Bulanan/ Triwulanan/Semesteran SKPD",
+              "pagu": 838800,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyusunan Pelaporan dan Analisis Prognosis Realisasi Anggaran",
+              "pagu": 1087000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Administrasi Barang Milik Daerah pada Perangkat Daerah",
+              "pagu": 2275650,
+              "realisasi": 190475,
+              "realisasiBulanIni": 120475,
+              "fisik": 3.08
+            },
+            {
+              "nama": "Penyusunan Perencanaan Kebutuhan Barang Milik Daerah SKPD",
+              "pagu": 821800,
+              "realisasi": 120475,
+              "realisasiBulanIni": 120475,
+              "fisik": 0
+            },
+            {
+              "nama": "Pengamanan Barang Milik Daerah SKPD",
+              "pagu": 504200,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penatausahaan Barang Milik Daerah pada SKPD",
+              "pagu": 949650,
+              "realisasi": 70000,
+              "realisasiBulanIni": 0,
+              "fisik": 7.37
+            },
+            {
+              "nama": "Administrasi Pendapatan Daerah Kewenangan Perangkat Daerah",
+              "pagu": 800000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pelaporan Pengelolaan Retribusi Daerah",
+              "pagu": 800000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Administrasi Kepegawaian Perangkat Daerah",
+              "pagu": 59197100,
+              "realisasi": 109500,
+              "realisasiBulanIni": 109500,
+              "fisik": 0
+            },
+            {
+              "nama": "Pendataan dan Pengolahan Administrasi Kepegawaian",
+              "pagu": 408800,
+              "realisasi": 109500,
+              "realisasiBulanIni": 109500,
+              "fisik": 0
+            },
+            {
+              "nama": "Monitoring, Evaluasi, dan Penilaian Kinerja Pegawai",
+              "pagu": 608400,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pendidikan dan Pelatihan Pegawai Berdasarkan Tugas dan Fungsi",
+              "pagu": 58179900,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Administrasi Umum Perangkat Daerah",
+              "pagu": 219992700,
+              "realisasi": 82224975,
+              "realisasiBulanIni": 11197000,
+              "fisik": 37.24
+            },
+            {
+              "nama": "Penyediaan Komponen Instalasi Listrik/Penerangan Bangunan Kantor",
+              "pagu": 20779500,
+              "realisasi": 2778500,
+              "realisasiBulanIni": 0,
+              "fisik": 13.37
+            },
+            {
+              "nama": "Penyediaan Peralatan Rumah Tangga",
+              "pagu": 14143000,
+              "realisasi": 2775500,
+              "realisasiBulanIni": 0,
+              "fisik": 19.62
+            },
+            {
+              "nama": "Fasilitasi Kunjungan Tamu",
+              "pagu": 27439100,
+              "realisasi": 5684000,
+              "realisasiBulanIni": 0,
+              "fisik": 20.71
+            },
+            {
+              "nama": "Penyelenggaraan Rapat Koordinasi dan Konsultasi SKPD",
+              "pagu": 157308000,
+              "realisasi": 70684975,
+              "realisasiBulanIni": 10895000,
+              "fisik": 44.93
+            },
+            {
+              "nama": "Dukungan Pelaksanaan Sistem Pemerintahan Berbasis Elektronik pada SKPD",
+              "pagu": 323100,
+              "realisasi": 302000,
+              "realisasiBulanIni": 302000,
+              "fisik": 0
+            },
+            {
+              "nama": "Pengadaan Barang Milik Daerah Penunjang Urusan Pemerintah Daerah",
+              "pagu": 576000000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pengadaan Kendaraan Perorangan Dinas atau Kendaraan Dinas Jabatan",
+              "pagu": 576000000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyediaan Jasa Penunjang Urusan Pemerintahan Daerah",
+              "pagu": 362353763.95,
+              "realisasi": 120223122,
+              "realisasiBulanIni": 21321998,
+              "fisik": 50
+            },
+            {
+              "nama": "Penyediaan Jasa Komunikasi, Sumber Daya Air dan Listrik",
+              "pagu": 350353763.95,
+              "realisasi": 117023122,
+              "realisasiBulanIni": 19721998,
+              "fisik": 50
+            },
+            {
+              "nama": "Penyediaan Jasa Pelayanan Umum Kantor",
+              "pagu": 12000000,
+              "realisasi": 3200000,
+              "realisasiBulanIni": 1600000,
+              "fisik": 50
+            },
+            {
+              "nama": "Pemeliharaan Barang Milik Daerah Penunjang Urusan Pemerintahan Daerah",
+              "pagu": 251196620,
+              "realisasi": 10441800,
+              "realisasiBulanIni": 0,
+              "fisik": 4.16
+            },
+            {
+              "nama": "Penyediaan Jasa Pemeliharaan, Biaya Pemeliharaan dan Pajak Kendaraan Perorangan Dinas atau Kendaraan Dinas Jabatan",
+              "pagu": 16487500,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyediaan Jasa Pemeliharaan, Biaya Pemeliharaan, Pajak dan Perizinan Kendaraan Dinas Operasional atau Lapangan",
+              "pagu": 179500120,
+              "realisasi": 10441800,
+              "realisasiBulanIni": 0,
+              "fisik": 5.82
+            },
+            {
+              "nama": "Pemeliharaan Peralatan dan Mesin Lainnya",
+              "pagu": 55209000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            }
+          ]
+        },
+        {
+          "namaProgram": "PROGRAM PENGEMBANGAN PERUMAHAN",
+          "pagu": 1501283250,
+          "realisasiTot": 13429319,
+          "realisasiBulanIni": 7170000,
+          "fisikPersen": 1.94,
+          "subKegiatan": [
+            {
+              "nama": "Pendataan Penyediaan dan Rehabilitasi Rumah Korban Bencana atau Relokasi Program Provinsi",
+              "pagu": 43459450,
+              "realisasi": 195000,
+              "realisasiBulanIni": 0,
+              "fisik": 0.45
+            },
+            {
+              "nama": "Pendataan Tingkat Kerusakan Rumah Akibat Bencana Provinsi",
+              "pagu": 43459450,
+              "realisasi": 195000,
+              "realisasiBulanIni": 0,
+              "fisik": 0.45
+            },
+            {
+              "nama": "Pembangunan dan Rehabilitasi Rumah Korban Bencana atau Relokasi Program Provinsi",
+              "pagu": 1457823800,
+              "realisasi": 13234319,
+              "realisasiBulanIni": 7170000,
+              "fisik": 1.98
+            },
+            {
+              "nama": "Rehabilitasi Rumah bagi Korban Bencana",
+              "pagu": 1029889900,
+              "realisasi": 13234319,
+              "realisasiBulanIni": 7170000,
+              "fisik": 2.81
+            },
+            {
+              "nama": "Pembangunan Rumah bagi Korban Bencana",
+              "pagu": 427933900,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            }
+          ]
+        },
+        {
+          "namaProgram": "PROGRAM KAWASAN PERMUKIMAN",
+          "pagu": 3665122700,
+          "realisasiTot": 90978880,
+          "realisasiBulanIni": 6208360,
+          "fisikPersen": 3.39,
+          "subKegiatan": [
+            {
+              "nama": "Penataan Kawasan Permukiman Kumuh dengan Luas 10 (Sepuluh) Ha sampai dengan di Bawah 15 (Lima Belas) Ha",
+              "pagu": 122946500,
+              "realisasi": 20340150,
+              "realisasiBulanIni": 3380000,
+              "fisik": 18.55
+            },
+            {
+              "nama": "Koordinasi dan Sinkronisasi Penyelenggaraan Kawasan Permukiman",
+              "pagu": 122946500,
+              "realisasi": 20340150,
+              "realisasiBulanIni": 3380000,
+              "fisik": 18.55
+            },
+            {
+              "nama": "Peningkatan Kualitas Kawasan Permukiman Kumuh dengan Luas 10 (Sepuluh) Ha sampai dengan di Bawah 15 (Lima Belas) Ha",
+              "pagu": 3542176200,
+              "realisasi": 70638730,
+              "realisasiBulanIni": 2828360,
+              "fisik": 2.87
+            },
+            {
+              "nama": "Perbaikan Rumah Tidak Layak Huni dalam Kawasan Permukiman dengan Luas 10 (Sepuluh) Ha sampai dengan di Bawah 15 (Lima Belas) Ha",
+              "pagu": 3187643800,
+              "realisasi": 64540370,
+              "realisasiBulanIni": 0,
+              "fisik": 2.7
+            },
+            {
+              "nama": "Pembangunan Rumah Baru Layak Huni untuk Peningkatan Kualitas Permukiman Kumuh dengan Luas 10 (Sepuluh) Ha sampai dengan di Bawah 15 (Lima Belas) Ha",
+              "pagu": 354532400,
+              "realisasi": 6098360,
+              "realisasiBulanIni": 2828360,
+              "fisik": 4.33
+            }
+          ]
+        },
+        {
+          "namaProgram": "PROGRAM PENINGKATAN PRASARANA, SARANA DAN UTILITAS UMUM (PSU)",
+          "pagu": 3661735000,
+          "realisasiTot": 1776000,
+          "realisasiBulanIni": 520000,
+          "fisikPersen": 0.05,
+          "subKegiatan": [
+            {
+              "nama": "Urusan Penyelenggaraan PSU Permukiman",
+              "pagu": 3661735000,
+              "realisasi": 1776000,
+              "realisasiBulanIni": 520000,
+              "fisik": 0.05
+            },
+            {
+              "nama": "Perbaikan Prasarana, Sarana, dan Utilitas Umum Permukiman",
+              "pagu": 3661735000,
+              "realisasi": 1776000,
+              "realisasiBulanIni": 520000,
+              "fisik": 0.05
+            }
+          ]
+        },
+        {
+          "namaProgram": "PROGRAM PENGADAAN TANAH UNTUK KEPENTINGAN UMUM",
+          "pagu": 210014260671.48,
+          "realisasiTot": 5818307184,
+          "realisasiBulanIni": 3944862769,
+          "fisikPersen": 24.94,
+          "subKegiatan": [
+            {
+              "nama": "Penetapan Lokasi Pengadaan Tanah untuk Kepentingan Umum di Wilayah Provinsi",
+              "pagu": 210014260671.48,
+              "realisasi": 5818307184,
+              "realisasiBulanIni": 3944862769,
+              "fisik": 24.94
+            },
+            {
+              "nama": "Pemberitahuan Rencana Pembangunan dalam rangka Penetapan Lokasi Pengadaan Tanah untuk Kepentingan Umum",
+              "pagu": 210014260671.48,
+              "realisasi": 5818307184,
+              "realisasiBulanIni": 3944862769,
+              "fisik": 24.94
+            }
+          ]
+        },
+        {
+          "namaProgram": "PROGRAM REDISTRIBUSI TANAH DAN GANTI KERUGIAN TANAH KELEBIHAN MAKSIMUM DAN TANAH ABSENTEE",
+          "pagu": 41343800,
+          "realisasiTot": 0,
+          "realisasiBulanIni": 0,
+          "fisikPersen": 45.49,
+          "subKegiatan": [
+            {
+              "nama": "Penetapan Subyek dan Obyek Redistribusi Tanah Lintas Daerah Kabupaten/Kota dalam 1 (satu) Daerah Provinsi",
+              "pagu": 41343800,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 45.49
+            },
+            {
+              "nama": "Koordinasi dan Sinkronisasi Penataan Akses dalam Pemanfaatan Redistribusi Tanah Lintas Daerah Kabupaten/Kota",
+              "pagu": 21965200,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 44.15
+            },
+            {
+              "nama": "Koordinasi dalam rangka Penataan Aset Reforma Agraria",
+              "pagu": 19378600,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 47
+            }
+          ]
+        }
+      ],
+
+      "barjas": [
+
+      ],
+      "sdacktr": [
+        {
+          "namaProgram": "PROGRAM PENUNJANG URUSAN PEMERINTAHAN DAERAH PROVINSI",
+          "pagu": 47640085889.33,
+          "realisasiTot": 21220322673,
+          "realisasiBulanIni": 5305651408,
+          "fisikPersen": 44.59,
+          "subKegiatan": [
+            {
+              "nama": "Perencanaan, Penganggaran, dan Evaluasi Kinerja Perangkat Daerah",
+              "pagu": 627757100,
+              "realisasi": 90850000,
+              "realisasiBulanIni": 1680000,
+              "fisik": 14.47
+            },
+            {
+              "nama": "Penyusunan Dokumen Perencanaan Perangkat Daerah",
+              "pagu": 156237400,
+              "realisasi": 30804000,
+              "realisasiBulanIni": 990000,
+              "fisik": 19.72
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan Dokumen RKA- SKPD",
+              "pagu": 78221750,
+              "realisasi": 10312000,
+              "realisasiBulanIni": 430000,
+              "fisik": 13.18
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan Dokumen Perubahan RKA-SKPD",
+              "pagu": 33820000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan DPA-SKPD",
+              "pagu": 10995350,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan Perubahan DPA- SKPD",
+              "pagu": 12795350,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan Laporan Capaian Kinerja dan Ikhtisar Realisasi Kinerja SKPD",
+              "pagu": 274355250,
+              "realisasi": 49734000,
+              "realisasiBulanIni": 260000,
+              "fisik": 18.13
+            },
+            {
+              "nama": "Evaluasi Kinerja Perangkat Daerah",
+              "pagu": 9700000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pelaksanaan Forum Perangkat Daerah Berdasarkan Bidang Urusan yang Diampu dalam Rangka Penyusunan Dokumen Perencanaan Perangkat Daerah",
+              "pagu": 51632000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Administrasi Keuangan Perangkat Daerah",
+              "pagu": 36494914910.33,
+              "realisasi": 18994718828,
+              "realisasiBulanIni": 4470706725,
+              "fisik": 52.03
+            },
+            {
+              "nama": "Penyediaan Gaji dan Tunjangan ASN",
+              "pagu": 36245224110.33,
+              "realisasi": 18938653903,
+              "realisasiBulanIni": 4464046725,
+              "fisik": 52.25
+            },
+            {
+              "nama": "Koordinasi dan Pelaksanaan Akuntansi SKPD",
+              "pagu": 71640000,
+              "realisasi": 28410000,
+              "realisasiBulanIni": 6660000,
+              "fisik": 30.36
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan Laporan Keuangan Akhir Tahun SKPD",
+              "pagu": 10400000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pengelolaan dan Penyiapan Bahan Tanggapan Pemeriksaan",
+              "pagu": 10956000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Koordinasi dan Penyusunan Laporan Keuangan Bulanan/ Triwulanan/Semesteran SKPD",
+              "pagu": 144034800,
+              "realisasi": 27654925,
+              "realisasiBulanIni": 0,
+              "fisik": 19.2
+            },
+            {
+              "nama": "Penyusunan Pelaporan dan Analisis Prognosis Realisasi Anggaran",
+              "pagu": 12660000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Administrasi Barang Milik Daerah pada Perangkat Daerah",
+              "pagu": 124509100,
+              "realisasi": 1820000,
+              "realisasiBulanIni": 0,
+              "fisik": 1.46
+            },
+            {
+              "nama": "Penyusunan Perencanaan Kebutuhan Barang Milik Daerah SKPD",
+              "pagu": 15744800,
+              "realisasi": 1820000,
+              "realisasiBulanIni": 0,
+              "fisik": 11.56
+            },
+            {
+              "nama": "Pembinaan, Pengawasan, dan Pengendalian Barang Milik Daerah pada SKPD",
+              "pagu": 58429000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pemanfaatan Barang Milik Daerah SKPD",
+              "pagu": 50335300,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Administrasi Pendapatan Daerah Kewenangan Perangkat Daerah",
+              "pagu": 38550000,
+              "realisasi": 9390000,
+              "realisasiBulanIni": 1040000,
+              "fisik": 24.36
+            },
+            {
+              "nama": "Pelaporan Pengelolaan Retribusi Daerah",
+              "pagu": 38550000,
+              "realisasi": 9390000,
+              "realisasiBulanIni": 1040000,
+              "fisik": 24.36
+            },
+            {
+              "nama": "Administrasi Kepegawaian Perangkat Daerah",
+              "pagu": 13846950,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pendataan dan Pengolahan Administrasi Kepegawaian",
+              "pagu": 13846950,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Administrasi Umum Perangkat Daerah",
+              "pagu": 1367540250,
+              "realisasi": 73602823,
+              "realisasiBulanIni": 19964884,
+              "fisik": 7.34
+            },
+            {
+              "nama": "Penyediaan Komponen Instalasi Listrik/Penerangan Bangunan Kantor",
+              "pagu": 25282700,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyediaan Peralatan dan Perlengkapan Kantor",
+              "pagu": 292031100,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyediaan Peralatan Rumah Tangga",
+              "pagu": 32342250,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyediaan Barang Cetakan dan Penggandaan",
+              "pagu": 19996000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Fasilitasi Kunjungan Tamu",
+              "pagu": 39957000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyelenggaraan Rapat Koordinasi dan Konsultasi SKPD",
+              "pagu": 957931200,
+              "realisasi": 73602823,
+              "realisasiBulanIni": 19964884,
+              "fisik": 10.48
+            },
+            {
+              "nama": "Pengadaan Barang Milik Daerah Penunjang Urusan Pemerintah Daerah",
+              "pagu": 1814839500,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pengadaan Kendaraan Dinas Operasional atau Lapangan",
+              "pagu": 645354000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pengadaan Peralatan dan Mesin Lainnya",
+              "pagu": 1169485500,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyediaan Jasa Penunjang Urusan Pemerintahan Daerah",
+              "pagu": 6102126359,
+              "realisasi": 2036213367,
+              "realisasiBulanIni": 798532144,
+              "fisik": 33.37
+            },
+            {
+              "nama": "Penyediaan Jasa Komunikasi, Sumber Daya Air dan Listrik",
+              "pagu": 1277976035,
+              "realisasi": 342792522,
+              "realisasiBulanIni": 56914066,
+              "fisik": 26.82
+            },
+            {
+              "nama": "Penyediaan Jasa Pelayanan Umum Kantor",
+              "pagu": 4824150324,
+              "realisasi": 1693420845,
+              "realisasiBulanIni": 741618078,
+              "fisik": 35.1
+            },
+            {
+              "nama": "Pemeliharaan Barang Milik Daerah Penunjang Urusan Pemerintahan Daerah",
+              "pagu": 1056001720,
+              "realisasi": 13727655,
+              "realisasiBulanIni": 13727655,
+              "fisik": 1.3
+            },
+            {
+              "nama": "Penyediaan Jasa Pemeliharaan, Biaya Pemeliharaan, Pajak dan Perizinan Kendaraan Dinas Operasional atau Lapangan",
+              "pagu": 531820320,
+              "realisasi": 13727655,
+              "realisasiBulanIni": 13727655,
+              "fisik": 2.58
+            },
+            {
+              "nama": "Pemeliharaan Peralatan dan Mesin Lainnya",
+              "pagu": 9750000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pemeliharaan/Rehabilitasi Sarana dan Prasarana Gedung Kantor atau Bangunan Lainnya",
+              "pagu": 514431400,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            }
+          ]
+        },
+        {
+          "namaProgram": "PROGRAM PENGELOLAAN SUMBER DAYA AIR (SDA)",
+          "pagu": 435988315367,
+          "realisasiTot": 1533560477,
+          "realisasiBulanIni": 94360165,
+          "fisikPersen": 0.35,
+          "subKegiatan": [
+            {
+              "nama": "Pengelolaan SDA dan Bangunan Pengaman Pantai pada Wilayah Sungai Lintas Daerah Kabupaten/Kota",
+              "pagu": 54213476964,
+              "realisasi": 15650000,
+              "realisasiBulanIni": 3825000,
+              "fisik": 0.03
+            },
+            {
+              "nama": "Pembangunan Tanggul Sungai",
+              "pagu": 18811863097,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Koordinasi dan Sinkronisasi Peningkatan Kapasitas Kelembagaan Pengelolaan Sumber Daya Air Kewenangan Provinsi",
+              "pagu": 39650200,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Normalisasi/Restorasi Sungai",
+              "pagu": 20498357000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pembinaan dan Pemberdayaan Kelembagaan Pengelolaan Sumber Daya Air Kewenangan Provinsi",
+              "pagu": 41750600,
+              "realisasi": 7445000,
+              "realisasiBulanIni": 3825000,
+              "fisik": 17.83
+            },
+            {
+              "nama": "Penyusunan Rencana Teknis dan Dokumen Lingkungan Hidup untuk Konstruksi Bendungan, Embung, dan Bangunan Penampung Air Lainnya",
+              "pagu": 5399891067,
+              "realisasi": 2650000,
+              "realisasiBulanIni": 0,
+              "fisik": 0.05
+            },
+            {
+              "nama": "Pembangunan Embung",
+              "pagu": 9366916200,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pengelolaan Sistem Hidrologi dan Kualitas Air Wilayah Sungai Kewenangan Provinsi",
+              "pagu": 55048800,
+              "realisasi": 5555000,
+              "realisasiBulanIni": 0,
+              "fisik": 10.09
+            },
+            {
+              "nama": "Pengembangan dan Pengelolaan Sistem Irigasi Primer dan Sekunder pada Daerah Irigasi yang Luasnya 1000 Ha-3000 Ha dan Daerah Irigasi Lintas Daerah Kabupaten/Kota",
+              "pagu": 381774838403,
+              "realisasi": 1517910477,
+              "realisasiBulanIni": 90535165,
+              "fisik": 0.4
+            },
+            {
+              "nama": "Rehabilitasi Jaringan Irigasi Permukaan",
+              "pagu": 363904017150,
+              "realisasi": 156250000,
+              "realisasiBulanIni": 55255000,
+              "fisik": 0.04
+            },
+            {
+              "nama": "Operasi dan Pemeliharaan Jaringan Irigasi Permukaan",
+              "pagu": 652953000,
+              "realisasi": 88302439,
+              "realisasiBulanIni": 23517565,
+              "fisik": 13.52
+            },
+            {
+              "nama": "Operasi dan Pemeliharaan Bendung Irigasi",
+              "pagu": 96949200,
+              "realisasi": 8279845,
+              "realisasiBulanIni": 0,
+              "fisik": 8.75
+            },
+            {
+              "nama": "Penguatan Kapasitas Kelembagaan Pengelola Irigasi Kewenangan Provinsi",
+              "pagu": 53085400,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyusunan Rencana Teknis dan Dokumen Lingkungan Hidup untuk Konstruksi Irigasi dan Rawa",
+              "pagu": 16968804053,
+              "realisasi": 1248446393,
+              "realisasiBulanIni": 11762600,
+              "fisik": 7.36
+            },
+            {
+              "nama": "Penyiapan, Pelaksanaan dan Pengawasan Alokasi Air",
+              "pagu": 99029600,
+              "realisasi": 16631800,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            }
+          ]
+        },
+        {
+          "namaProgram": "PROGRAM PENGELOLAAN DAN PENGEMBANGAN SISTEM PENYEDIAAN AIR MINUM",
+          "pagu": 11782093702,
+          "realisasiTot": 291457392,
+          "realisasiBulanIni": 57394712,
+          "fisikPersen": 2.47,
+          "subKegiatan": [
+            {
+              "nama": "Pengelolaan dan Pengembangan Sistem Penyediaan Air Minum (SPAM) Lintas Kabupaten/Kota",
+              "pagu": 11782093702,
+              "realisasi": 291457392,
+              "realisasiBulanIni": 57394712,
+              "fisik": 2.47
+            },
+            {
+              "nama": "Pembangunan Sistem Penyediaan Air Minum (SPAM) Lintas Kabupaten/Kota",
+              "pagu": 11570907702,
+              "realisasi": 291457392,
+              "realisasiBulanIni": 57394712,
+              "fisik": 2.52
+            },
+            {
+              "nama": "Penyusunan Rencana, Kebijakan, Strategi dan Teknis Sistem Penyediaan Air Minum (SPAM) Lintas Kabupaten/Kota",
+              "pagu": 211186000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            }
+          ]
+        },
+        {
+          "namaProgram": "PROGRAM PENGEMBANGAN SISTEM DAN PENGELOLAAN PERSAMPAHAN REGIONAL",
+          "pagu": 21820000,
+          "realisasiTot": 0,
+          "realisasiBulanIni": 0,
+          "fisikPersen": 0,
+          "subKegiatan": [
+            {
+              "nama": "Pengembangan Sistem dan Pengelolaan Persampahan Regional",
+              "pagu": 21820000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pembinaan dan Pengawasan Pengembangan dan Pengelolaan TPA/TPST/SPA/TPS-3R/TPS Kabupaten/Kota",
+              "pagu": 21820000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            }
+          ]
+        },
+        {
+          "namaProgram": "PROGRAM PENGELOLAAN DAN PENGEMBANGAN SISTEM AIR LIMBAH",
+          "pagu": 10360000,
+          "realisasiTot": 0,
+          "realisasiBulanIni": 0,
+          "fisikPersen": 0,
+          "subKegiatan": [
+            {
+              "nama": "Pengelolaan dan Pengembangan Sistem Air Limbah Domestik Regional",
+              "pagu": 10360000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Pembinaan Pengelolaan dan Pengembangan Sistem Pengelolaan Air Limbah Domestik (SPALD) Kabupaten/Kota",
+              "pagu": 10360000,
+              "realisasi": 0,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            }
+          ]
+        },
+        {
+          "namaProgram": "PROGRAM PENATAAN BANGUNAN GEDUNG",
+          "pagu": 194374036000,
+          "realisasiTot": 74705514,
+          "realisasiBulanIni": 3465000,
+          "fisikPersen": 0.04,
+          "subKegiatan": [
+            {
+              "nama": "Penetapan dan Penyelenggaraan Bangunan Gedung untuk Kepentingan Strategis Daerah Provinsi",
+              "pagu": 194374036000,
+              "realisasi": 74705514,
+              "realisasiBulanIni": 3465000,
+              "fisik": 0.04
+            },
+            {
+              "nama": "Pelaksanaan Pengelolaan Rumah Negara",
+              "pagu": 79920000,
+              "realisasi": 22920924,
+              "realisasiBulanIni": 0,
+              "fisik": 28.68
+            },
+            {
+              "nama": "Pembangunan, Pemanfaatan, Pelestariaan dan Pembongkaran Bangunan Gedung untuk Kepentingan Strategis Daerah Provinsi",
+              "pagu": 194294116000,
+              "realisasi": 51784590,
+              "realisasiBulanIni": 3465000,
+              "fisik": 0.03
+            }
+          ]
+        },
+        {
+          "namaProgram": "PROGRAM PENATAAN BANGUNAN DAN LINGKUNGANNYA",
+          "pagu": 253355719768,
+          "realisasiTot": 201881302,
+          "realisasiBulanIni": 0,
+          "fisikPersen": 0,
+          "subKegiatan": [
+            {
+              "nama": "Penyelenggaraan Penataan Bangunan dan Lingkungan di Kawasan Strategis Daerah Provinsi dan Lintas Daerah Kabupaten/Kota",
+              "pagu": 253355719768,
+              "realisasi": 201881302,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penyusunan Rencana dan Teknis Tata Bangunan dan Lingkungan di Kawasan Strategis Daerah Provinsi dan Lintas Daerah Kabupaten/Kota",
+              "pagu": 20027039768,
+              "realisasi": 201621302,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            },
+            {
+              "nama": "Penataan Bangunan dan Lingkungan di Kawasan Strategis Daerah Provinsi dan Lintas Daerah Kabupaten/Kota",
+              "pagu": 233328680000,
+              "realisasi": 260000,
+              "realisasiBulanIni": 0,
+              "fisik": 0
+            }
+          ]
+        },
+        {
+          "namaProgram": "PROGRAM PENYELENGGARAAN PENATAAN RUANG",
+          "pagu": 746474600,
+          "realisasiTot": 62855836,
+          "realisasiBulanIni": 0,
+          "fisikPersen": 8.42,
+          "subKegiatan": [
+            {
+              "nama": "Penetapan Rencana Tata Ruang Wilayah dan Rencana Rinci Tata Ruang Provinsi",
+              "pagu": 200040200,
+              "realisasi": 29117114,
+              "realisasiBulanIni": 0,
+              "fisik": 14.56
+            },
+            {
+              "nama": "Penetapan Kebijakan dalam rangka Pelaksanaan Penataan Ruang",
+              "pagu": 200040200,
+              "realisasi": 29117114,
+              "realisasiBulanIni": 0,
+              "fisik": 14.56
+            },
+            {
+              "nama": "Koordinasi dan Sinkronisasi Perencanaan Tata Ruang",
+              "pagu": 281233500,
+              "realisasi": 23484722,
+              "realisasiBulanIni": 0,
+              "fisik": 8.35
+            },
+            {
+              "nama": "Evaluasi Rancangan Peraturan Daerah tentang RTRW Kabupaten/Kota",
+              "pagu": 281233500,
+              "realisasi": 23484722,
+              "realisasiBulanIni": 0,
+              "fisik": 8.35
+            },
+            {
+              "nama": "Koordinasi dan Sinkronisasi Pengendalian Pemanfataan Ruang Daerah Provinsi",
+              "pagu": 265200900,
+              "realisasi": 10254000,
+              "realisasiBulanIni": 0,
+              "fisik": 3.87
+            },
+            {
+              "nama": "Operasionalisasi Tugas dan Fungsi Forum Penataan Ruang",
+              "pagu": 265200900,
+              "realisasi": 10254000,
+              "realisasiBulanIni": 0,
+              "fisik": 3.87
+            }
+          ]
+        }
+      ],
+
+    };
+    let seluruhDataTrenOPD = {
+      "bappeda": {
+        "tren_fisik": [3.45, 10.11, 19.19, 26.02, 31.47, 40.53, 0, 0, 0, 0, 0, 0],
+        "tren_keuangan": [2.87, 8.59, 17.15, 23.66, 29.38, 38.5, 0, 0, 0, 0, 0, 0]
+      },
+      "bmbk": {
+        "tren_fisik": [0.01, 0.06, 0.12, 0.38, 0.53, 13.23, 0, 0, 0, 0, 0, 0],
+        "tren_keuangan": [0.15, 0.75, 4.51, 8.73, 10.11, 13.08, 0, 0, 0, 0, 0, 0]
+      },
+      "bpbd": {
+        "tren_fisik": [3.39, 8.77, 18.33, 25.38, 30.59, 40.1, 0, 0, 0, 0, 0, 0],
+        "tren_keuangan": [3.39, 8.4, 17.56, 23.8, 28.94, 37.47, 0, 0, 0, 0, 0, 0]
+      },
+      "dishub": {
+        "tren_fisik": [1.88, 7.82, 16.52, 19.5, 29.86, 38.55, 0, 0, 0, 0, 0, 0],
+        "tren_keuangan": [1.84, 7.82, 15.94, 18.9, 29.48, 38.55, 0, 0, 0, 0, 0, 0]
+      },
+      "kominfo": {
+        "tren_fisik": [1.87, 4.65, 10.46, 15.9, 22.24, 29.65, 0, 0, 0, 0, 0, 0],
+        "tren_keuangan": [1.87, 4.65, 10.44, 15.23, 21.44, 29.32, 0, 0, 0, 0, 0, 0]
+      },
+      "perkimtan": {
+        "tren_fisik": [0.29, 0.89, 1.62, 2.22, 24.8, 25.7, 0, 0, 0, 0, 0, 0],
+        "tren_keuangan": [0.28, 0.68, 1.34, 1.89, 3.02, 5.4, 0, 0, 0, 0, 0, 0]
+      },
+      "sdacktr": {
+        "tren_fisik": [0.21, 0.52, 1.05, 1.54, 1.89, 2.46, 0, 0, 0, 0, 0, 0],
+        "tren_keuangan": [0.21, 0.5, 1.01, 1.52, 1.9, 2.48, 0, 0, 0, 0, 0, 0]
+      }
+    };
+
+    // 1. PROSES PENGAMBILAN DATA JSON SECARA ASYNC
+    document.addEventListener("DOMContentLoaded", function () {
+      try {
+        console.log("Database Internal Terikat Secara Offline.");
+
+        // Panggil fungsi inisialisasi grafik mandiri Anda
+        if (typeof siapkanWadahGrafikPermanen === "function") {
+          siapkanWadahGrafikPermanen();
+        }
+
+        // Jalankan render awal dashboard
+        if (typeof renderDashboard === "function") {
+          renderDashboard();
+        }
+      } catch (error) {
+        console.error("Gagal memuat dashboard offline:", error);
+      }
+    });
+
+    // ==========================================================
+    // PENGATURAN AUDIO & VARIABEL KONTROL
+    // ==========================================================
+    const audioKlik = new Audio('tap_sound.mp3');
+
+    function putarSuara() {
+      audioKlik.currentTime = 0;
+      audioKlik.play().catch(e => { });
+    }
+
+    let opdAktif = "";
+    let dataTrenFisik = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    let dataTrenKeuangan = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    let chartInstanceGabungan = null;
+    let tampilkanAngkaGrafik = false;
+
+    const MASTER_BULAN = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
+    const VISITOR_URL = 'https://script.google.com/macros/s/AKfycby81UBUAjpUxB40pw3fUiy3og_iZFTo3OF3jotl-Ge4-c33NQ2de9XoGFoMTINgtUaI/exec';
+
+
+    const LOGO_OPD = {
+      "bappeda": "logo-bappeda.png",
+      "bpbd": "logo-bpbd.png",
+      "bmbk": "logo-bmbk.png",
+      "sdacktr": "logo-sdacktr.png",
+      "perkimtan": "logo-perkimtan.png",
+      "kominfo": "logo-kominfo.png",
+      "diskominfo": "logo-kominfo.png",
+      "dishub": "logo-dishub.png",
+      "barjas": "logo-barjas.png",
+      "DEFAULT": "logo-infras.png"
+    };
+
+
+
+    // ==========================================
+    // 2. INISIALISASI WADAH GRAFIK PERMANEN
+    // ==========================================
+    function siapkanWadahGrafikPermanen() {
+      // 1. Cari elemen judul rincian program
+      const judulRincian = document.getElementById('nama-opd-title');
+      if (!judulRincian) return;
+
+      // 2. Cari seluruh kotak kartu rincian utama
+      const kartuRincianUtama = judulRincian.closest('.card');
+      if (!kartuRincianUtama) return;
+
+      // 3. Buat kartu grafik baru
+      const grafikWrapper = document.createElement('div');
+      grafikWrapper.id = 'grafik-tren-wrapper';
+
+      // Samakan kelasnya dengan kartu-kartu utama Anda yang lain
+      grafikWrapper.className = 'card';
+
+      // KUNCI BORDER AWAL: Berikan border transparan 1px di sekeliling kartu agar tidak kaku/geser saat di-hover
+      grafikWrapper.style.cssText = "margin-bottom: 15px; display: none; transition: all 0.3s ease; border: 1.5px solid rgba(0, 0, 0, 0);";
+
+      // LOGIKA HOVER: Ubah warna border di sekeliling kartu menjadi biru
+      grafikWrapper.addEventListener('mouseenter', function () {
+        grafikWrapper.style.borderColor = "#0c6bdc"; // Warna biru khas dashboard Anda
+      });
+
+      // LOGIKA HOVER LEAVE: Kembalikan warna border sekeliling menjadi transparan kembali
+      grafikWrapper.addEventListener('mouseleave', function () {
+        grafikWrapper.style.borderColor = "rgba(0, 0, 0, 0)";
+      });
+
+      // 4. Sisipkan kartu grafik tepat di luar atas kartu rincian utama
+      kartuRincianUtama.parentNode.insertBefore(grafikWrapper, kartuRincianUtama);
+    }
+
+    // ==========================================
+    // 3. DROPDOWN HANDLER & GRAPH TOGGLE
+    // ==========================================
+    function gantiOPD(pilihan) {
+      putarSuara();
+      opdAktif = pilihan;
+
+      if (opdAktif && seluruhDataTrenOPD[opdAktif]) {
+        dataTrenFisik = seluruhDataTrenOPD[opdAktif].tren_fisik || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        dataTrenKeuangan = seluruhDataTrenOPD[opdAktif].tren_keuangan || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      } else {
+        dataTrenFisik = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        dataTrenKeuangan = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      }
+
+      renderDashboard();
+    }
+
+    function toggleAngkaGrafik() {
+      putarSuara();
+      tampilkanAngkaGrafik = !tampilkanAngkaGrafik;
+
+      const btn = document.getElementById('btn-toggle-angka');
+      if (btn) {
+        if (tampilkanAngkaGrafik) {
+          btn.innerHTML = '<i class="fa-solid fa-eye-slash"></i> Sembunyikan Nilai';
+          btn.style.background = '#28a745';
+          btn.style.borderColor = '#1e7e34';
+        } else {
+          btn.innerHTML = '<i class="fa-solid fa-eye"></i> Lihat Nilai';
+          btn.style.background = '#0c6bdc';
+          btn.style.borderColor = '#0a58b6';
+        }
+      }
+
+      if (chartInstanceGabungan) {
+        chartInstanceGabungan.options.plugins.datalabels.display = function (context) {
+          return tampilkanAngkaGrafik && context.dataset.data[context.dataIndex] > 0;
+        };
+        chartInstanceGabungan.update();
+      }
+    }
+
+    function toggleGarisTren(indexDataset) {
+      if (!chartInstanceGabungan) return;
+      putarSuara();
+
+      const saatIniTerlihat = chartInstanceGabungan.isDatasetVisible(indexDataset);
+      chartInstanceGabungan.setDatasetVisibility(indexDataset, !saatIniTerlihat);
+      chartInstanceGabungan.update();
+
+      const idElement = indexDataset === 0 ? 'legend-fisik' : 'legend-keuangan';
+      const elemenLegenda = document.getElementById(idElement);
+
+      if (elemenLegenda) {
+        if (saatIniTerlihat) {
+          elemenLegenda.style.opacity = '0.35';
+          elemenLegenda.style.textDecoration = 'line-through';
+        } else {
+          elemenLegenda.style.opacity = '1';
+          elemenLegenda.style.textDecoration = 'none';
+        }
+      }
+    }
+
+    // ==========================================
+    // 4. RENDERING DASHBOARD UTAMA
+    // ==========================================
+    function renderDashboard() {
+      let grandTotalPagu = 0;
+      let grandTotalRealisasi = 0;
+      let totalKegiatanCount = 0;
+
+      const mainContainer = document.getElementById('program-list');
+      const grafikWrapper = document.getElementById('grafik-tren-wrapper');
+      if (!mainContainer) return;
+
+      // Bersihkan daftar program lama
+      mainContainer.innerHTML = '';
+
+      // Hancurkan instance chart lama agar tidak bertumpuk di memori
+      if (chartInstanceGabungan) {
+        chartInstanceGabungan.destroy();
+        chartInstanceGabungan = null;
+      }
+
+      const selector = document.getElementById('opd-selector');
+      const headerLogo = document.getElementById('header-logo-img');
+      const headerTitle = document.getElementById('header-title-text');
+
+      // KONDISI JIKA BELUM ADA OPD YANG DIPILIH
+      if (opdAktif === "") {
+        if (headerLogo) headerLogo.src = LOGO_OPD["DEFAULT"];
+        if (headerTitle) headerTitle.textContent = "Dashboard Progres Realisasi Fisik & Keuangan 8 OPD Mitra";
+        document.getElementById('total-pagu-label').textContent = "Rp 0";
+        document.getElementById('total-realisasi-label').textContent = "Rp 0";
+        document.getElementById('sisa-pagu-label').textContent = "Rp 0";
+        document.getElementById('total-program-badge').textContent = "0 Program";
+        document.getElementById('total-kegiatan-badge').textContent = "0 Kegiatan";
+        document.getElementById('nama-opd-title').textContent = "Rincian Progres per Program: Silahkan pilih OPD terlebih dahulu";
+
+        // Sembunyikan wadah grafik secara aman
+        if (grafikWrapper) {
+          grafikWrapper.style.display = 'none';
+          grafikWrapper.innerHTML = '';
+        }
+        mainContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: #64748b; font-style: italic;">Belum ada OPD yang dipilih. Silakan pilih OPD pada menu di atas.</div>';
+        return;
+      }
+
+      // TAMPILKAN WADAH GRAFIK KARENA OPD SUDAH TERPILIH
+      if (grafikWrapper) {
+        grafikWrapper.style.display = 'block';
+      }
+
+      const namaOPDTerpilih = selector.options[selector.selectedIndex] ? selector.options[selector.selectedIndex].text : opdAktif.toUpperCase();
+      if (headerTitle) headerTitle.textContent = `Dashboard Progres Realisasi Fisik & Keuangan ${namaOPDTerpilih}`;
+
+      const namaOpdTitleElement = document.getElementById('nama-opd-title');
+      if (namaOpdTitleElement) {
+        namaOpdTitleElement.textContent = `Rincian Progres per Program: ${namaOPDTerpilih}`;
+      }
+
+      if (headerLogo) {
+        headerLogo.src = LOGO_OPD[opdAktif] || LOGO_OPD["DEFAULT"];
+      }
+
+      const dataDipilih = seluruhDataOPD[opdAktif] || [];
+
+      // MEMPERBARUI ISI WADAH GRAFIK SECARA DINAMIS (TANPA MEMBUAT KARTU BARU)
+      const teksTombol = tampilkanAngkaGrafik ? '<i class="fa-solid fa-eye-slash"></i> Sembunyikan Nilai' : '<i class="fa-solid fa-eye"></i> Lihat Nilai';
+      const bgTombol = tampilkanAngkaGrafik ? '#28a745' : '#0c6bdc';
+      const borderTombol = tampilkanAngkaGrafik ? '#1e7e34' : '#0a58b6';
+
+      if (grafikWrapper) {
+        grafikWrapper.innerHTML = `
+                    <div style="font-weight: bold; font-size: 14px; margin-bottom: 12px; color: #1e293b; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                        <span><i class="fa-solid fa-chart-line" style="color:#28a745; margin-right: 5px;"></i>Tren Bulanan Fisik & Keuangan</span>
+                        
+                        <div style="display: flex; align-items: center; gap: 18px;">
+                            <span id="legend-fisik" onclick="toggleGarisTren(0)" style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #475569; cursor: pointer; user-select: none; transition: all 0.2s;">
+                                <span style="width: 12px; height: 12px; background: #ff9800; display: inline-block; border-radius: 3px; box-shadow: 0 1px 3px rgba(255,152,0,0.4);"></span> Fisik
+                            </span>
+                            <span id="legend-keuangan" onclick="toggleGarisTren(1)" style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #475569; cursor: pointer; user-select: none; transition: all 0.2s;">
+                                <span style="width: 12px; height: 12px; background: #28a745; display: inline-block; border-radius: 3px; box-shadow: 0 1px 3px rgba(40,167,69,0.4);"></span> Keuangan
+                            </span>
+                            <button id="btn-toggle-angka" onclick="toggleAngkaGrafik()" style="background: ${bgTombol}; border: 1px solid ${borderTombol}; padding: 5px 10px; font-size: 11px; font-weight: 600; border-radius: 5px; cursor: pointer; color: #ffffff; display: flex; align-items: center; gap: 4px; transition: all 0.2s; height: 26px;">
+                                ${teksTombol}
+                            </button>
+                        </div>
+                    </div>
+                    <div style="height: 180px; position: relative;">
+                        <canvas id="canvasGabunganDinamis"></canvas>
+                    </div>
+                `;
+      }
+
+      if (dataDipilih.length === 0) {
+        document.getElementById('total-pagu-label').textContent = "Rp 0";
+        document.getElementById('total-realisasi-label').textContent = "Rp 0";
+        document.getElementById('sisa-pagu-label').textContent = "Rp 0";
+        document.getElementById('total-program-badge').textContent = "0 Program";
+        document.getElementById('total-kegiatan-badge').textContent = "0 Kegiatan";
+        mainContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: #64748b; font-style: italic;">Data rincian program untuk OPD ini belum tersedia.</div>';
+        initChartGabunganDinamis();
+        return;
+      }
+
+      // Looping data program kerja
+      dataDipilih.forEach((item, index) => {
+        const keuPersen = item.pagu > 0 ? ((item.realisasiTot / item.pagu) * 100).toFixed(2) : 0;
+        const sisa = item.pagu - item.realisasiTot;
+
+        grandTotalPagu += item.pagu;
+        grandTotalRealisasi += item.realisasiTot;
+        totalKegiatanCount += item.subKegiatan ? item.subKegiatan.length : 0;
+
+        const programCard = document.createElement('div');
+        programCard.className = 'card inner-card';
+        programCard.style.marginBottom = "15px";
+        programCard.innerHTML = `
+                <div class="program-header" onclick="putarSuara(); toggleProgram(this, ${index})" style="display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 12px; cursor: pointer;">
+                    <div style="flex: 1; min-width: 0; word-break: break-word;">
+                        <h3 style="margin: 0; font-size: 14px; line-height: 1.4; color: #1e293b;">${item.namaProgram}</h3>
+                        <p style="margin: 4px 0 0 0; font-size: 11px; color: #0c6bdc; font-weight: 700;">Pagu: Rp ${item.pagu.toLocaleString('id-ID')}</p>
+                    </div>
+                    <div class="btn-container" onclick="event.stopPropagation();" style="display: flex; flex-direction: column; gap: 15px; align-items: flex-end; flex-shrink: 0; width: 85px;">
+                        <button class="toggle-btn" style="width: 100%; padding: 5px 4px; font-size: 11px; font-weight: 600; border-radius: 5px; text-align: center;" onclick="putarSuara(); toggleProgramFromBtn(this, ${index})">Detail</button>
+                        <button class="kegiatan-btn" style="display: none; width: 100%; padding: 5px 4px; font-size: 11px; font-weight: 600; border-radius: 5px; text-align: center;" onclick="putarSuara(); toggleKegiatanData(this, ${index})">Kegiatan</button>
+                    </div>
+                </div>
+                <div class="program-content" id="keg-${index}" style="display:none; overflow:hidden;">
+                    <div class="card inner-card" style="margin-bottom:10px;">
+                        <div class="card-flex">
+                            <div class="icon-box icon-green"><i class="fa-solid fa-calendar-day"></i></div>
+                            <div><h4>Realisasi Bulan Ini (Rp)</h4><h2>Rp ${item.realisasiBulanIni.toLocaleString('id-ID')}</h2></div>
+                        </div>
+                    </div>
+                    <div class="card inner-card" style="background: #fafafa; margin-bottom:0; padding:10px;">
+                        <div class="wrapper-title">REALISASI TOTAL HINGGA BULAN INI</div>
+                        <div class="grid-4">
+                            <div class="card inner-card" style="background: white; padding:10px;"><div class="card-flex"><div class="icon-box icon-green" style="width:32px; height:32px; font-size:12px;"><i class="fa-solid fa-money-bill"></i></div><div><h4>Total Realisasi</h4><h2 style="font-size:14px;">Rp ${item.realisasiTot.toLocaleString('id-ID')}</h2></div></div></div>
+                            <div class="card inner-card" style="background: white; padding:10px;"><div class="card-flex"><div class="icon-box icon-blue" style="width:32px; height:32px; font-size:12px;"><i class="fa-solid fa-chart-line"></i></div><div><h4>Keuangan</h4><h2 style="font-size:14px;">${keuPersen}%</h2></div></div><div class="progress-bar" style="height:6px;"><div class="progress-fill" style="width: ${keuPersen}%; background:#0c6bdc;"></div></div></div>
+                            <div class="card inner-card" style="background: white; padding:10px;"><div class="card-flex"><div class="icon-box icon-orange" style="width:32px; height:32px; font-size:12px;"><i class="fa-solid fa-building"></i></div><div><h4>Fisik</h4><h2 style="font-size:14px;">${item.fisikPersen}%</h2></div></div><div class="progress-bar" style="height:6px;"><div class="progress-fill" style="width: ${item.fisikPersen}%; background:#ff9800;"></div></div></div>
+                            <div class="card inner-card" style="background: white; padding:10px;"><div class="card-flex"><div class="icon-box icon-red" style="width:32px; height:32px; font-size:12px;"><i class="fa-solid fa-hand-holding-dollar"></i></div><div><h4>Sisa Dana</h4><h2 style="font-size:14px;">Rp ${sisa.toLocaleString('id-ID')}</h2></div></div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sub-kegiatan-wrapper" id="sub-list-${index}" style="display:none; overflow:hidden;">
+                    <div class="sub-kegiatan-title"><i class="fa-solid fa-list-check"></i> Daftar Kegiatan Dalam Program</div>
+                    <div class="sub-kegiatan-container"></div>
+                </div>
+                `;
+        mainContainer.appendChild(programCard);
+
+        const subContainer = programCard.querySelector(`#sub-list-${index} .sub-kegiatan-container`);
+        if (subContainer && item.subKegiatan) {
+          item.subKegiatan.forEach((sub) => {
+            const subKeuPct = sub.pagu > 0 ? ((sub.realisasi / sub.pagu) * 100).toFixed(2) : 0;
+            const subSisa = sub.pagu - sub.realisasi;
+            subContainer.innerHTML += `
+                        <div class="sub-kegiatan-block" style="margin-bottom: 10px;">
+                            <div class="sub-kegiatan-name-header">
+                                <div class="sub-kegiatan-name-text">
+                                    <i class="fa-solid fa-circle-dot" style="color:#28a745; font-size:10px;"></i> <b>${sub.nama}</b>
+                                    <div style="font-size:11px; color:#64748b; margin-top:3px;">Pagu: Rp ${sub.pagu.toLocaleString('id-ID')}</div>
+                                </div>
+                                <button class="sub-detail-btn" onclick="putarSuara(); toggleSubDetailCard(this)">Detail</button>
+                            </div>
+                            <div class="sub-kegiatan-cards-content" style="display:none; overflow:hidden;">
+                                <div class="card inner-card" style="padding:10px; margin-bottom:10px;"><div class="card-flex"><div class="icon-box icon-green" style="width:30px; height:30px; font-size:12px;"><i class="fa-solid fa-calendar-day"></i></div><div><h4>Realisasi Bulan Ini (Rp)</h4><h2 style="font-size:14px; margin-top:2px;">Rp ${sub.realisasiBulanIni.toLocaleString('id-ID')}</h2></div></div></div>
+                                <div class="card inner-card" style="background: #fafafa; padding:12px; margin-bottom:0;">
+                                    <div class="wrapper-title" style="font-size:11px; margin-bottom:10px;">REALISASI TOTAL HINGGA BULAN INI</div>
+                                    <div class="grid-4">
+                                        <div class="card inner-card" style="background: white; padding:10px;"><div class="card-flex"><div class="icon-box icon-green" style="width:30px; height:30px; font-size:12px;"><i class="fa-solid fa-money-bill"></i></div><div><h4 style="font-size:10px;">Total Realisasi</h4><h2 style="font-size:12px;">Rp ${sub.realisasi.toLocaleString('id-ID')}</h2></div></div></div>
+                                        <div class="card inner-card" style="background: white; padding:10px;"><div class="card-flex"><div class="icon-box icon-blue" style="width:30px; height:30px; font-size:12px;"><i class="fa-solid fa-chart-line"></i></div><div><h4 style="font-size:10px;">Keuangan</h4><h2 style="font-size:12px;">${subKeuPct}%</h2></div></div><div class="progress-bar" style="height:5px;"><div class="progress-fill" style="width:${subKeuPct}%; background:#0c6bdc;"></div></div></div>
+                                        <div class="card inner-card" style="background: white; padding:10px;"><div class="card-flex"><div class="icon-box icon-orange" style="width:30px; height:30px; font-size:12px;"><i class="fa-solid fa-building"></i></div><div><h4 style="font-size:10px;">Fisik</h4><h2 style="font-size:12px;">${sub.fisik}%</h2></div></div><div class="progress-bar" style="height:5px;"><div class="progress-fill" style="width:${sub.fisik}%; background:#ff9800;"></div></div></div>
+                                        <div class="card inner-card" style="background: white; padding:10px;"><div class="card-flex"><div class="icon-box icon-red" style="width:30px; height:30px; font-size:12px;"><i class="fa-solid fa-hand-holding-dollar"></i></div><div><h4 style="font-size:10px;">Sisa Dana</h4><h2 style="font-size:12px;">Rp ${subSisa.toLocaleString('id-ID')}</h2></div></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        `;
+          });
+        }
+      });
+
+      document.getElementById('total-pagu-label').textContent = `Rp ${grandTotalPagu.toLocaleString('id-ID')}`;
+      document.getElementById('total-realisasi-label').textContent = `Rp ${grandTotalRealisasi.toLocaleString('id-ID')}`;
+      document.getElementById('sisa-pagu-label').textContent = `Rp ${(grandTotalPagu - grandTotalRealisasi).toLocaleString('id-ID')}`;
+      document.getElementById('total-program-badge').textContent = `${dataDipilih.length} Program`;
+      document.getElementById('total-kegiatan-badge').textContent = `${totalKegiatanCount} Kegiatan`;
+
+      initChartGabunganDinamis();
+    }
+
+    // ==========================================
+    // 5. INITIALIZATION GRAPH GABUNGAN
+    // ==========================================
+    function initChartGabunganDinamis() {
+      const canvas = document.getElementById('canvasGabunganDinamis');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      let lastIndexFisik = 0;
+      let lastIndexKeu = 0;
+
+      for (let i = 11; i >= 0; i--) {
+        if (dataTrenFisik[i] > 0) { lastIndexFisik = i; break; }
+      }
+      for (let i = 11; i >= 0; i--) {
+        if (dataTrenKeuangan[i] > 0) { lastIndexKeu = i; break; }
+      }
+
+      const maxDataIndex = Math.max(lastIndexFisik, lastIndexKeu);
+      const bulanBerjalanIndex = Math.min(12, maxDataIndex + 2);
+
+      const labelDinamisX = MASTER_BULAN.slice(0, bulanBerjalanIndex);
+      const dataFisikDinamis = dataTrenFisik.slice(0, bulanBerjalanIndex);
+      const dataKeuDinamis = dataTrenKeuangan.slice(0, bulanBerjalanIndex);
+
+      chartInstanceGabungan = new Chart(ctx, {
+        type: 'line',
+        plugins: [ChartDataLabels],
+        data: {
+          labels: labelDinamisX,
+          datasets: [
+            {
+              label: 'Fisik (%)',
+              data: dataFisikDinamis,
+              borderColor: '#ff9800',
+              borderWidth: 2.5,
+              backgroundColor: 'rgba(255, 152, 0, 0.04)',
+              fill: true,
+              tension: 0.2,
+              pointBackgroundColor: '#ff9800',
+              pointRadius: 4,
+              pointHoverRadius: 6
+            },
+            {
+              label: 'Keuangan (%)',
+              data: dataKeuDinamis,
+              borderColor: '#28a745',
+              borderWidth: 2.5,
+              backgroundColor: 'rgba(40, 167, 69, 0.04)',
+              fill: true,
+              tension: 0.2,
+              pointBackgroundColor: '#28a745',
+              pointRadius: 4,
+              pointHoverRadius: 6
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            datalabels: {
+              display: (context) => tampilkanAngkaGrafik && context.dataset.data[context.dataIndex] > 0,
+              align: 'top',
+              offset: 3,
+              color: (context) => context.datasetIndex === 0 ? '#e65100' : '#1e7e34',
+              font: { weight: 'bold', size: 9 },
+              formatter: (value) => value + '%'
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grace: '10%',
+              ticks: {
+                font: { size: 9 },
+                callback: function (value) { return value + '%'; }
+              }
+            },
+            x: {
+              ticks: { color: '#334155', font: { size: 10, weight: 'bold' } }
+            }
+          }
+        }
+      });
+    }
+
+    // ==========================================
+    // 6. ANIMASI AKORDION & DETAILS
+    // ==========================================
+    function toggleProgram(header, index) {
+      const content = document.getElementById(`keg-${index}`);
+      const btnDetail = header.querySelector('.toggle-btn');
+      const btnKeg = header.querySelector('.kegiatan-btn');
+      const wrapper = document.getElementById(`sub-list-${index}`);
+      header.classList.toggle('active');
+      if (header.classList.contains('active')) {
+        if (btnDetail) btnDetail.textContent = "Tutup";
+        if (btnKeg) btnKeg.style.display = "inline-block";
+        if (content) content.style.display = 'block';
+      } else {
+        if (btnDetail) btnDetail.textContent = "Detail";
+        if (btnKeg) {
+          btnKeg.style.display = "none";
+          btnKeg.classList.remove('aktif');
+          btnKeg.style.backgroundColor = "";
+          btnKeg.style.borderColor = "";
+          btnKeg.style.color = "";
+        }
+        if (content) content.style.display = 'none';
+        if (wrapper) wrapper.style.display = 'none';
+      }
+    }
+
+    function toggleProgramFromBtn(btn, index) {
+      const header = btn.closest('.program-header');
+      if (header) toggleProgram(header, index);
+    }
+
+    function toggleKegiatanData(btn, index) {
+      const wrapper = document.getElementById(`sub-list-${index}`);
+      const content = document.getElementById(`keg-${index}`);
+      const header = btn.closest('.program-header');
+      const btnDetail = header ? header.querySelector('.toggle-btn') : null;
+
+      btn.classList.toggle('aktif');
+
+      if (btn.classList.contains('aktif')) {
+        // KONDISI 1: Saat tombol Kegiatan aktif (menampilkan daftar kegiatan)
+        btn.textContent = "Tutup Kegiatan";
+        if (content) content.style.display = 'none';
+        if (wrapper) wrapper.style.display = 'block';
+
+        btn.style.backgroundColor = "#fa8107";
+        btn.style.borderColor = "#d66e04";
+        btn.style.color = "#ffffff";
+      } else {
+        // KONDISI 2: Saat "Tutup Kegiatan" diklik -> KEMBALI KE AWAL SECARA TOTAL
+        btn.textContent = "Kegiatan";
+        if (wrapper) wrapper.style.display = 'none';
+        if (content) content.style.display = 'none'; // Pastikan detail ringkasan juga tutup
+
+        // Reset style tombol kegiatan ke default
+        btn.style.backgroundColor = "";
+        btn.style.borderColor = "";
+        btn.style.color = "";
+
+        // KUNCI UTAMA: Sembunyikan tombol kegiatan ini secara instan
+        btn.style.display = "none";
+
+        // Kembalikan tombol detail menjadi bertuliskan "Detail" dan lepas kelas active pada header
+        if (btnDetail) btnDetail.textContent = "Detail";
+        if (header) header.classList.remove('active');
+      }
+    }
+
+    function toggleSubDetailCard(btn) {
+      const block = btn.closest('.sub-kegiatan-block');
+      if (!block) return;
+
+      const content = block.querySelector('.sub-kegiatan-cards-content');
+      if (!content) return;
+
+      if (content.style.display === 'none' || content.style.display === '') {
+        content.style.display = 'block';
+        btn.textContent = "Tutup";
+        btn.style.background = "#fa8107";
+        btn.style.borderColor = "#b71c1c";
+      } else {
+        content.style.display = 'none';
+        btn.textContent = "Detail";
+        btn.style.background = "#28a745";
+        btn.style.borderColor = "#1e7e34";
+      }
+    }
+    // ==========================================
+    // 7. VISITOR COUNTER & EVENT LISTENERS
+    // ==========================================
+    function muatJumlahPengunjung() {
+      const elVisitor = document.getElementById('visitorCount');
+      if (!elVisitor) return;
+
+      // Tambahkan parameter timestamp untuk mencegah cache browser
+      const firestoreOrScriptUrl = VISITOR_URL + (VISITOR_URL.includes('?') ? '&' : '?') + 't=' + new Date().getTime();
+
+      fetch(firestoreOrScriptUrl, { method: 'GET' })
+        .then(res => {
+          if (!res.ok) throw new Error('Respon jaringan gagal');
+          return res.json();
+        })
+        .then(data => {
+          // Mendukung fleksibilitas response key dari Apps Script (visits, count, atau total)
+          const totalKunjungan = data.visits ?? data.count ?? data.total ?? 0;
+          elVisitor.innerHTML = `<i class="fa-solid fa-eye"></i> : ${totalKunjungan.toLocaleString('id-ID')}`;
+        })
+        .catch(err => {
+          console.warn("Gagal memuat statistik pengunjung:", err);
+          elVisitor.innerHTML = `<i class="fa-solid fa-eye"></i> : -`;
+        });
+    }
+
+    // ====================================================================
+    // 8. FIX AKHIR: HANDLER URL DECODE UNTUK KARAKTER KHUSUS (& dan Spasi)
+    // ====================================================================
+    function cekUrlDanPilihOPD() {
+      const urlParams = new URLSearchParams(window.location.search);
+      let opdParam = urlParams.get('opd');
+
+      if (!opdParam) return;
+
+      // 1. Decode URL (%20 jadi spasi, %26 jadi &) lalu ubah ke huruf kecil
+      try {
+        opdParam = decodeURIComponent(opdParam).toLowerCase().trim();
+      } catch (e) {
+        opdParam = opdParam.toLowerCase().trim();
+      }
+
+      console.log("Parameter OPD dari URL terdeteksi:", opdParam);
+
+      // 2. Pemetaan Lengkap (Menangani format 'bm & bk', 'sda & cktr', dll)
+      const mapOPD = {
+        // Variasi Bappelitbangda
+        'bappelitbangda': 'bappeda',
+        'bappeda': 'bappeda',
+
+        // Variasi BM & BK
+        'bm & bk': 'bmbk',
+        'bm&bk': 'bmbk',
+        'bmbk': 'bmbk',
+
+        // Variasi SDA & CKTR
+        'sda & cktr': 'sdacktr',
+        'sda&cktr': 'sdacktr',
+        'sdacktr': 'sdacktr',
+
+        // Variasi Lainnya
+        'bpbd': 'bpbd',
+        'perkimtan': 'perkimtan',
+        'kominfo': 'kominfo',
+        'dishub': 'dishub',
+        'barjas': 'barjas'
+      };
+
+      // 3. Cari target value untuk dropdown (default ke opdParam jika tidak ada di map)
+      const targetValue = mapOPD[opdParam] || opdParam;
+
+      // 4. Eksekusi Pilih Dropdown
+      setTimeout(() => {
+        const selector = document.getElementById('opd-selector');
+        if (selector) {
+          selector.value = targetValue;
+
+          // Jalankan fungsi gantiOPD
+          if (typeof gantiOPD === "function") {
+            gantiOPD(targetValue);
+          }
+        }
+      }, 100);
+    }
+
+    // Jalankan saat halaman selesai dimuat
+    window.addEventListener('load', function () {
+      muatJumlahPengunjung();
+      cekUrlDanPilihOPD();
+    });
+  </script>
+</body>
+
+</html>
