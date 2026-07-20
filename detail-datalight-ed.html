@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Multi-OPD Terintegrasi Provinsi Sulsel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS UTAMA */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(180deg, #eaf4ff, #f7fbff);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(90deg, #0f3c78, #0c6bdc);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+        }
+
+        .header-logo {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .header-text h1 {
+            margin: 0;
+            font-size: 18px;
+            line-height: 1.2;
+        }
+
+        .header-text p {
+            margin: 5px 0 0 0;
+            opacity: 0.9;
+            font-size: 12px;
+        }
+
+        .container {
+            padding: 15px;
+            flex: 1;
+        }
+
+        /* =========================================
+           CARD STYLE (SESUAI REQUEST HTML PENDEK)
+        =========================================== */
+        .card {
+            background: linear-gradient(180deg, #ffffff, #eef7ff);
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow:
+                0 12px 30px rgba(15, 60, 120, 0.12),
+                0 4px 12px rgba(15, 60, 120, 0.08);
+            margin-bottom: 15px;
+            transition: all 0.25s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 18px 40px rgba(15, 60, 120, 0.18),
+                0 8px 18px rgba(15, 60, 120, 0.12);
+        }
+
+        /* =========================================
+           INNER CARD STYLE (SESUAI REQUEST HTML PENDEK)
+        =========================================== */
+        .inner-card {
+            border: 1.5px solid #e3e6f0;
+            box-shadow:
+                0 10px 25px rgba(15, 60, 120, 0.10),
+                0 4px 10px rgba(15, 60, 120, 0.06);
+            transition: all 0.25s ease;
+        }
+
+        .inner-card:hover {
+            border-color: #0c6bdc;
+            transform: translateY(-2px);
+            box-shadow:
+                0 16px 35px rgba(15, 60, 120, 0.18),
+                0 8px 18px rgba(15, 60, 120, 0.12);
+        }
+
+        /* TEXT */
+        .card h4 {
+            margin: 0;
+            font-size: 11px;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card h2 {
+            margin: 8px 0 0 0;
+            font-size: 18px;
+            color: #1a1a1a;
+            font-weight: 700;
+        }
+
+        .card-flex {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .icon-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .icon-blue {
+            background: #0c6bdc;
+        }
+
+        .icon-green {
+            background: #28a745;
+        }
+
+        .icon-orange {
+            background: #ff9800;
+        }
+
+        .icon-red {
+            background: #e53935;
+        }
+
+        /* Container Section Title */
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #0f3c78;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e3e6f0;
+            padding-bottom: 8px;
+        }
+
+        .wrapper-title {
+            text-align: center;
+            font-size: 13px;
+            margin-bottom: 15px;
+            color: #0f3c78;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 8px;
+            background: #eee;
+            border-radius: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 1.5s ease-in-out;
+        }
+
+        /* Accordion Program */
+        .program-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .program-header h3 {
+            margin: 0;
+            font-size: 14px;
+            color: #0f3c78;
+            flex: 1;
+            padding-right: 15px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: stretch;
+            min-width: 80px;
+        }
+
+        .toggle-btn {
+            background: #0c6bdc;
+            color: white;
+            border: 1px solid #0a56b2;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            transition: background 0.2s, color 0.2s;
+            text-align: center;
+        }
+
+        .kegiatan-btn {
+            background: #28a745;
+            color: white;
+            border: 1px solid #1e7e34;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+            display: none;
+            transition: background 0.2s;
+        }
+
+        .program-content {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .sub-kegiatan-wrapper {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border-left: 4px solid #28a745;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .sub-kegiatan-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1e7e34;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sub-kegiatan-block {
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 15px;
+        }
+
+        .sub-kegiatan-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .sub-kegiatan-name-header {
+            font-size: 13px;
+            font-weight: bold;
+            color: #334155;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .sub-kegiatan-name-text {
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        .sub-detail-btn {
+            background: #28a745;
+            color: white;
+            border: 1px solid #1e7e34;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+
+        .sub-kegiatan-cards-content {
+            display: none;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #cbd5e1;
+        }
+
+        /* GRAFIK TRIGGER BUTTONS */
+        .btn-grafik-trigger,
+        .btn-grafik-trigger-keu {
+            width: 100%;
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            letter-spacing: 0.3px;
+        }
+
+        .btn-grafik-trigger {
+            background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%);
+            color: #0c6bdc;
+            border: 2px solid #0c6bdc;
+            box-shadow: 0 4px 6px rgba(12, 107, 220, 0.05);
+        }
+
+        .btn-grafik-trigger:hover {
+            background: linear-gradient(135deg, #0c6bdc 0%, #0f3c78 100%);
+            color: #ffffff;
+            box-shadow: 0 6px 15px rgba(12, 107, 220, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-grafik-trigger-keu {
+            background: linear-gradient(135deg, #ffffff 0%, #f0fff4 100%);
+            color: #28a745;
+            border: 2px solid #28a745;
+            box-shadow: 0 4px 6px rgba(40, 167, 69, 0.05);
+        }
+
+        .btn-grafik-trigger-keu:hover {
+            background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+            color: #ffffff;
+            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-grafik-trigger:active,
+        .btn-grafik-trigger-keu:active {
+            transform: translateY(1px);
+        }
+
+        .btn-grafik-trigger.aktif,
+        .btn-grafik-trigger-keu.aktif {
+            background: linear-gradient(135deg, #e53935 0%, #b71c1c 100%) !important;
+            color: #ffffff !important;
+            border-color: #b71c1c !important;
+            box-shadow: 0 6px 15px rgba(229, 57, 53, 0.25) !important;
+        }
+
+        .grafik-expand-content {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transform: scaleY(0.95);
+            transform-origin: top;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), margin-top 0.4s ease;
+            background: #ffffff;
+        }
+
+        .grafik-expand-content.terbuka {
+            max-height: 340px !important;
+            opacity: 1;
+            transform: scaleY(1);
+            margin-top: 10px;
+            margin-bottom: 15px;
+            padding-top: 10px;
+            border-top: 1px dashed #cbd5e1;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 270px;
+            width: 100%;
+        }
+
+        .footer {
+            background: #0f3c78;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 11px;
+            margin-top: auto;
+        }
+
+        @media (max-width: 992px) {
+            .grid-4 {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .grid-4 {
+                grid-template-columns: 1fr !important;
+                gap: 15px !important;
+            }
+
+            .grid-4 .card,
+            .grid-4 .inner-card {
+                margin-bottom: 0 !important;
+            }
+
+            .sub-kegiatan-name-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .sub-detail-btn {
+                align-self: flex-end;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <img src="logo-infras.png" alt="Logo" class="header-logo" id="header-logo-img">
+        <div class="header-text">
+            <h1 id="header-title-text">Dashboard Progres Realisasi Fisik &amp; Keuangan 8 OPD Mitra</h1>
+            <p><i class="fa-regular fa-calendar-check"></i> Data Realisasi per Juni 2026</p>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- SELEKTOR OPD -->
+        <div class="card inner-card" style="border-left: 5px solid #0c6bdc; background: #fdfdfd; margin-bottom: 20px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <i class="fa-solid fa-building-shield" style="color: #0c6bdc; font-size: 18px;"></i>
+                <h4 style="margin: 0; color: #334155; font-size: 15px;">PILIH PERANGKAT DAERAH (OPD)</h4>
+            </div>
+            <select id="opd-selector" onchange="gantiOPD(this.value)"
+                style="width: 100%; padding: 12px 15px; border-radius: 8px; border: 1.5px solid #cbd5e1; font-size: 15px; font-weight: 600; color: #1e293b; background: white; cursor: pointer; outline: none; transition: all 0.2s;">
+                <option value="">-- Pilih Perangkat Daerah --</option>
+                <option value="bappeda">BAPPELITBANGDA</option>
+                <option value="bpbd">BPBD</option>
+                <option value="bmbk">BM & BK</option>
+                <option value="sdacktr">SDA & CKTR</option>
+                <option value="perkimtan">PERKIMTAN</option>
+                <option value="kominfo">DISKOMINFO</option>
+                <option value="dishub">DISHUB</option>
+                <option value="barjas">BARJAS</option>
+            </select>
+        </div>
+
+        <!-- KARTU RINGKASAN ANGGARAN UTAMA -->
+        <div class="card inner-card">
+            <div class="card-flex">
+                <div class="icon-box icon-blue"><i class="fa-solid fa-wallet"></i></div>
+                <div class="card-text">
+                    <h4>Total Pagu OPD</h4>
+                    <h2 id="total-pagu-label">Rp 0</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="card inner-card">
+            <div class="card-flex">
+                <div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div>
+                <div class="card-text">
+                    <h4>Total Realisasi Hingga Bulan Ini</h4>
+                    <h2 id="total-realisasi-label">Rp 0</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="card inner-card">
+            <div class="card-flex">
+                <div class="icon-box icon-red"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                <div class="card-text">
+                    <h4>Sisa Pagu Keseluruhan</h4>
+                    <h2 id="sisa-pagu-label">Rp 0</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- KARTU INDIKATOR PROGRAM & KEGIATAN -->
+        <div style="display: flex; gap: 15px; width: 100%; margin-bottom: 15px;">
+            <div class="card inner-card" style="flex: 1; margin-bottom: 0; padding: 15px;">
+                <div class="card-flex">
+                    <div class="icon-box icon-orange"><i class="fa-solid fa-folder-open"></i></div>
+                    <div class="card-text" style="min-width: 0;">
+                        <h4>TOTAL PROGRAM</h4>
+                        <h2 id="total-program-badge"
+                            style="margin: 8px 0 0 0; font-size: 16px; color: #1a1a1a; font-weight: 700;">0 Program</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="card inner-card" style="flex: 1; margin-bottom: 0; padding: 15px;">
+                <div class="card-flex">
+                    <div class="icon-box icon-blue"><i class="fa-solid fa-list-check"></i></div>
+                    <div class="card-text" style="min-width: 0;">
+                        <h4>TOTAL KEGIATAN</h4>
+                        <h2 id="total-kegiatan-badge"
+                            style="margin: 8px 0 0 0; font-size: 16px; color: #1a1a1a; font-weight: 700;">0 Kegiatan
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DAFTAR RINCIAN PROGRAM -->
+        <div class="card">
+            <div class="section-title" id="nama-opd-title">Rincian Progres Per Program</div>
+            <div id="program-list"></div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+<div class="footer">
+        Sumber Data: <a href="https://sulselprov.e-planning.id"
+            style="color:#6ab0ff; text-decoration:none;">sulselprov.e-planning.id</a> <br>
+        &copy; 2026 by @zuwlend. All Rights Reserved.
+        <div id="visitorCount" style="margin-top:8px; opacity:0.8;"></div>
+    </div>
+       
+
+    <!-- LOGIKA JAVASCRIPT -->
+    <script>
+        // ==========================================================
+        // DATABASE UTAMA (DISUNTIKKAN SECARA OTOMATIS OLEH COMPILER)
+        // ==========================================================
+        let seluruhDataOPD = {
+  "bappeda": [
+    {
+      "namaProgram": "PROGRAM PENUNJANG URUSAN PEMERINTAHAN DAERAH PROVINSI",
+      "pagu": 31976763521.38,
+      "realisasiTot": 15189881007,
+      "realisasiBulanIni": 3579951668,
+      "fisikPersen": 49.55,
+      "subKegiatan": [
+        {
+          "nama": "Perencanaan, Penganggaran, dan Evaluasi Kinerja Perangkat Daerah",
+          "pagu": 111127550,
+          "realisasi": 15957000,
+          "realisasiBulanIni": 15957000,
+          "fisik": 15.86
+        },
+        
+      ]
+    }
+  ],
+  "bmbk": [
+    {
+      "namaProgram": "PROGRAM PENUNJANG URUSAN PEMERINTAHAN DAERAH PROVINSI",
+      "pagu": 53625238807.54,
+      "realisasiTot": 19534790618,
+      "realisasiBulanIni": 4608033952,
+      "fisikPersen": 36.74,
+      "subKegiatan": [
+        {
+          "nama": "Perencanaan, Penganggaran, dan Evaluasi Kinerja Perangkat Daerah",
+          "pagu": 400016300,
+          "realisasi": 44315000,
+          "realisasiBulanIni": 21320000,
+          "fisik": 11.08
+        },
+        
+      ]
+    }
+  ],
+  "bpbd": [
+    {
+      "namaProgram": "PROGRAM PENUNJANG URUSAN PEMERINTAHAN DAERAH PROVINSI",
+      "pagu": 7488328499.83,
+      "realisasiTot": 3667914761,
+      "realisasiBulanIni": 871433618,
+      "fisikPersen": 52.57,
+      "subKegiatan": [
+        {
+          "nama": "Perencanaan, Penganggaran, dan Evaluasi Kinerja Perangkat Daerah",
+          "pagu": 5022000,
+          "realisasi": 0,
+          "realisasiBulanIni": 0,
+          "fisik": 0
+        },
+        
+      ]
+    }
+  ],
+  "dishub": [
+    {
+      "namaProgram": "PROGRAM PENUNJANG URUSAN PEMERINTAHAN DAERAH PROVINSI",
+      "pagu": 32669331643.14,
+      "realisasiTot": 15694548376,
+      "realisasiBulanIni": 4000076770,
+      "fisikPersen": 48.05,
+      "subKegiatan": [
+        {
+          "nama": "Perencanaan, Penganggaran, dan Evaluasi Kinerja Perangkat Daerah",
+          "pagu": 127643000,
+          "realisasi": 0,
+          "realisasiBulanIni": 0,
+          "fisik": 0
+        },
+        
+      ]
+    },
+    
+  ],
+  "kominfo": [
+    {
+      "namaProgram": "PROGRAM PENUNJANG URUSAN PEMERINTAHAN DAERAH PROVINSI",
+      "pagu": 15137401951.78,
+      "realisasiTot": 6993209500,
+      "realisasiBulanIni": 1761359301,
+      "fisikPersen": 46.23,
+      "subKegiatan": [
+        {
+          "nama": "Perencanaan, Penganggaran, dan Evaluasi Kinerja Perangkat Daerah",
+          "pagu": 16717700,
+          "realisasi": 3221500,
+          "realisasiBulanIni": 3221500,
+          "fisik": 20.37
+        },
+        
+      ]
+    }
+  ],
+  "perkimtan": [
+    {
+      "namaProgram": "PROGRAM PENUNJANG URUSAN PEMERINTAHAN DAERAH PROVINSI",
+      "pagu": 14718767011.46,
+      "realisasiTot": 6689148974,
+      "realisasiBulanIni": 1601450489,
+      "fisikPersen": 50.94,
+      "subKegiatan": [
+        {
+          "nama": "Perencanaan, Penganggaran, dan Evaluasi Kinerja Perangkat Daerah",
+          "pagu": 52007200,
+          "realisasi": 12854300,
+          "realisasiBulanIni": 5720000,
+          "fisik": 26.39
+        },
+        
+      ]
+    }
+  ],
+  "sdacktr": [
+    {
+      "namaProgram": "PROGRAM PENUNJANG URUSAN PEMERINTAHAN DAERAH PROVINSI",
+      "pagu": 47640085889.33,
+      "realisasiTot": 21220322673,
+      "realisasiBulanIni": 5305651408,
+      "fisikPersen": 44.59,
+      "subKegiatan": [
+        {
+          "nama": "Perencanaan, Penganggaran, dan Evaluasi Kinerja Perangkat Daerah",
+          "pagu": 627757100,
+          "realisasi": 90850000,
+          "realisasiBulanIni": 1680000,
+          "fisik": 14.47
+        },
+        
+      ]
+    }
+  ]
+};
+        let seluruhDataTrenOPD = {
+  "bappeda": {
+    "tren_fisik": [3.45, 10.11, 19.19, 26.02, 31.47, 40.53, 0, 0, 0, 0, 0, 0],
+    "tren_keuangan": [2.87, 8.59, 17.15, 23.66, 29.38, 38.5, 0, 0, 0, 0, 0, 0]
+  },
+  "bmbk": {
+    "tren_fisik": [0.01, 0.06, 0.12, 0.38, 0.53, 13.23, 0, 0, 0, 0, 0, 0],
+    "tren_keuangan": [0.15, 0.75, 4.51, 8.73, 10.11, 13.08, 0, 0, 0, 0, 0, 0]
+  },
+  "bpbd": {
+    "tren_fisik": [3.39, 8.77, 18.33, 25.38, 30.59, 40.1, 0, 0, 0, 0, 0, 0],
+    "tren_keuangan": [3.39, 8.4, 17.56, 23.8, 28.94, 37.47, 0, 0, 0, 0, 0, 0]
+  },
+  "dishub": {
+    "tren_fisik": [1.88, 7.82, 16.52, 19.5, 29.86, 38.55, 0, 0, 0, 0, 0, 0],
+    "tren_keuangan": [1.84, 7.82, 15.94, 18.9, 29.48, 38.55, 0, 0, 0, 0, 0, 0]
+  },
+  "kominfo": {
+    "tren_fisik": [1.87, 4.65, 10.46, 15.9, 22.24, 29.65, 0, 0, 0, 0, 0, 0],
+    "tren_keuangan": [1.87, 4.65, 10.44, 15.23, 21.44, 29.32, 0, 0, 0, 0, 0, 0]
+  },
+  "perkimtan": {
+    "tren_fisik": [0.29, 0.89, 1.62, 2.22, 24.8, 25.7, 0, 0, 0, 0, 0, 0],
+    "tren_keuangan": [0.28, 0.68, 1.34, 1.89, 3.02, 5.4, 0, 0, 0, 0, 0, 0]
+  },
+  "sdacktr": {
+    "tren_fisik": [0.21, 0.52, 1.05, 1.54, 1.89, 2.46, 0, 0, 0, 0, 0, 0],
+    "tren_keuangan": [0.21, 0.5, 1.01, 1.52, 1.9, 2.48, 0, 0, 0, 0, 0, 0]
+  }
+};
+
+        // 1. PROSES PENGAMBILAN DATA JSON SECARA ASYNC
+        document.addEventListener("DOMContentLoaded", function () {
+            try {
+                console.log("Database Internal Terikat Secara Offline.");
+                
+                // Panggil fungsi inisialisasi grafik mandiri Anda
+                if (typeof siapkanWadahGrafikPermanen === "function") {
+                    siapkanWadahGrafikPermanen();
+                }
+                
+                // Jalankan render awal dashboard
+                if (typeof renderDashboard === "function") {
+                    renderDashboard();
+                }
+            } catch (error) {
+                console.error("Gagal memuat dashboard offline:", error);
+            }
+        });
+
+        // ==========================================================
+        // PENGATURAN AUDIO & VARIABEL KONTROL
+        // ==========================================================
+        const audioKlik = new Audio('tap_sound.mp3');
+
+        function putarSuara() {
+            audioKlik.currentTime = 0;
+            audioKlik.play().catch(e => { });
+        }
+
+        let opdAktif = "";
+        let dataTrenFisik = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        let dataTrenKeuangan = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        let chartInstanceGabungan = null;
+        let tampilkanAngkaGrafik = false;
+
+        const MASTER_BULAN = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
+        const VISITOR_URL = 'https://script.google.com/macros/s/AKfycby81UBUAjpUxB40pw3fUiy3og_iZFTo3OF3jotl-Ge4-c33NQ2de9XoGFoMTINgtUaI/exec';
+
+
+        const LOGO_OPD = {
+            "bappeda": "logo-bappeda.png",
+            "bpbd": "logo-bpbd.png",
+            "bmbk": "logo-bmbk.png",
+            "sdacktr": "logo-sdacktr.png",
+            "perkimtan": "logo-perkimtan.png",
+            "kominfo": "logo-kominfo.png",
+            "diskominfo": "logo-kominfo.png",
+            "dishub": "logo-dishub.png",
+            "barjas": "logo-barjas.png",
+            "DEFAULT": "logo-infras.png"
+        };
+
+
+
+           // ==========================================
+        // 2. INISIALISASI WADAH GRAFIK PERMANEN
+        // ==========================================
+        function siapkanWadahGrafikPermanen() {
+            // 1. Cari elemen judul rincian program
+            const judulRincian = document.getElementById('nama-opd-title');
+            if (!judulRincian) return;
+
+            // 2. Cari seluruh kotak kartu rincian utama
+            const kartuRincianUtama = judulRincian.closest('.card');
+            if (!kartuRincianUtama) return;
+
+            // 3. Buat kartu grafik baru
+            const grafikWrapper = document.createElement('div');
+            grafikWrapper.id = 'grafik-tren-wrapper';
+            
+            // Samakan kelasnya dengan kartu-kartu utama Anda yang lain
+            grafikWrapper.className = 'card'; 
+            
+            // KUNCI BORDER AWAL: Berikan border transparan 1px di sekeliling kartu agar tidak kaku/geser saat di-hover
+            grafikWrapper.style.cssText = "margin-bottom: 15px; display: none; transition: all 0.3s ease; border: 1.5px solid rgba(0, 0, 0, 0);"; 
+            
+            // LOGIKA HOVER: Ubah warna border di sekeliling kartu menjadi biru
+            grafikWrapper.addEventListener('mouseenter', function() {
+                grafikWrapper.style.borderColor = "#0c6bdc"; // Warna biru khas dashboard Anda
+            });
+            
+            // LOGIKA HOVER LEAVE: Kembalikan warna border sekeliling menjadi transparan kembali
+            grafikWrapper.addEventListener('mouseleave', function() {
+                grafikWrapper.style.borderColor = "rgba(0, 0, 0, 0)";
+            });
+
+            // 4. Sisipkan kartu grafik tepat di luar atas kartu rincian utama
+            kartuRincianUtama.parentNode.insertBefore(grafikWrapper, kartuRincianUtama);
+        }
+
+        // ==========================================
+        // 3. DROPDOWN HANDLER & GRAPH TOGGLE
+        // ==========================================
+        function gantiOPD(pilihan) {
+            putarSuara();
+            opdAktif = pilihan;
+
+            if (opdAktif && seluruhDataTrenOPD[opdAktif]) {
+                dataTrenFisik = seluruhDataTrenOPD[opdAktif].tren_fisik || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                dataTrenKeuangan = seluruhDataTrenOPD[opdAktif].tren_keuangan || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            } else {
+                dataTrenFisik = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                dataTrenKeuangan = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            }
+
+            renderDashboard();
+        }
+
+        function toggleAngkaGrafik() {
+            putarSuara();
+            tampilkanAngkaGrafik = !tampilkanAngkaGrafik;
+
+            const btn = document.getElementById('btn-toggle-angka');
+            if (btn) {
+                if (tampilkanAngkaGrafik) {
+                    btn.innerHTML = '<i class="fa-solid fa-eye-slash"></i> Sembunyikan Nilai';
+                    btn.style.background = '#28a745';
+                    btn.style.borderColor = '#1e7e34';
+                } else {
+                    btn.innerHTML = '<i class="fa-solid fa-eye"></i> Lihat Nilai';
+                    btn.style.background = '#0c6bdc';
+                    btn.style.borderColor = '#0a58b6';
+                }
+            }
+
+            if (chartInstanceGabungan) {
+                chartInstanceGabungan.options.plugins.datalabels.display = function (context) {
+                    return tampilkanAngkaGrafik && context.dataset.data[context.dataIndex] > 0;
+                };
+                chartInstanceGabungan.update();
+            }
+        }
+
+        function toggleGarisTren(indexDataset) {
+            if (!chartInstanceGabungan) return;
+            putarSuara();
+
+            const saatIniTerlihat = chartInstanceGabungan.isDatasetVisible(indexDataset);
+            chartInstanceGabungan.setDatasetVisibility(indexDataset, !saatIniTerlihat);
+            chartInstanceGabungan.update();
+
+            const idElement = indexDataset === 0 ? 'legend-fisik' : 'legend-keuangan';
+            const elemenLegenda = document.getElementById(idElement);
+
+            if (elemenLegenda) {
+                if (saatIniTerlihat) {
+                    elemenLegenda.style.opacity = '0.35';
+                    elemenLegenda.style.textDecoration = 'line-through';
+                } else {
+                    elemenLegenda.style.opacity = '1';
+                    elemenLegenda.style.textDecoration = 'none';
+                }
+            }
+        }
+
+        // ==========================================
+        // 4. RENDERING DASHBOARD UTAMA
+        // ==========================================
+        function renderDashboard() {
+            let grandTotalPagu = 0;
+            let grandTotalRealisasi = 0;
+            let totalKegiatanCount = 0;
+
+            const mainContainer = document.getElementById('program-list');
+            const grafikWrapper = document.getElementById('grafik-tren-wrapper');
+            if (!mainContainer) return;
+            
+            // Bersihkan daftar program lama
+            mainContainer.innerHTML = '';
+
+            // Hancurkan instance chart lama agar tidak bertumpuk di memori
+            if (chartInstanceGabungan) { 
+                chartInstanceGabungan.destroy(); 
+                chartInstanceGabungan = null; 
+            }
+
+            const selector = document.getElementById('opd-selector');
+            const headerLogo = document.getElementById('header-logo-img');
+            const headerTitle = document.getElementById('header-title-text');
+
+            // KONDISI JIKA BELUM ADA OPD YANG DIPILIH
+            if (opdAktif === "") {
+                if (headerLogo) headerLogo.src = LOGO_OPD["DEFAULT"];
+                if (headerTitle) headerTitle.textContent = "Dashboard Progres Realisasi Fisik & Keuangan 8 OPD Mitra";
+                document.getElementById('total-pagu-label').textContent = "Rp 0";
+                document.getElementById('total-realisasi-label').textContent = "Rp 0";
+                document.getElementById('sisa-pagu-label').textContent = "Rp 0";
+                document.getElementById('total-program-badge').textContent = "0 Program";
+                document.getElementById('total-kegiatan-badge').textContent = "0 Kegiatan";
+                document.getElementById('nama-opd-title').textContent = "Rincian Progres per Program: Silahkan pilih OPD terlebih dahulu";
+                
+                // Sembunyikan wadah grafik secara aman
+                if (grafikWrapper) {
+                    grafikWrapper.style.display = 'none';
+                    grafikWrapper.innerHTML = '';
+                }
+                mainContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: #64748b; font-style: italic;">Belum ada OPD yang dipilih. Silakan pilih OPD pada menu di atas.</div>';
+                return;
+            }
+
+            // TAMPILKAN WADAH GRAFIK KARENA OPD SUDAH TERPILIH
+            if (grafikWrapper) {
+                grafikWrapper.style.display = 'block';
+            }
+
+            const namaOPDTerpilih = selector.options[selector.selectedIndex] ? selector.options[selector.selectedIndex].text : opdAktif.toUpperCase();
+            if (headerTitle) headerTitle.textContent = `Dashboard Progres Realisasi Fisik & Keuangan ${namaOPDTerpilih}`;
+
+            const namaOpdTitleElement = document.getElementById('nama-opd-title');
+            if (namaOpdTitleElement) {
+                namaOpdTitleElement.textContent = `Rincian Progres per Program: ${namaOPDTerpilih}`;
+            }
+
+            if (headerLogo) {
+                headerLogo.src = LOGO_OPD[opdAktif] || LOGO_OPD["DEFAULT"];
+            }
+
+            const dataDipilih = seluruhDataOPD[opdAktif] || [];
+
+            // MEMPERBARUI ISI WADAH GRAFIK SECARA DINAMIS (TANPA MEMBUAT KARTU BARU)
+            const teksTombol = tampilkanAngkaGrafik ? '<i class="fa-solid fa-eye-slash"></i> Sembunyikan Nilai' : '<i class="fa-solid fa-eye"></i> Lihat Nilai';
+            const bgTombol = tampilkanAngkaGrafik ? '#28a745' : '#0c6bdc';
+            const borderTombol = tampilkanAngkaGrafik ? '#1e7e34' : '#0a58b6';
+
+            if (grafikWrapper) {
+                grafikWrapper.innerHTML = `
+                    <div style="font-weight: bold; font-size: 14px; margin-bottom: 12px; color: #1e293b; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                        <span><i class="fa-solid fa-chart-line" style="color:#28a745; margin-right: 5px;"></i>Tren Bulanan Fisik & Keuangan</span>
+                        
+                        <div style="display: flex; align-items: center; gap: 18px;">
+                            <span id="legend-fisik" onclick="toggleGarisTren(0)" style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #475569; cursor: pointer; user-select: none; transition: all 0.2s;">
+                                <span style="width: 12px; height: 12px; background: #ff9800; display: inline-block; border-radius: 3px; box-shadow: 0 1px 3px rgba(255,152,0,0.4);"></span> Fisik
+                            </span>
+                            <span id="legend-keuangan" onclick="toggleGarisTren(1)" style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #475569; cursor: pointer; user-select: none; transition: all 0.2s;">
+                                <span style="width: 12px; height: 12px; background: #28a745; display: inline-block; border-radius: 3px; box-shadow: 0 1px 3px rgba(40,167,69,0.4);"></span> Keuangan
+                            </span>
+                            <button id="btn-toggle-angka" onclick="toggleAngkaGrafik()" style="background: ${bgTombol}; border: 1px solid ${borderTombol}; padding: 5px 10px; font-size: 11px; font-weight: 600; border-radius: 5px; cursor: pointer; color: #ffffff; display: flex; align-items: center; gap: 4px; transition: all 0.2s; height: 26px;">
+                                ${teksTombol}
+                            </button>
+                        </div>
+                    </div>
+                    <div style="height: 180px; position: relative;">
+                        <canvas id="canvasGabunganDinamis"></canvas>
+                    </div>
+                `;
+            }
+
+            if (dataDipilih.length === 0) {
+                document.getElementById('total-pagu-label').textContent = "Rp 0";
+                document.getElementById('total-realisasi-label').textContent = "Rp 0";
+                document.getElementById('sisa-pagu-label').textContent = "Rp 0";
+                document.getElementById('total-program-badge').textContent = "0 Program";
+                document.getElementById('total-kegiatan-badge').textContent = "0 Kegiatan";
+                mainContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: #64748b; font-style: italic;">Data rincian program untuk OPD ini belum tersedia.</div>';
+                initChartGabunganDinamis();
+                return;
+            }
+
+            // Looping data program kerja
+            dataDipilih.forEach((item, index) => {
+                const keuPersen = item.pagu > 0 ? ((item.realisasiTot / item.pagu) * 100).toFixed(2) : 0;
+                const sisa = item.pagu - item.realisasiTot;
+
+                grandTotalPagu += item.pagu;
+                grandTotalRealisasi += item.realisasiTot;
+                totalKegiatanCount += item.subKegiatan ? item.subKegiatan.length : 0;
+
+                const programCard = document.createElement('div');
+                programCard.className = 'card inner-card';
+                programCard.style.marginBottom = "15px";
+                programCard.innerHTML = `
+                <div class="program-header" onclick="putarSuara(); toggleProgram(this, ${index})" style="display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 12px; cursor: pointer;">
+                    <div style="flex: 1; min-width: 0; word-break: break-word;">
+                        <h3 style="margin: 0; font-size: 14px; line-height: 1.4; color: #1e293b;">${item.namaProgram}</h3>
+                        <p style="margin: 4px 0 0 0; font-size: 11px; color: #0c6bdc; font-weight: 700;">Pagu: Rp ${item.pagu.toLocaleString('id-ID')}</p>
+                    </div>
+                    <div class="btn-container" onclick="event.stopPropagation();" style="display: flex; flex-direction: column; gap: 15px; align-items: flex-end; flex-shrink: 0; width: 85px;">
+                        <button class="toggle-btn" style="width: 100%; padding: 5px 4px; font-size: 11px; font-weight: 600; border-radius: 5px; text-align: center;" onclick="putarSuara(); toggleProgramFromBtn(this, ${index})">Detail</button>
+                        <button class="kegiatan-btn" style="display: none; width: 100%; padding: 5px 4px; font-size: 11px; font-weight: 600; border-radius: 5px; text-align: center;" onclick="putarSuara(); toggleKegiatanData(this, ${index})">Kegiatan</button>
+                    </div>
+                </div>
+                <div class="program-content" id="keg-${index}" style="display:none; overflow:hidden;">
+                    <div class="card inner-card" style="margin-bottom:10px;">
+                        <div class="card-flex">
+                            <div class="icon-box icon-green"><i class="fa-solid fa-calendar-day"></i></div>
+                            <div><h4>Realisasi Bulan Ini (Rp)</h4><h2>Rp ${item.realisasiBulanIni.toLocaleString('id-ID')}</h2></div>
+                        </div>
+                    </div>
+                    <div class="card inner-card" style="background: #fafafa; margin-bottom:0; padding:10px;">
+                        <div class="wrapper-title">REALISASI TOTAL HINGGA BULAN INI</div>
+                        <div class="grid-4">
+                            <div class="card inner-card" style="background: white; padding:10px;"><div class="card-flex"><div class="icon-box icon-green" style="width:32px; height:32px; font-size:12px;"><i class="fa-solid fa-money-bill"></i></div><div><h4>Total Realisasi</h4><h2 style="font-size:14px;">Rp ${item.realisasiTot.toLocaleString('id-ID')}</h2></div></div></div>
+                            <div class="card inner-card" style="background: white; padding:10px;"><div class="card-flex"><div class="icon-box icon-blue" style="width:32px; height:32px; font-size:12px;"><i class="fa-solid fa-chart-line"></i></div><div><h4>Keuangan</h4><h2 style="font-size:14px;">${keuPersen}%</h2></div></div><div class="progress-bar" style="height:6px;"><div class="progress-fill" style="width: ${keuPersen}%; background:#0c6bdc;"></div></div></div>
+                            <div class="card inner-card" style="background: white; padding:10px;"><div class="card-flex"><div class="icon-box icon-orange" style="width:32px; height:32px; font-size:12px;"><i class="fa-solid fa-building"></i></div><div><h4>Fisik</h4><h2 style="font-size:14px;">${item.fisikPersen}%</h2></div></div><div class="progress-bar" style="height:6px;"><div class="progress-fill" style="width: ${item.fisikPersen}%; background:#ff9800;"></div></div></div>
+                            <div class="card inner-card" style="background: white; padding:10px;"><div class="card-flex"><div class="icon-box icon-red" style="width:32px; height:32px; font-size:12px;"><i class="fa-solid fa-hand-holding-dollar"></i></div><div><h4>Sisa Dana</h4><h2 style="font-size:14px;">Rp ${sisa.toLocaleString('id-ID')}</h2></div></div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sub-kegiatan-wrapper" id="sub-list-${index}" style="display:none; overflow:hidden;">
+                    <div class="sub-kegiatan-title"><i class="fa-solid fa-list-check"></i> Daftar Kegiatan Dalam Program</div>
+                    <div class="sub-kegiatan-container"></div>
+                </div>
+                `;
+                mainContainer.appendChild(programCard);
+
+                const subContainer = programCard.querySelector(`#sub-list-${index} .sub-kegiatan-container`);
+                if (subContainer && item.subKegiatan) {
+                    item.subKegiatan.forEach((sub) => {
+                        const subKeuPct = sub.pagu > 0 ? ((sub.realisasi / sub.pagu) * 100).toFixed(2) : 0;
+                        const subSisa = sub.pagu - sub.realisasi;
+                        subContainer.innerHTML += `
+                        <div class="sub-kegiatan-block" style="margin-bottom: 10px;">
+                            <div class="sub-kegiatan-name-header">
+                                <div class="sub-kegiatan-name-text">
+                                    <i class="fa-solid fa-circle-dot" style="color:#28a745; font-size:10px;"></i> <b>${sub.nama}</b>
+                                    <div style="font-size:11px; color:#64748b; margin-top:3px;">Pagu: Rp ${sub.pagu.toLocaleString('id-ID')}</div>
+                                </div>
+                                <button class="sub-detail-btn" onclick="putarSuara(); toggleSubDetailCard(this)">Detail</button>
+                            </div>
+                            <div class="sub-kegiatan-cards-content" style="display:none; overflow:hidden;">
+                                <div class="card inner-card" style="padding:10px; margin-bottom:10px;"><div class="card-flex"><div class="icon-box icon-green" style="width:30px; height:30px; font-size:12px;"><i class="fa-solid fa-calendar-day"></i></div><div><h4>Realisasi Bulan Ini (Rp)</h4><h2 style="font-size:14px; margin-top:2px;">Rp ${sub.realisasiBulanIni.toLocaleString('id-ID')}</h2></div></div></div>
+                                <div class="card inner-card" style="background: #fafafa; padding:12px; margin-bottom:0;">
+                                    <div class="wrapper-title" style="font-size:11px; margin-bottom:10px;">REALISASI TOTAL HINGGA BULAN INI</div>
+                                    <div class="grid-4">
+                                        <div class="card inner-card" style="background: white; padding:10px;"><div class="card-flex"><div class="icon-box icon-green" style="width:30px; height:30px; font-size:12px;"><i class="fa-solid fa-money-bill"></i></div><div><h4 style="font-size:10px;">Total Realisasi</h4><h2 style="font-size:12px;">Rp ${sub.realisasi.toLocaleString('id-ID')}</h2></div></div></div>
+                                        <div class="card inner-card" style="background: white; padding:10px;"><div class="card-flex"><div class="icon-box icon-blue" style="width:30px; height:30px; font-size:12px;"><i class="fa-solid fa-chart-line"></i></div><div><h4 style="font-size:10px;">Keuangan</h4><h2 style="font-size:12px;">${subKeuPct}%</h2></div></div><div class="progress-bar" style="height:5px;"><div class="progress-fill" style="width:${subKeuPct}%; background:#0c6bdc;"></div></div></div>
+                                        <div class="card inner-card" style="background: white; padding:10px;"><div class="card-flex"><div class="icon-box icon-orange" style="width:30px; height:30px; font-size:12px;"><i class="fa-solid fa-building"></i></div><div><h4 style="font-size:10px;">Fisik</h4><h2 style="font-size:12px;">${sub.fisik}%</h2></div></div><div class="progress-bar" style="height:5px;"><div class="progress-fill" style="width:${sub.fisik}%; background:#ff9800;"></div></div></div>
+                                        <div class="card inner-card" style="background: white; padding:10px;"><div class="card-flex"><div class="icon-box icon-red" style="width:30px; height:30px; font-size:12px;"><i class="fa-solid fa-hand-holding-dollar"></i></div><div><h4 style="font-size:10px;">Sisa Dana</h4><h2 style="font-size:12px;">Rp ${subSisa.toLocaleString('id-ID')}</h2></div></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        `;
+                    });
+                }
+            });
+
+            document.getElementById('total-pagu-label').textContent = `Rp ${grandTotalPagu.toLocaleString('id-ID')}`;
+            document.getElementById('total-realisasi-label').textContent = `Rp ${grandTotalRealisasi.toLocaleString('id-ID')}`;
+            document.getElementById('sisa-pagu-label').textContent = `Rp ${(grandTotalPagu - grandTotalRealisasi).toLocaleString('id-ID')}`;
+            document.getElementById('total-program-badge').textContent = `${dataDipilih.length} Program`;
+            document.getElementById('total-kegiatan-badge').textContent = `${totalKegiatanCount} Kegiatan`;
+
+            initChartGabunganDinamis();
+        }
+
+        // ==========================================
+        // 5. INITIALIZATION GRAPH GABUNGAN
+        // ==========================================
+        function initChartGabunganDinamis() {
+            const canvas = document.getElementById('canvasGabunganDinamis');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            let lastIndexFisik = 0;
+            let lastIndexKeu = 0;
+
+            for (let i = 11; i >= 0; i--) {
+                if (dataTrenFisik[i] > 0) { lastIndexFisik = i; break; }
+            }
+            for (let i = 11; i >= 0; i--) {
+                if (dataTrenKeuangan[i] > 0) { lastIndexKeu = i; break; }
+            }
+
+            const maxDataIndex = Math.max(lastIndexFisik, lastIndexKeu);
+            const bulanBerjalanIndex = Math.min(12, maxDataIndex + 2);
+
+            const labelDinamisX = MASTER_BULAN.slice(0, bulanBerjalanIndex);
+            const dataFisikDinamis = dataTrenFisik.slice(0, bulanBerjalanIndex);
+            const dataKeuDinamis = dataTrenKeuangan.slice(0, bulanBerjalanIndex);
+
+            chartInstanceGabungan = new Chart(ctx, {
+                type: 'line',
+                plugins: [ChartDataLabels],
+                data: {
+                    labels: labelDinamisX,
+                    datasets: [
+                        {
+                            label: 'Fisik (%)',
+                            data: dataFisikDinamis,
+                            borderColor: '#ff9800',
+                            borderWidth: 2.5,
+                            backgroundColor: 'rgba(255, 152, 0, 0.04)',
+                            fill: true,
+                            tension: 0.2,
+                            pointBackgroundColor: '#ff9800',
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        },
+                        {
+                            label: 'Keuangan (%)',
+                            data: dataKeuDinamis,
+                            borderColor: '#28a745',
+                            borderWidth: 2.5,
+                            backgroundColor: 'rgba(40, 167, 69, 0.04)',
+                            fill: true,
+                            tension: 0.2,
+                            pointBackgroundColor: '#28a745',
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }, 
+                        datalabels: {
+                            display: (context) => tampilkanAngkaGrafik && context.dataset.data[context.dataIndex] > 0,
+                            align: 'top',
+                            offset: 3,
+                            color: (context) => context.datasetIndex === 0 ? '#e65100' : '#1e7e34',
+                            font: { weight: 'bold', size: 9 },
+                            formatter: (value) => value + '%'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grace: '10%',
+                            ticks: {
+                                font: { size: 9 },
+                                callback: function (value) { return value + '%'; }
+                            }
+                        },
+                        x: {
+                            ticks: { color: '#334155', font: { size: 10, weight: 'bold' } }
+                        }
+                    }
+                }
+            });
+        }
+
+        // ==========================================
+        // 6. ANIMASI AKORDION & DETAILS
+        // ==========================================
+        function toggleProgram(header, index) {
+            const content = document.getElementById(`keg-${index}`);
+            const btnDetail = header.querySelector('.toggle-btn');
+            const btnKeg = header.querySelector('.kegiatan-btn');
+            const wrapper = document.getElementById(`sub-list-${index}`);
+            header.classList.toggle('active');
+            if (header.classList.contains('active')) {
+                if (btnDetail) btnDetail.textContent = "Tutup";
+                if (btnKeg) btnKeg.style.display = "inline-block";
+                if (content) content.style.display = 'block';
+            } else {
+                if (btnDetail) btnDetail.textContent = "Detail";
+                if (btnKeg) {
+                    btnKeg.style.display = "none";
+                    btnKeg.classList.remove('aktif');
+                    btnKeg.style.backgroundColor = "";
+                    btnKeg.style.borderColor = "";
+                    btnKeg.style.color = "";
+                }
+                if (content) content.style.display = 'none';
+                if (wrapper) wrapper.style.display = 'none';
+            }
+        }
+
+        function toggleProgramFromBtn(btn, index) {
+            const header = btn.closest('.program-header');
+            if (header) toggleProgram(header, index);
+        }
+
+        function toggleKegiatanData(btn, index) {
+            const wrapper = document.getElementById(`sub-list-${index}`);
+            const content = document.getElementById(`keg-${index}`);
+            const header = btn.closest('.program-header');
+            const btnDetail = header ? header.querySelector('.toggle-btn') : null;
+            
+            btn.classList.toggle('aktif');
+
+            if (btn.classList.contains('aktif')) {
+                // KONDISI 1: Saat tombol Kegiatan aktif (menampilkan daftar kegiatan)
+                btn.textContent = "Tutup Kegiatan";
+                if (content) content.style.display = 'none';
+                if (wrapper) wrapper.style.display = 'block';
+
+                btn.style.backgroundColor = "#fa8107";
+                btn.style.borderColor = "#d66e04";
+                btn.style.color = "#ffffff";
+            } else {
+                // KONDISI 2: Saat "Tutup Kegiatan" diklik -> KEMBALI KE AWAL SECARA TOTAL
+                btn.textContent = "Kegiatan";
+                if (wrapper) wrapper.style.display = 'none';
+                if (content) content.style.display = 'none'; // Pastikan detail ringkasan juga tutup
+
+                // Reset style tombol kegiatan ke default
+                btn.style.backgroundColor = "";
+                btn.style.borderColor = "";
+                btn.style.color = "";
+                
+                // KUNCI UTAMA: Sembunyikan tombol kegiatan ini secara instan
+                btn.style.display = "none"; 
+
+                // Kembalikan tombol detail menjadi bertuliskan "Detail" dan lepas kelas active pada header
+                if (btnDetail) btnDetail.textContent = "Detail";
+                if (header) header.classList.remove('active');
+            }
+        }
+
+        function toggleSubDetailCard(btn) {
+            const block = btn.closest('.sub-kegiatan-block');
+            if (!block) return;
+
+            const content = block.querySelector('.sub-kegiatan-cards-content');
+            if (!content) return;
+
+            if (content.style.display === 'none' || content.style.display === '') {
+                content.style.display = 'block';
+                btn.textContent = "Tutup";
+                btn.style.background = "#fa8107";
+                btn.style.borderColor = "#b71c1c";
+            } else {
+                content.style.display = 'none';
+                btn.textContent = "Detail";
+                btn.style.background = "#28a745";
+                btn.style.borderColor = "#1e7e34";
+            }
+        }
+       // ==========================================
+        // ==========================================
+        // 7. VISITOR COUNTER & EVENT LISTENERS
+        // ==========================================
+        function muatJumlahPengunjung() {
+            const elVisitor = document.getElementById('visitorCount');
+            if (!elVisitor) return;
+
+            // Tambahkan parameter timestamp untuk mencegah cache browser
+            const firestoreOrScriptUrl = VISITOR_URL + (VISITOR_URL.includes('?') ? '&' : '?') + 't=' + new Date().getTime();
+
+            fetch(firestoreOrScriptUrl, { method: 'GET' })
+                .then(res => {
+                    if (!res.ok) throw new Error('Respon jaringan gagal');
+                    return res.json();
+                })
+                .then(data => {
+                    // Mendukung fleksibilitas response key dari Apps Script (visits, count, atau total)
+                    const totalKunjungan = data.visits ?? data.count ?? data.total ?? 0;
+                    elVisitor.innerHTML = `<i class="fa-solid fa-eye"></i> : ${totalKunjungan.toLocaleString('id-ID')}`;
+                })
+                .catch(err => {
+                    console.warn("Gagal memuat statistik pengunjung:", err);
+                    elVisitor.innerHTML = `<i class="fa-solid fa-eye"></i> : -`;
+                });
+        }
+
+        // ====================================================================
+        // 8. SISIPAN: AUTO BACA QUERY URL (?opd=...) UNTUK MEMILIH DROPDOWN
+        // ====================================================================
+        function cekUrlDanPilihOPD() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let opdParam = urlParams.get('opd');
+
+            if (opdParam) {
+                opdParam = opdParam.toLowerCase();
+
+                // Pemetaan nama OPD jika ada perbedaan penulisan di Bagian 1 vs Database
+                const mapOPD = {
+                    'bappelitbangda': 'bappeda', // bappelitbangda di URL diubah jadi bappeda
+                    'barjas': 'bappeda'          // default fallback untuk barjas
+                };
+
+                if (mapOPD[opdParam]) {
+                    opdParam = mapOPD[opdParam];
+                }
+
+                // Ubah nilai pada Dropdown Selector (Bagian 2)
+                const selector = document.getElementById('opd-selector');
+                if (selector) {
+                    selector.value = opdParam;
+
+                    // Jalankan fungsi ganti OPD untuk update grafik & tabel
+                    if (typeof gantiOPD === "function") {
+                        gantiOPD(opdParam);
+                    }
+                }
+            }
+        }
+
+        // Jalankan saat halaman selesai dimuat sepenuhnya
+        window.addEventListener('load', function () {
+            muatJumlahPengunjung();
+            cekUrlDanPilihOPD(); // <--- Menjalankan fungsi otomatisasi URL
+        });
+    </script>
+</body>
+</html>
