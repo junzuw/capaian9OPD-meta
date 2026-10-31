@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Binfraswil</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <meta property="og:title" content="Dashboard Kegiatan Internal Bidang Infraswil per 31 Oktober 2026" />
+    <meta property="og:title" content="Dashboard Progres Kegiatan Internal Bidang Infraswil" />
     <meta property="og:description"
-    content="Lihat progres realisasi fisik & keuangan Bidang Infraswil, data ekstrak 30 Oktober 2026, pukul 20.00 WITA. Best view via smartphone." />
+    content="Lihat progres realisasi fisik & keuangan Kegiatan Bidang Infraswil, data ekstrak 30 Oktober 2026, pukul 20.00 WITA. Best view via smartphone." />
     <meta property="og:image" content="https://binfraswilzulsel.my.id/thumbnail5.png" />
     <meta property="og:url" content="https://binfraswilzulsel.my.id/" />
     <meta property="og:type" content="website" />
@@ -32,7 +32,6 @@
             min-height: 100vh;
         }
 
-        /* --- STYLES SPLASH SCREEN & ANIMASI LOGO --- */
         #splash-screen {
             position: fixed;
             top: 0;
@@ -51,76 +50,54 @@
             padding: 2px;
         }
 
-        /* --- STYLE CONTAINER DENGAN GAMBAR LATAR BELAKANG --- */
         .logo-container {
             width: 100%;
             max-width: 200px;
-            /* Ukuran maksimal logo tetap */
             height: 200px;
-            /* Berikan tinggi pasti agar gambar latar belakang punya ruang yang proporsional */
             display: flex;
             justify-content: center;
             align-items: center;
             margin: 0 auto;
             padding: 0;
-
-            /* Tambahkan baris di bawah ini untuk gambar latar belakang */
             background-image: url('logo-sulsel.png');
-            /* Ganti dengan nama file gambar latar Anda */
             background-size: contain;
-            /* Memastikan gambar latar pas di dalam kotak */
             background-position: center;
-            /* Posisi gambar latar tepat di tengah */
             background-repeat: no-repeat;
-            /* Mencegah gambar latar berulang (tiling) */
         }
 
-        /* Class Animasi Melayang Naik-Turun (SUDAH BERSIH DARI BINGKAI KOTAK) */
         .floating-logo {
             width: 100%;
             height: 100%;
             object-fit: contain;
             animation: floatAnimation 3s ease-in-out infinite;
             margin-bottom: 0 !important;
-            /* Hapus margin bawaan yang lama */
-
         }
 
-        /* Kunci posisi teks Bismillah agar tidak terpengaruh apapun */
         .static-bismillah-img {
             width: 65%;
-            /* Responsif mengikuti lebar layar HP */
             max-width: 180px;
-            /* Batas maksimal ukuran agar tidak raksasa di laptop */
             height: auto;
             object-fit: contain;
             margin-top: 10px;
             margin-bottom: 50px;
             filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.6));
-            /* Efek bayangan emas */
         }
 
         @keyframes floatAnimation {
             0% {
                 transform: translateY(0px);
-                /* Bayangan mengikuti lekukan objek asli logo PNG */
                 filter: drop-shadow(0px 5px 8px rgba(0, 0, 0, 0.7));
             }
-
             50% {
                 transform: translateY(-15px);
-                /* Jarak melayang naik */
-                /* Efek bayangan membesar/menyamar saat logo naik */
                 filter: drop-shadow(0px 20px 15px rgba(0, 0, 0, 0.25));
             }
-
             100% {
                 transform: translateY(0px);
                 filter: drop-shadow(0px 5px 8px rgba(0, 0, 0, 0.4));
             }
         }
 
-        /* OPSI JIKA INGIN BERPUTAR (SUDAH BERSIH DARI BINGKAI KOTAK) */
         .spinning-logo {
             width: 100px;
             height: 100px;
@@ -134,13 +111,8 @@
         }
 
         @keyframes spinAnimation {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         #splash-screen h1 {
@@ -172,7 +144,6 @@
             transform: scale(1.05);
         }
 
-        /* Header */
         .header {
             background: linear-gradient(180deg, #012d7e, #0740aa);
             color: white;
@@ -212,7 +183,6 @@
             flex: 1;
         }
 
-        /* Card Styles */
         .card {
             background: white;
             padding: 15px;
@@ -235,16 +205,13 @@
                 opacity: 0;
                 transform: translateY(-80px) scale(0.8);
             }
-
             60% {
                 opacity: 1;
                 transform: translateY(10px) scale(1.02);
             }
-
             80% {
                 transform: translateY(-5px) scale(0.99);
             }
-
             100% {
                 opacity: 1;
                 transform: translateY(0) scale(1);
@@ -294,21 +261,10 @@
             flex-shrink: 0;
         }
 
-        .icon-blue {
-            background: #0c6bdc;
-        }
-
-        .icon-green {
-            background: #28a745;
-        }
-
-        .icon-orange {
-            background: #ff9800;
-        }
-
-        .icon-red {
-            background: #e53935;
-        }
+        .icon-blue { background: #0c6bdc; }
+        .icon-green { background: #28a745; }
+        .icon-orange { background: #ff9800; }
+        .icon-red { background: #e53935; }
 
         .section-title {
             font-size: 16px;
@@ -533,7 +489,6 @@
             }
         }
 
-        /* --- RESPONSIVE CSS --- */
         @media (max-width: 768px) {
             .grid-4 {
                 grid-template-columns: 1fr !important;
@@ -580,14 +535,11 @@
 
 <body>
 
-    <!-- GANTI BAGIAN INI SECARA UTUH -->
     <div id="splash-screen">
         <img src="bismillah.png" alt="Bismillaah" class="static-bismillah-img">
-
         <div class="logo-container">
             <img src="sappurecca-2.png" alt="Logo" class="floating-logo">
         </div>
-
         <p style="margin-top: 5px; margin-bottom: 20px; line-height: 1.5;">
             <b>Selamat Datang,</b> di Halaman Dashboard<br>
             Progres Realisasi FisKeu Bidang <b>INFRASWIL</b>.<br>
@@ -636,25 +588,21 @@
         </div>
 
         <div style="display: flex; flex-direction: row; gap: 15px; width: 100%; margin-bottom: 15px;">
-            <div class="card inner-card animated-card" id="main-card-4"
-                style="flex: 1; margin-bottom: 0; padding: 15px;">
+            <div class="card inner-card animated-card" id="main-card-4" style="flex: 1; margin-bottom: 0; padding: 15px;">
                 <div class="card-flex">
                     <div class="icon-box icon-orange"><i class="fa-solid fa-folder-open"></i></div>
                     <div class="card-text" style="min-width: 0;">
                         <h4>TOTAL KEGIATAN</h4>
-                        <h2 id="total-program-badge"
-                            style="margin: 1px 0 0 0; font-size: 20px; color: #1a1a1a; font-weight: 700;">0</h2>
+                        <h2 id="total-program-badge" style="margin: 1px 0 0 0; font-size: 20px; color: #1a1a1a; font-weight: 700;">0</h2>
                     </div>
                 </div>
             </div>
-            <div class="card inner-card animated-card" id="main-card-5"
-                style="flex: 1; margin-bottom: 0; padding: 15px;">
+            <div class="card inner-card animated-card" id="main-card-5" style="flex: 1; margin-bottom: 0; padding: 15px;">
                 <div class="card-flex">
                     <div class="icon-box icon-blue"><i class="fa-solid fa-list-check"></i></div>
                     <div class="card-text" style="min-width: 0;">
                         <h4>TOTAL SUB-KEGIATAN</h4>
-                        <h2 id="total-kegiatan-badge"
-                            style="margin: 1px 0 0 0; font-size: 20px; color: #1a1a1a; font-weight: 700;">0</h2>
+                        <h2 id="total-kegiatan-badge" style="margin: 1px 0 0 0; font-size: 20px; color: #1a1a1a; font-weight: 700;">0</h2>
                     </div>
                 </div>
             </div>
@@ -663,8 +611,7 @@
         <div class="card animated-card" id="main-card-6">
             <div class="section-title">
                 <span><i class="fa-solid fa-chart-line"></i> Trend Capaian Bulanan</span>
-                <button class="btn-view-data" id="btnToggleAngka" onclick="toggleAngkaGrafik()"><i
-                        class="fa-solid fa-eye"></i> Lihat Nilai</button>
+                <button class="btn-view-data" id="btnToggleAngka" onclick="toggleAngkaGrafik()"><i class="fa-solid fa-eye"></i> Lihat Nilai</button>
             </div>
             <div class="chart-container">
                 <canvas id="trendChart"></canvas>
@@ -678,8 +625,7 @@
     </div>
 
     <div class="footer">
-        Sumber Data: <a href="https://sulselprov.e-planning.id"
-            style="color:#6ab0ff; text-decoration:none;">sulselprov.e-planning.id</a> <br>
+        Sumber Data: <a href="https://sulselprov.e-planning.id" style="color:#6ab0ff; text-decoration:none;">sulselprov.e-planning.id</a> <br>
         &copy; 2026 by @zuwlend. All Rights Reserved.
         <div id="visitorCount" style="margin-top:8px; opacity:0.8;"></div>
     </div>
@@ -719,14 +665,14 @@
                         "pagu": 16400000,
                         "realisasiBulanIni": 0,
                         "realisasi": 4000000,
-                        "fisik": 30
+                        "fisik": 30.0
                     },
                     {
                         "nama": "Belanja Perjalanan Dinas Biasa",
                         "pagu": 98320000,
                         "realisasiBulanIni": 0,
                         "realisasi": 9609000,
-                        "fisik": 15
+                        "fisik": 15.0
                     }
                 ]
             },
@@ -763,14 +709,14 @@
                         "pagu": 16400000,
                         "realisasiBulanIni": 0,
                         "realisasi": 600000,
-                        "fisik": 10
+                        "fisik": 10.0
                     },
                     {
                         "nama": "Belanja Perjalanan Dinas Biasa",
                         "pagu": 42670000,
                         "realisasiBulanIni": 5515000,
                         "realisasi": 34644000,
-                        "fisik": 73
+                        "fisik": 73.0
                     }
                 ]
             },
@@ -807,21 +753,21 @@
                         "pagu": 16400000,
                         "realisasiBulanIni": 0,
                         "realisasi": 2930000,
-                        "fisik": 25
+                        "fisik": 25.0
                     },
                     {
                         "nama": "Honorarium Narasumber atau Pembahas, Moderator, Pembawa Acara, dan Panitia",
                         "pagu": 324000000,
                         "realisasiBulanIni": 0,
                         "realisasi": 10800000,
-                        "fisik": 10
+                        "fisik": 10.0
                     },
                     {
                         "nama": "Belanja Perjalanan Dinas Biasa",
                         "pagu": 68686000,
                         "realisasiBulanIni": 6290000,
                         "realisasi": 56230676,
-                        "fisik": 83
+                        "fisik": 83.0
                     }
                 ]
             }
@@ -1007,55 +953,50 @@
                     item.subKegiatan.forEach((sub) => {
                         const subKeuPct = sub.pagu > 0 ? ((sub.realisasi / sub.pagu) * 100).toFixed(2) : 0;
                         const subSisa = sub.pagu - sub.realisasi;
-
                         const warnaSubKegiatan = sub.realisasi > 0 ? '#28a745' : '#e53935';
-
-                        // 1. TAMBAHKAN LOGIKA WARNA FISIK SUB-KEGIATAN DI SINI
                         const warnaFisikSub = sub.fisik > 0 ? '#ff9800' : '#e53935';
 
                         subContainer.innerHTML += `
-            <div class="sub-kegiatan-block" style="padding: 12px 15px; border-radius: 12px; margin-bottom: 10px; border-left: 3px solid #ff7300;">
-                <div class="sub-kegiatan-name-header" style="margin-bottom: 5px;">
-                    <div class="sub-kegiatan-name-text" style="width: 100%;">
-                        <i class="fa-solid fa-circle-dot" style="color:#ff7300; font-size:9px;"></i> <span style="font-size: 13px; font-weight: 600; color: #2d3748;">${sub.nama}</span>
-                        <div style="font-size: 12px; color: #0c6bdc; font-weight: 700; margin-top: 4px;"><i class="fa-solid fa-wallet" style="width:15px;"></i> Pagu: Rp ${sub.pagu.toLocaleString('id-ID')}</div>
-                        
-                        <div style="margin-top: 12px; width: 100%;">
-                            <div class="progress-bar" style="margin-top: 0; height: 12px; background: #eee; border-radius: 6px;">
-                                <div class="progress-fill" style="width: ${subKeuPct}%; background: ${warnaSubKegiatan}; height: 100%;"></div>
+                            <div class="sub-kegiatan-block" style="padding: 12px 15px; border-radius: 12px; margin-bottom: 10px; border-left: 3px solid #ff7300;">
+                                <div class="sub-kegiatan-name-header" style="margin-bottom: 5px;">
+                                    <div class="sub-kegiatan-name-text" style="width: 100%;">
+                                        <i class="fa-solid fa-circle-dot" style="color:#ff7300; font-size:9px;"></i> <span style="font-size: 13px; font-weight: 600; color: #2d3748;">${sub.nama}</span>
+                                        <div style="font-size: 12px; color: #0c6bdc; font-weight: 700; margin-top: 4px;"><i class="fa-solid fa-wallet" style="width:15px;"></i> Pagu: Rp ${sub.pagu.toLocaleString('id-ID')}</div>
+                                        
+                                        <div style="margin-top: 12px; width: 100%;">
+                                            <div class="progress-bar" style="margin-top: 0; height: 12px; background: #eee; border-radius: 6px;">
+                                                <div class="progress-fill" style="width: ${subKeuPct}%; background: ${warnaSubKegiatan}; height: 100%;"></div>
+                                            </div>
+                                            <div style="font-size: 11px; font-weight: bold; color: ${warnaSubKegiatan}; margin-top: 4px;">
+                                                Realisasi Keuangan: ${subKeuPct}%
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="sub-detail-btn" onclick="toggleSubDetailCard(this)">Detail</button>
+                                </div>
+                                
+                                <div class="sub-kegiatan-cards-content" style="margin-top: 8px; padding-top: 8px;">
+                                    <div style="display: flex; flex-direction: column; gap: 8px; background: #fdfdfd; padding: 10px; border-radius: 8px; border: 1px dashed #e2e8f0; font-size: 12px;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #edf2f7; padding-bottom: 4px;">
+                                            <span style="color: #000000; font-weight: 500;"><i class="fa-solid fa-calendar-day" style="color:#28a745; width:15px;"></i> Realisasi Bulan Ini</span>
+                                            <span style="font-weight: 600; color: #28a745;">Rp ${sub.realisasiBulanIni.toLocaleString('id-ID')}</span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #edf2f7; padding-bottom: 4px;">
+                                            <span style="color: #000000; font-weight: 700;"><i class="fa-solid fa-chart-pie" style="color:#0c6bdc; width:15px;"></i> Total Realisasi Hingga Bulan Ini</span>
+                                            <span style="font-weight: 700; color: #0c6bdc;">Rp ${sub.realisasi.toLocaleString('id-ID')} (${subKeuPct}%)</span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #edf2f7; padding-bottom: 4px;">
+                                            <span style="color: #000000; font-weight: 500; font-size: 12px;"><i class="fa-solid fa-building" style="color: ${warnaFisikSub}; width:15px;"></i> Realisasi Fisik</span>
+                                            <span style="font-weight: 600; color: ${warnaFisikSub}; font-size: 12px;">${sub.fisik}%</span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                            <span style="color: #000000; font-weight: 500;"><i class="fa-solid fa-hand-holding-dollar" style="color:#e53935; width:15px;"></i> Sisa Dana Sub</span>
+                                            <span style="font-weight: 600; color: #e53935;">Rp ${subSisa.toLocaleString('id-ID')}</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div style="font-size: 11px; font-weight: bold; color: ${warnaSubKegiatan}; margin-top: 4px;">
-                                Realisasi Keuangan: ${subKeuPct}%
-                            </div>
-                        </div>
-                    </div>
-                    <button class="sub-detail-btn" onclick="toggleSubDetailCard(this)">Detail</button>
-                </div>
-                
-                <div class="sub-kegiatan-cards-content" style="margin-top: 8px; padding-top: 8px;">
-                    <div style="display: flex; flex-direction: column; gap: 8px; background: #fdfdfd; padding: 10px; border-radius: 8px; border: 1px dashed #e2e8f0; font-size: 12px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #edf2f7; padding-bottom: 4px;">
-                            <span style="color: #000000; font-weight: 500;"><i class="fa-solid fa-calendar-day" style="color:#28a745; width:15px;"></i> Realisasi Bulan Ini</span>
-                            <span style="font-weight: 600; color: #28a745;">Rp ${sub.realisasiBulanIni.toLocaleString('id-ID')}</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #edf2f7; padding-bottom: 4px;">
-                            <span style="color: #000000; font-weight: 700;"><i class="fa-solid fa-chart-pie" style="color:#0c6bdc; width:15px;"></i> Total Realisasi Hingga Bulan Ini</span>
-                            <span style="font-weight: 700; color: #0c6bdc;">Rp ${sub.realisasi.toLocaleString('id-ID')} (${subKeuPct}%)</span>
-                        </div>
-                        
-                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #edf2f7; padding-bottom: 4px;">
-                            <span style="color: #000000; font-weight: 500; font-size: 12px;"><i class="fa-solid fa-building" style="color: ${warnaFisikSub}; width:15px;"></i> Realisasi Fisik</span>
-                            <span style="font-weight: 600; color: ${warnaFisikSub}; font-size: 12px;">${sub.fisik}%</span>
-                        </div>
-                        
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span style="color: #000000; font-weight: 500;"><i class="fa-solid fa-hand-holding-dollar" style="color:#e53935; width:15px;"></i> Sisa Dana Sub</span>
-                            <span style="font-weight: 600; color: #e53935;">Rp ${subSisa.toLocaleString('id-ID')}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
+                        `;
                     });
                 }
             });
