@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Progres Program Prioritas 2026</title>
     <meta property="og:title" content="Dashboard Progres Strong Point 2026" />
-    <meta property="og:description" content="Klik/tap di sini untuk melihat progres kegiatan Strong Point Mitra Bidang INFRASWIL 2026." />
+    <meta property="og:description" content="Klik/tap di sini untuk melihat progres kegiatan Strong Point Triwulan IV Mitra Bidang INFRASWIL 2026." />
     <meta property="og:image" content="https://binfraswilzulsel.my.id/thumbnail6.png" />
     <meta property="og:url" content="https://binfraswilzulsel.my.id/" />
     <meta property="og:type" content="website" />
@@ -516,6 +516,28 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             margin-top: 10px;
         }
+
+        .btn-edit-full {
+            display: block;
+            width: 100%;
+            margin-top: 12px;
+            padding: 9px 12px;
+            background-color: #0740aa; /* Warna biru sesuai tema utama */
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 12.5px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .btn-edit-full:hover {
+            background-color: #1d4ed8;
+        }
     </style>
 </head>
 
@@ -574,7 +596,7 @@
     </div>
 
     <script>
-        const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbwQ44-b8uNez1gVSHMgz9EaFXb1FIoQNtnfFXFw36n5V5a8lti5sK56fzk4rOfcQppg/exec";
+        const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbze7rHruZjWSjpqoqAIhT_1nplOl4HjPJCG0Sb5pt6iiG6WlY6OUs7a0MscUwlddVGR/exec";
         let proyekData = [];
         let kategoriAktif = 'semua';
         const tapSound = new Audio("tap_sound.mp3");
@@ -864,9 +886,36 @@
                                 </div>
                             </div>
                             <div class="kegiatan-sub-detail">
-                                <div class="detail-row"><div class="detail-label">Status Saat Ini</div><div class="detail-value"><span class="status-badge" style="${badgeStyle}">${status}</span></div></div>
-                                <div class="detail-row"><div class="detail-label">Progres Fisik</div><div class="detail-value">${fisikStr}</div></div>
-                                <div class="detail-row"><div class="detail-label">Keterangan</div><div class="detail-value">${ket}</div></div>
+                                <!-- MODE TAMPILAN NORMAL -->
+                                <div class="view-mode">
+                                    <div class="detail-row"><div class="detail-label">Status Saat Ini</div><div class="detail-value"><span class="status-badge view-status" style="${badgeStyle}">${status}</span></div></div>
+                                    <div class="detail-row"><div class="detail-label">Progres Fisik</div><div class="detail-value view-fisik">${fisikStr}</div></div>
+                                    <div class="detail-row"><div class="detail-label">Keterangan</div><div class="detail-value view-ket">${ket}</div></div>
+                                    
+                                    <!-- TOMBOL EDIT BIRU -->
+                                    <button class="btn-edit-full" onclick="aktifkanModeEdit(this)">✏️ Edit Langsung Data Ini</button>
+                                </div>
+
+                                <!-- MODE EDIT (LANGSUNG MENGGANTI KOLOM DI ATAS) -->
+                                <div class="edit-mode" style="display: none;">
+                                    <div class="detail-row">
+                                        <div class="detail-label">Status Saat Ini</div>
+                                        <div class="detail-value"><input type="text" class="edit-input-status" value="${status}" style="width:100%; padding:4px; font-size:12.5px; border:1px solid #cbd5e1; border-radius:4px;"></div>
+                                    </div>
+                                    <div class="detail-row">
+                                        <div class="detail-label">Progres Fisik</div>
+                                        <div class="detail-value"><input type="text" class="edit-input-fisik" value="${fisikStr}" style="width:100%; padding:4px; font-size:12.5px; border:1px solid #cbd5e1; border-radius:4px;"></div>
+                                    </div>
+                                    <div class="detail-row">
+                                        <div class="detail-label">Keterangan</div>
+                                        <div class="detail-value"><textarea class="edit-input-ket" rows="2" style="width:100%; padding:4px; font-size:12.5px; border:1px solid #cbd5e1; border-radius:4px;">${ket}</textarea></div>
+                                    </div>
+
+                                    <div style="display: flex; gap: 8px; margin-top: 10px;">
+                                        <button class="btn" style="flex:1; background:#10b981; color:#fff; padding:6px;" onclick="simpanDataEditable(this, '${namaOPD}', '${uraian}')">💾 Simpan</button>
+                                        <button class="btn" style="flex:1; background:#64748b; color:#fff; padding:6px;" onclick="batalModeEdit(this)">Batal</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>`;
                 });
@@ -1016,6 +1065,90 @@
                     }
                 }
             });
+        }
+
+        function bukaFormEdit(namaOPD, uraianKegiatan, statusLama, fisikLama, ketLama) {
+            try {
+                tapSound.currentTime = 0;
+                tapSound.play().catch(() => {});
+            } catch(e) {}
+
+            let statusBaru = prompt(`[EDIT STATUS SAAT INI]\nOPD: ${namaOPD}\nKegiatan: ${uraianKegiatan}\n\nMasukkan status baru:`, statusLama);
+            if (statusBaru === null) return; // Batal jika tombol cancel ditekan
+
+            let fisikBaru = prompt(`[EDIT PROGRES FISIK (%)]\nMasukkan persentase fisik baru (contoh: 75% atau 75):`, fisikLama);
+            if (fisikBaru === null) return;
+
+            let ketBaru = prompt(`[EDIT KETERANGAN]\nMasukkan keterangan baru:`, ketLama);
+            if (ketBaru === null) return;
+
+            alert(`Simulasi Perubahan Berhasil!\n\nOPD: ${namaOPD}\nKegiatan: ${uraianKegiatan}\n- Status Baru: ${statusBaru}\n- Fisik Baru: ${fisikBaru}\n- Keterangan Baru: ${ketBaru}\n\n*Catatan: Nilai ini baru simulasi di browser. Jika ingin permanen, data ini nantinya dikirim menggunakan fetch() ke Google Apps Script.*`);
+        }
+        // Fungsi saat tombol Edit diklik (mengubah tampilan menjadi kotak isian)
+        function aktifkanModeEdit(button) {
+            try { tapSound.currentTime = 0; tapSound.play().catch(() => {}); } catch(e) {}
+            
+            let subDetail = button.closest('.kegiatan-sub-detail');
+            subDetail.querySelector('.view-mode').style.display = 'none';
+            subDetail.querySelector('.edit-mode').style.display = 'block';
+        }
+
+        // Fungsi saat tombol Batal diklik
+        function batalModeEdit(button) {
+            try { tapSound.currentTime = 0; tapSound.play().catch(() => {}); } catch(e) {}
+            
+            let subDetail = button.closest('.kegiatan-sub-detail');
+            subDetail.querySelector('.edit-mode').style.display = 'none';
+            subDetail.querySelector('.view-mode').style.display = 'block';
+        }
+
+        // Fungsi saat tombol Simpan diklik
+        function simpanDataEditable(button, namaOPD, uraianKegiatan) {
+            try { tapSound.currentTime = 0; tapSound.play().catch(() => {}); } catch(e) {}
+
+            let subDetail = button.closest('.kegiatan-sub-detail');
+            
+            // Ambil nilai baru dari inputan
+            let statusBaru = subDetail.querySelector('.edit-input-status').value;
+            let fisikBaru = subDetail.querySelector('.edit-input-fisik').value;
+            let ketBaru = subDetail.querySelector('.edit-input-ket').value;
+
+            // Berikan indikator loading pada tombol simpan
+            let btnSimpan = button;
+            let teksAsli = btnSimpan.innerText;
+            btnSimpan.innerText = "⏳ Menyimpan...";
+            btnSimpan.disabled = true;
+
+            // Kirim data ke Google Apps Script
+            let urlUpdate = APPSCRIPT_URL + `?action=updateData&opd=${encodeURIComponent(namaOPD)}&kegiatan=${encodeURIComponent(uraianKegiatan)}&status=${encodeURIComponent(statusBaru)}&fisik=${encodeURIComponent(fisikBaru)}&keterangan=${encodeURIComponent(ketBaru)}`;
+
+            fetch(urlUpdate)
+                .then(response => response.json())
+                .then(result => {
+                    btnSimpan.innerText = teksAsli;
+                    btnSimpan.disabled = false;
+
+                    if (result.status === "success") {
+                        // Perbarui tampilan teks secara langsung di layar
+                        subDetail.querySelector('.view-status').innerText = statusBaru;
+                        subDetail.querySelector('.view-fisik').innerText = fisikBaru;
+                        subDetail.querySelector('.view-ket').innerText = ketBaru;
+
+                        // Kembalikan ke mode normal (tampilan teks)
+                        subDetail.querySelector('.edit-mode').style.display = 'none';
+                        subDetail.querySelector('.view-mode').style.display = 'block';
+
+                        alert("✅ Data berhasil disimpan secara permanen ke Google Spreadsheet!");
+                    } else {
+                        alert("⚠️ Gagal menyimpan: " + (result.message || "Terjadi kesalahan pada server."));
+                    }
+                })
+                .catch(error => {
+                    btnSimpan.innerText = teksAsli;
+                    btnSimpan.disabled = false;
+                    console.error("Error:", error);
+                    alert("❌ Terjadi kesalahan jaringan saat menyimpan data.");
+                });
         }
     </script>
 </body>
