@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Progres Program Prioritas 2026</title>
     <meta property="og:title" content="Dashboard Progres Strong Point 2026" />
-    <meta property="og:description" content="Klik/tap di sini untuk melihat progres kegiatan Strong Point Mitra Bidang INFRASWIL 2026." />
+    <meta property="og:description" content="Klik/tap di sini untuk melihat progres kegiatan Strong Point Triwulan IV Mitra Bidang INFRASWIL 2026." />
     <meta property="og:image" content="https://binfraswilzulsel.my.id/thumbnail6.png" />
     <meta property="og:url" content="https://binfraswilzulsel.my.id/" />
     <meta property="og:type" content="website" />
@@ -506,7 +506,9 @@
 
         function bukaDashboard() {
             tapSound.currentTime = 0;
-            tapSound.play().catch(() => {});
+            tapSound.play().catch(err => {
+                console.log("Audio diblokir browser sampai ada interaksi:", err);
+            });
             document.getElementById('splashScreen').style.display = 'none';
             document.getElementById('appContainer').style.display = 'flex';
             muatDataDariGoogleSheets();
@@ -565,6 +567,22 @@
             if (isNaN(angka)) return nilai;
 
             return "Rp " + angka.toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+        }
+
+// Fungsi untuk mencocokkan nama OPD dengan file logo berawalan "logo-"
+        function getLogoFilename(namaOPD) {
+            let nama = namaOPD ? namaOPD.toString().toLowerCase().trim() : "";
+            
+            if (nama.includes("perhubungan") || nama.includes("dishub")) return "logo-dishub.png";
+            if (nama.includes("kominfo") || nama.includes("komunikasi")) return "logo-kominfo.png";
+            if (nama.includes("bappelitbangda") || nama.includes("bappeda")) return "logo-bappelitbangda.png";
+            if (nama.includes("perkimtan")) return "logo-perkimtan.png";
+            if (nama.includes("bmbk") || nama.includes("binamarga") || nama.includes("bm")) return "logo-bmbk.png";
+            if (nama.includes("sdacktr") || nama.includes("sda") || nama.includes("cktr")) return "logo-sdacktr.png";
+            if (nama.includes("bpbd")) return "logo-bpbd.png";
+            
+            // Fallback default jika ada nama lain
+            return "logo.png";
         }
 
         function deteksiKategoriWarna(warnaHex, teksStatus) {
@@ -781,7 +799,7 @@
                 opdCard.innerHTML = `
                     <div class="opd-main-info">
                         <div class="opd-logo-cell">
-                            <img class="opd-logo" src="placeholder.png" alt="Logo" onerror="this.src='https://placehold.co/70x70?text=OPD';">
+                            <img class="opd-logo" src="${getLogoFilename(namaOPD)}" alt="${namaOPD}" onerror="this.src='https://placehold.co/70x70?text=${encodeURIComponent(namaOPD)}';">
                         </div>
                         <div class="opd-details-cell">
                             <div class="opd-title">${namaOPD}</div>
@@ -806,11 +824,25 @@
             semuaKartu.forEach((kartu, index) => {
                 setTimeout(() => {
                     kartu.classList.add('mulai-animasi');
+                    
+                    // Mainkan suara secara berurutan seiring jatuhnya kartu
+                    try {
+                        let cloneSound = tapSound.cloneNode(); // Clone agar bisa bunyi bertumpuk cepat
+                        cloneSound.volume = 0.3;
+                        cloneSound.play().catch(() => {});
+                    } catch(e) {}
+
                 }, index * 100);
             });
         }
 
         function filterKategori(kategori, btnElement) {
+            // Mainkan suara saat tombol filter diklik
+            try {
+                tapSound.currentTime = 0;
+                tapSound.play().catch(() => {});
+            } catch(e) {}
+
             kategoriAktif = kategori;
 
             document.querySelectorAll('.btn-filter-kat').forEach(btn => btn.classList.remove('active'));
@@ -820,6 +852,12 @@
         }
 
         function toggleOPD(button, containerId) {
+            // Mainkan suara saat tombol Detail/Tutup OPD diklik
+            try {
+                tapSound.currentTime = 0;
+                tapSound.play().catch(() => {});
+            } catch(e) {}
+
             var container = document.getElementById(containerId);
             if (container.style.display === "block") {
                 container.style.display = "none";
@@ -833,6 +871,12 @@
         }
 
         function toggleSubDetail(button) {
+            // Mainkan suara saat tombol Detail/Tutup Kegiatan diklik
+            try {
+                tapSound.currentTime = 0;
+                tapSound.play().catch(() => {});
+            } catch(e) {}
+
             var kegiatanCard = button.closest('.kegiatan-card');
             var subDetail = kegiatanCard.querySelector('.kegiatan-sub-detail');
             if (subDetail.style.display === "block") {
