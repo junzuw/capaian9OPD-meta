@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Progres Program Prioritas 2026</title>
     <meta property="og:title" content="Dashboard Progres Strong Point 2026" />
-    <meta property="og:description" content="Klik/tap di sini untuk melihat progres kegiatan Strong Point Triwulan IV Mitra Bidang INFRASWIL 2026." />
+    <meta property="og:description" content="Klik/tap di sini untuk melihat progres kegiatan Strong Point Mitra Bidang INFRASWIL 2026." />
     <meta property="og:image" content="https://binfraswilzulsel.my.id/thumbnail6.png" />
     <meta property="og:url" content="https://binfraswilzulsel.my.id/" />
     <meta property="og:type" content="website" />
@@ -30,6 +30,9 @@
             min-height: 100vh;
         }
 
+        /* ======================================================= */
+        /* Splash Screen Estetik & Floating Logo                   */
+        /* ======================================================= */
         .splash-screen {
             position: fixed;
             top: 0;
@@ -46,6 +49,7 @@
             transition: opacity 0.5s ease, visibility 0.5s;
             text-align: center;
             padding: 20px;
+            overflow: hidden;
         }
 
         .splash-screen h2 {
@@ -57,7 +61,77 @@
         .splash-screen p {
             font-size: 14px;
             opacity: 0.8;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
+        }
+
+        .splash-logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .logo-bismillah {
+            width: 175px;
+            height: auto;
+            margin-bottom: 15px;
+            filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.15));
+        }
+
+        .logo-character-group {
+            position: relative;
+            width: 220px;
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-statis-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            z-index: 1;
+            opacity: 0.9;
+        }
+
+        .logo-karakter-floating {
+            position: absolute;
+            width: 85%;
+            height: 85%;
+            object-fit: contain;
+            z-index: 3;
+            top: 10px;
+            animation: melayangKarakter 3s ease-in-out infinite;
+        }
+
+        @keyframes melayangKarakter {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .logo-character-group::after {
+            content: "";
+            position: absolute;
+            bottom: 0px;
+            left: 15%;
+            width: 70%;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            z-index: 2;
+            filter: blur(4px);
+            animation: bayanganBerdenyut 3s ease-in-out infinite;
+        }
+
+        @keyframes bayanganBerdenyut {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(0.7); opacity: 0.4; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         .btn-masuk {
@@ -73,6 +147,14 @@
             transition: all 0.2s;
         }
 
+        .btn-masuk:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+        }
+
+        /* ======================================================= */
+        /* Dashboard Utama                                         */
+        /* ======================================================= */
         .container {
             display: none;
             width: 100%;
@@ -158,6 +240,7 @@
             height: 44px;
         }
 
+        /* 5 Tombol Filter Fit di 1 Layar */
         .filter-buttons-container {
             display: grid;
             grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -412,16 +495,6 @@
             .opd-card { margin-bottom: 0 !important; height: max-content; }
         }
 
-        .splash-logo-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .logo-bismillah { width: 175px; height: auto; margin-bottom: 15px; }
-
         footer {
             background: linear-gradient(135deg, #0740aa 0%, #1d4ed8 100%);
             color: rgba(255, 255, 255, 0.8);
@@ -451,6 +524,10 @@
     <div class="splash-screen" id="splashScreen">
         <div class="splash-logo-container">
             <img src="bismillah.png" alt="Bismillah" class="logo-bismillah">
+            <div class="logo-character-group">
+                <img src="logo-sulsel.png" alt="Logo Background" class="logo-statis-bg">
+                <img src="sappurecca-2.png" alt="Karakter Utama" class="logo-karakter-floating">
+            </div>
         </div>
         <h2>Selamat Datang</h2>
         <p>Di Halaman Dashboard Progres <b>Strong Point</b><br>Mitra Bidang <b>INFRASWIL</b> 2026</p>
@@ -497,7 +574,7 @@
     </div>
 
     <script>
-        const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbzTc2Bt8Vgx1TPebfNUJT4MXMxUJbcEPM-SLXvnsksbWOjBqdtYJeE7CTD3AgHLloYr/exec";
+        const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbwQ44-b8uNez1gVSHMgz9EaFXb1FIoQNtnfFXFw36n5V5a8lti5sK56fzk4rOfcQppg/exec";
         let proyekData = [];
         let kategoriAktif = 'semua';
         const tapSound = new Audio("tap_sound.mp3");
