@@ -98,23 +98,6 @@
             }
         }
 
-        .spinning-logo {
-            width: 100px;
-            height: 100px;
-            object-fit: contain;
-            border-radius: 0 !important;
-            border: none !important;
-            background: transparent !important;
-            box-shadow: none !important;
-            margin-bottom: 20px;
-            animation: spinAnimation 8s linear infinite;
-        }
-
-        @keyframes spinAnimation {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
         #splash-screen h1 {
             font-size: 24px;
             margin-bottom: 10px;
@@ -630,460 +613,457 @@
         <div id="visitorCount" style="margin-top:8px; opacity:0.8;"></div>
     </div>
 
-    <script>
-        const dataBidangInfraswil = [
-            {
-                "namaKegiatan": "Pelaksanaan Monitoring dan Evaluasi Penyusunan Dokumen Perencanaan Pembangunan Perangkat Daerah Bidang Infrastruktur",
-                "pagu": 122634800,
-                "realisasiBulanIni": 0,
-                "realisasiTot": 13609000,
-                "fisikPersen": 16.04,
-                "subKegiatan": [
-                    {
-                        "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor-Alat Tulis Kantor",
-                        "pagu": 2882800,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 0,
-                        "fisik": 0
-                    },
-                    {
-                        "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor- Kertas dan Cover",
-                        "pagu": 2584000,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 0,
-                        "fisik": 0
-                    },
-                    {
-                        "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor-Bahan Komputer",
-                        "pagu": 2448000,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 0,
-                        "fisik": 0
-                    },
-                    {
-                        "nama": "Belanja Makanan dan Minuman Rapat",
-                        "pagu": 16400000,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 4000000,
-                        "fisik": 30.0
-                    },
-                    {
-                        "nama": "Belanja Perjalanan Dinas Biasa",
-                        "pagu": 98320000,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 9609000,
-                        "fisik": 15.0
-                    }
-                ]
-            },
-            {
-                "namaKegiatan": "Koordinasi Penyusunan Dokumen Perencanaan Pembangunan Daerah Bidang Kewilayahan (RPJPD, RPJMD dan RKPD)",
-                "pagu": 66974000,
-                "realisasiBulanIni": 5515000,
-                "realisasiTot": 35244000,
-                "fisikPersen": 48.96,
-                "subKegiatan": [
-                    {
-                        "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor-Alat Tulis Kantor",
-                        "pagu": 2742800,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 0,
-                        "fisik": 0
-                    },
-                    {
-                        "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor- Kertas dan Cover",
-                        "pagu": 2713200,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 0,
-                        "fisik": 0
-                    },
-                    {
-                        "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor-Bahan Komputer",
-                        "pagu": 2448000,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 0,
-                        "fisik": 0
-                    },
-                    {
-                        "nama": "Belanja Makanan dan Minuman Rapat",
-                        "pagu": 16400000,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 600000,
-                        "fisik": 10.0
-                    },
-                    {
-                        "nama": "Belanja Perjalanan Dinas Biasa",
-                        "pagu": 42670000,
-                        "realisasiBulanIni": 5515000,
-                        "realisasi": 34644000,
-                        "fisik": 73.0
-                    }
-                ]
-            },
-            {
-                "namaKegiatan": "Koordinasi Pelaksanaan Sinergitas dan Harmonisasi Perencanaan Pembangunan Daerah Bidang Kewilayahan",
-                "pagu": 416683000,
-                "realisasiBulanIni": 6290000,
-                "realisasiTot": 69960676,
-                "fisikPersen": 22.44,
-                "subKegiatan": [
-                    {
-                        "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor-Alat Tulis Kantor",
-                        "pagu": 2565000,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 0,
-                        "fisik": 0
-                    },
-                    {
-                        "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor- Kertas dan Cover",
-                        "pagu": 2584000,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 0,
-                        "fisik": 0
-                    },
-                    {
-                        "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor-Bahan Komputer",
-                        "pagu": 2448000,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 0,
-                        "fisik": 0
-                    },
-                    {
-                        "nama": "Belanja Makanan dan Minuman Rapat",
-                        "pagu": 16400000,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 2930000,
-                        "fisik": 25.0
-                    },
-                    {
-                        "nama": "Honorarium Narasumber atau Pembahas, Moderator, Pembawa Acara, dan Panitia",
-                        "pagu": 324000000,
-                        "realisasiBulanIni": 0,
-                        "realisasi": 10800000,
-                        "fisik": 10.0
-                    },
-                    {
-                        "nama": "Belanja Perjalanan Dinas Biasa",
-                        "pagu": 68686000,
-                        "realisasiBulanIni": 6290000,
-                        "realisasi": 56230676,
-                        "fisik": 83.0
-                    }
-                ]
-            }
-        ];
-
-        const namaBulan = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-        const dataTrendKeuangan = [0, 0, 0, 2.11, 2.11, 5.95, 5.95, 5.95, 5.95, 19.6, 0, 0];
-        const dataTrendFisik = [0, 0, 0, 4.29, 6.44, 9.27, 9.27, 9.27, 9.27, 29.15, 0, 0];
-        const VISITOR_URL = 'https://script.google.com/macros/s/AKfycbw4heB0YjxHIH31Mn6C_JRGHzdnWdCvrahsgGjZ3D8ZX9CQGDftb1Rmyy-3trQdgyt0/exec';
-
-        let myTrendChart;
-        let tunjukkanAngka = false;
-
-        const tapSound = new Audio('tap_sound.mp3');
-
-        function playTapSound() {
-            const soundClone = tapSound.cloneNode();
-            soundClone.volume = 0.6;
-            soundClone.play().catch(err => console.log(err));
-        }
-
-        function startDashboard() {
-            const splash = document.getElementById('splash-screen');
-            splash.style.opacity = '0';
-            splash.style.visibility = 'hidden';
-            triggerSequenceAnimations();
-        }
-
-        function initChart() {
-            const ctx = document.getElementById('trendChart').getContext('2d');
-            if (typeof ChartDataLabels !== 'undefined') {
-                Chart.register(ChartDataLabels);
-            }
-
-            myTrendChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: namaBulan,
-                    datasets: [
-                        {
-                            label: 'Keuangan (%)',
-                            data: dataTrendKeuangan,
-                            borderColor: '#28a745',
-                            backgroundColor: 'rgba(40, 167, 69, 0.05)',
-                            borderWidth: 3,
-                            tension: 0.2,
-                            fill: true
-                        },
-                        {
-                            label: 'Fisik (%)',
-                            data: dataTrendFisik,
-                            borderColor: '#ff9800',
-                            backgroundColor: 'rgba(255, 152, 0, 0.05)',
-                            borderWidth: 3,
-                            tension: 0.2,
-                            fill: true
-                        }
-                    ]
+    
+<script id="app-data" type="application/json">
+{
+    "dataTrendKeuangan": [
+        0,
+        0,
+        0,
+        2.11,
+        2.11,
+        5.95,
+        11.81,
+        15.96,
+        17.95,
+        19.6,
+        0,
+        0
+    ],
+    "dataTrendFisik": [
+        0,
+        0,
+        0,
+        4.81,
+        8.31,
+        11.71,
+        16.05,
+        22.59,
+        23.51,
+        24.08,
+        0,
+        0
+    ],
+    "dataBidangInfraswil": [
+        {
+            "namaKegiatan": "Pelaksanaan Monitoring dan Evaluasi Penyusunan Dokumen Perencanaan Pembangunan Perangkat Daerah Bidang Infrastruktur",
+            "pagu": 122634800,
+            "realisasiBulanIni": 0,
+            "realisasiTot": 13609000,
+            "fisikPersen": 16.04,
+            "subKegiatan": [
+                {
+                    "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor-Alat Tulis Kantor",
+                    "pagu": 2882800,
+                    "realisasiBulanIni": 0,
+                    "realisasi": 0,
+                    "fisik": 0
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'top', labels: { font: { size: 12, family: 'Segoe UI' } } },
-                        tooltip: { callbacks: { label: function (context) { return context.dataset.label + ': ' + context.raw + '%'; } } },
-                        datalabels: {
-                            display: function () { return tunjukkanAngka; },
-                            align: 'top',
-                            anchor: 'end',
-                            backgroundColor: function (context) { return context.dataset.borderColor; },
-                            borderRadius: 4,
-                            color: 'white',
-                            font: { weight: 'bold', size: 10 },
-                            formatter: function (value) { return value + '%'; }
-                        }
-                    },
-                    scales: { y: { beginAtZero: true, ticks: { callback: function (value) { return value + '%'; } } } }
+                {
+                    "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor- Kertas dan Cover",
+                    "pagu": 2584000,
+                    "realisasiBulanIni": 0,
+                    "realisasi": 0,
+                    "fisik": 0
+                },
+                {
+                    "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor-Bahan Komputer",
+                    "pagu": 2448000,
+                    "realisasiBulanIni": 0,
+                    "realisasi": 0,
+                    "fisik": 0
+                },
+                {
+                    "nama": "Belanja Makanan dan Minuman Rapat",
+                    "pagu": 16400000,
+                    "realisasiBulanIni": 0,
+                    "realisasi": 4000000,
+                    "fisik": 30
+                },
+                {
+                    "nama": "Belanja Perjalanan Dinas Biasa",
+                    "pagu": 98320000,
+                    "realisasiBulanIni": 0,
+                    "realisasi": 9609000,
+                    "fisik": 15
                 }
-            });
-        }
-
-        function toggleAngkaGrafik() {
-            playTapSound();
-            tunjukkanAngka = !tunjukkanAngka;
-            const btn = document.getElementById('btnToggleAngka');
-            if (tunjukkanAngka) {
-                btn.innerHTML = `<i class="fa-solid fa-eye-slash"></i> Tutup`;
-                btn.style.background = '#ff7300';
-            } else {
-                btn.innerHTML = `<i class="fa-solid fa-eye"></i> Lihat Nilai`;
-                btn.style.background = '#0f3c78';
-            }
-            myTrendChart.update();
-        }
-
-        function triggerSequenceAnimations() {
-            const cards = document.querySelectorAll('.animated-card');
-            cards.forEach((card, index) => {
-                const delay = index * 150;
-                card.style.animationDelay = `${delay}ms`;
-                card.classList.add('play-anim');
-                setTimeout(() => {
-                    playTapSound();
-                }, delay);
-            });
-        }
-
-        function renderDashboard() {
-            let grandTotalPagu = 0;
-            let grandTotalRealisasi = 0;
-            let totalKegiatanCount = dataBidangInfraswil.length;
-            let totalSubKegiatanCount = 0;
-
-            const mainContainer = document.getElementById('program-list');
-            mainContainer.innerHTML = '';
-
-            dataBidangInfraswil.forEach((item, index) => {
-                const keuPersen = item.pagu > 0 ? ((item.realisasiTot / item.pagu) * 100).toFixed(2) : 0;
-                const sisa = item.pagu - item.realisasiTot;
-
-                grandTotalPagu += item.pagu;
-                grandTotalRealisasi += item.realisasiTot;
-                totalSubKegiatanCount += item.subKegiatan.length;
-
-                const warnaKegiatan = item.realisasiTot > 0 ? '#28a745' : '#e53935';
-
-                const programCard = document.createElement('div');
-                programCard.className = 'card inner-card';
-                programCard.innerHTML = `
-                    <div class="program-header" onclick="toggleProgram(this)">
-                        <div style="flex: 1; min-width: 0;">
-                            <h3>${item.namaKegiatan}</h3>
-                            <p style="margin:6px 0 0 0; font-size:15px; color:#0c6bdc; font-weight:700;">Pagu: Rp ${item.pagu.toLocaleString('id-ID')}</p>
-                            
-                            <div style="margin-top: 12px; width: 100%;">
-                                <div class="progress-bar" style="margin-top: 0; height: 12px; background: #eee; border-radius: 6px;">
-                                    <div class="progress-fill" style="width: ${keuPersen}%; background: ${warnaKegiatan}; height: 100%;"></div>
-                                </div>
-                                <div style="font-size: 11px; font-weight: bold; color: ${warnaKegiatan}; margin-top: 4px;">
-                                    Realisasi Keuangan: ${keuPersen}%
-                                </div>
-                            </div>
-                        </div>
-                        <div class="btn-container" onclick="event.stopPropagation();">
-                            <button class="toggle-btn" onclick="toggleProgramFromBtn(this)">Lihat Detail Realisasi Kegiatan</button>
-                            <button class="kegiatan-btn" onclick="toggleKegiatanData(this, ${index})">Lihat Detail Realisasi Sub-Kegiatan</button>
-                        </div>
-                    </div>
-                    
-                    <div class="program-content" id="keg-${index}">
-                        <div class="card inner-card">
-                            <div class="card-flex">
-                                <div class="icon-box icon-green"><i class="fa-solid fa-calendar-day"></i></div>
-                                <div>
-                                    <h4>Realisasi Bulan Ini (Rp)</h4>
-                                    <h2 class="txt-realisasi-bulan">Rp ${item.realisasiBulanIni.toLocaleString('id-ID')}</h2>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card inner-card" style="background: #fafafa;">
-                            <div class="wrapper-title">REALISASI TOTAL <span class="badge-hingga">HINGGA</span> BULAN INI</div>
-                            <div class="grid-4">
-                                <div class="card inner-card" style="background: white;"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div><div><h4>Total Realisasi</h4><h2>Rp ${item.realisasiTot.toLocaleString('id-ID')}</h2></div></div></div>
-                                <div class="card inner-card" style="background: white;"><div class="card-flex"><div class="icon-box icon-blue"><i class="fa-solid fa-chart-line"></i></div><div><h4>Keuangan (%)</h4><h2>${keuPersen}%</h2></div></div><div class="progress-bar"><div class="progress-fill" style="width: ${keuPersen}%; background:#0c6bdc;"></div></div></div>
-                                <div class="card inner-card" style="background: white;"><div class="card-flex"><div class="icon-box icon-orange"><i class="fa-solid fa-building"></i></div><div><h4>Fisik (%)</h4><h2>${item.fisikPersen}%</h2></div></div><div class="progress-bar"><div class="progress-fill" style="width: ${item.fisikPersen}%; background:#ff9800;"></div></div></div>
-                                <div class="card inner-card" style="background: white;"><div class="card-flex"><div class="icon-box icon-red"><i class="fa-solid fa-hand-holding-dollar"></i></div><div><h4>Sisa Dana</h4><h2>Rp ${sisa.toLocaleString('id-ID')}</h2></div></div></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="sub-kegiatan-wrapper" id="sub-list-${index}">
-                        <div class="sub-kegiatan-title"><i class="fa-solid fa-list-check"></i> Daftar Sub-Kegiatan Dalam Kegiatan</div>
-                        <div class="sub-kegiatan-container"></div>
-                    </div>
-                `;
-                mainContainer.appendChild(programCard);
-
-                const subContainer = programCard.querySelector(`#sub-list-${index} .sub-kegiatan-container`);
-
-                if (item.subKegiatan.length === 0) {
-                    subContainer.innerHTML = `<div class="no-data-msg"><i class="fa-solid fa-circle-info"></i> Kegiatan ini tidak memiliki rincian sub-kegiatan belanja.</div>`;
-                } else {
-                    item.subKegiatan.forEach((sub) => {
-                        const subKeuPct = sub.pagu > 0 ? ((sub.realisasi / sub.pagu) * 100).toFixed(2) : 0;
-                        const subSisa = sub.pagu - sub.realisasi;
-                        const warnaSubKegiatan = sub.realisasi > 0 ? '#28a745' : '#e53935';
-                        const warnaFisikSub = sub.fisik > 0 ? '#ff9800' : '#e53935';
-
-                        subContainer.innerHTML += `
-                            <div class="sub-kegiatan-block" style="padding: 12px 15px; border-radius: 12px; margin-bottom: 10px; border-left: 3px solid #ff7300;">
-                                <div class="sub-kegiatan-name-header" style="margin-bottom: 5px;">
-                                    <div class="sub-kegiatan-name-text" style="width: 100%;">
-                                        <i class="fa-solid fa-circle-dot" style="color:#ff7300; font-size:9px;"></i> <span style="font-size: 13px; font-weight: 600; color: #2d3748;">${sub.nama}</span>
-                                        <div style="font-size: 12px; color: #0c6bdc; font-weight: 700; margin-top: 4px;"><i class="fa-solid fa-wallet" style="width:15px;"></i> Pagu: Rp ${sub.pagu.toLocaleString('id-ID')}</div>
-                                        
-                                        <div style="margin-top: 12px; width: 100%;">
-                                            <div class="progress-bar" style="margin-top: 0; height: 12px; background: #eee; border-radius: 6px;">
-                                                <div class="progress-fill" style="width: ${subKeuPct}%; background: ${warnaSubKegiatan}; height: 100%;"></div>
-                                            </div>
-                                            <div style="font-size: 11px; font-weight: bold; color: ${warnaSubKegiatan}; margin-top: 4px;">
-                                                Realisasi Keuangan: ${subKeuPct}%
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <button class="sub-detail-btn" onclick="toggleSubDetailCard(this)">Detail</button>
-                                </div>
-                                
-                                <div class="sub-kegiatan-cards-content" style="margin-top: 8px; padding-top: 8px;">
-                                    <div style="display: flex; flex-direction: column; gap: 8px; background: #fdfdfd; padding: 10px; border-radius: 8px; border: 1px dashed #e2e8f0; font-size: 12px;">
-                                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #edf2f7; padding-bottom: 4px;">
-                                            <span style="color: #000000; font-weight: 500;"><i class="fa-solid fa-calendar-day" style="color:#28a745; width:15px;"></i> Realisasi Bulan Ini</span>
-                                            <span style="font-weight: 600; color: #28a745;">Rp ${sub.realisasiBulanIni.toLocaleString('id-ID')}</span>
-                                        </div>
-                                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #edf2f7; padding-bottom: 4px;">
-                                            <span style="color: #000000; font-weight: 700;"><i class="fa-solid fa-chart-pie" style="color:#0c6bdc; width:15px;"></i> Total Realisasi Hingga Bulan Ini</span>
-                                            <span style="font-weight: 700; color: #0c6bdc;">Rp ${sub.realisasi.toLocaleString('id-ID')} (${subKeuPct}%)</span>
-                                        </div>
-                                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #edf2f7; padding-bottom: 4px;">
-                                            <span style="color: #000000; font-weight: 500; font-size: 12px;"><i class="fa-solid fa-building" style="color: ${warnaFisikSub}; width:15px;"></i> Realisasi Fisik</span>
-                                            <span style="font-weight: 600; color: ${warnaFisikSub}; font-size: 12px;">${sub.fisik}%</span>
-                                        </div>
-                                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                                            <span style="color: #000000; font-weight: 500;"><i class="fa-solid fa-hand-holding-dollar" style="color:#e53935; width:15px;"></i> Sisa Dana Sub</span>
-                                            <span style="font-weight: 600; color: #e53935;">Rp ${subSisa.toLocaleString('id-ID')}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    });
+            ]
+        },
+        {
+            "namaKegiatan": "Koordinasi Penyusunan Dokumen Perencanaan Pembangunan Daerah Bidang Kewilayahan (RPJPD, RPJMD dan RKPD)",
+            "pagu": 66974000,
+            "realisasiBulanIni": 5515000,
+            "realisasiTot": 35244000,
+            "fisikPersen": 48.96,
+            "subKegiatan": [
+                {
+                    "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor-Alat Tulis Kantor",
+                    "pagu": 2742800,
+                    "realisasiBulanIni": 0,
+                    "realisasi": 0,
+                    "fisik": 0
+                },
+                {
+                    "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor- Kertas dan Cover",
+                    "pagu": 2713200,
+                    "realisasiBulanIni": 0,
+                    "realisasi": 0,
+                    "fisik": 0
+                },
+                {
+                    "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor-Bahan Komputer",
+                    "pagu": 2448000,
+                    "realisasiBulanIni": 0,
+                    "realisasi": 0,
+                    "fisik": 0
+                },
+                {
+                    "nama": "Belanja Makanan dan Minuman Rapat",
+                    "pagu": 16400000,
+                    "realisasiBulanIni": 0,
+                    "realisasi": 600000,
+                    "fisik": 10
+                },
+                {
+                    "nama": "Belanja Perjalanan Dinas Biasa",
+                    "pagu": 42670000,
+                    "realisasiBulanIni": 5515000,
+                    "realisasi": 34644000,
+                    "fisik": 73
                 }
-            });
-
-            document.getElementById('total-pagu-label').textContent = `Rp ${grandTotalPagu.toLocaleString('id-ID')}`;
-            document.getElementById('total-realisasi-label').textContent = `Rp ${grandTotalRealisasi.toLocaleString('id-ID')}`;
-            document.getElementById('sisa-pagu-label').textContent = `Rp ${(grandTotalPagu - grandTotalRealisasi).toLocaleString('id-ID')}`;
-
-            document.getElementById('total-program-badge').textContent = totalKegiatanCount;
-            document.getElementById('total-kegiatan-badge').textContent = totalSubKegiatanCount;
-            document.getElementById('nama-opd-title').textContent = `Progres per Kegiatan : Internal Bidang Infraswil`;
+            ]
+        },
+        {
+            "namaKegiatan": "Koordinasi Pelaksanaan Sinergitas dan Harmonisasi Perencanaan Pembangunan Daerah Bidang Kewilayahan",
+            "pagu": 416683000,
+            "realisasiBulanIni": 6290000,
+            "realisasiTot": 69960676,
+            "fisikPersen": 22.44,
+            "subKegiatan": [
+                {
+                    "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor-Alat Tulis Kantor",
+                    "pagu": 2565000,
+                    "realisasiBulanIni": 0,
+                    "realisasi": 0,
+                    "fisik": 0
+                },
+                {
+                    "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor- Kertas dan Cover",
+                    "pagu": 2584000,
+                    "realisasiBulanIni": 0,
+                    "realisasi": 0,
+                    "fisik": 0
+                },
+                {
+                    "nama": "Belanja Alat/Bahan untuk Kegiatan Kantor-Bahan Komputer",
+                    "pagu": 2448000,
+                    "realisasiBulanIni": 0,
+                    "realisasi": 0,
+                    "fisik": 0
+                },
+                {
+                    "nama": "Belanja Makanan dan Minuman Rapat",
+                    "pagu": 16400000,
+                    "realisasiBulanIni": 0,
+                    "realisasi": 2930000,
+                    "fisik": 25
+                },
+                {
+                    "nama": "Honorarium Narasumber atau Pembahas, Moderator, Pembawa Acara, dan Panitia",
+                    "pagu": 324000000,
+                    "realisasiBulanIni": 0,
+                    "realisasi": 10800000,
+                    "fisik": 10
+                },
+                {
+                    "nama": "Belanja Perjalanan Dinas Biasa",
+                    "pagu": 68686000,
+                    "realisasiBulanIni": 6290000,
+                    "realisasi": 56230676,
+                    "fisik": 83
+                }
+            ]
         }
+    ]
+}
+</script>
 
-        function toggleSubDetailCard(btn) {
-            playTapSound();
-            const cardContent = btn.closest('.sub-kegiatan-block').querySelector('.sub-kegiatan-cards-content');
-            if (cardContent.style.display === "block") {
-                cardContent.style.display = "none"; btn.textContent = "Detail";
-                btn.style.background = "#28a745"; btn.style.borderColor = "#1e7e34";
-            } else {
-                cardContent.style.display = "block"; btn.textContent = "Tutup";
-                btn.style.background = "#ff7300"; btn.style.borderColor = "#ff7300";
+<script>
+    const rawJsonData = JSON.parse(document.getElementById('app-data').textContent);
+    let dataBidangInfraswil = rawJsonData.dataBidangInfraswil;
+    let dataTrendKeuangan = rawJsonData.dataTrendKeuangan;
+    let dataTrendFisik = rawJsonData.dataTrendFisik;
+
+    const namaBulan = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+    const VISITOR_URL = 'https://script.google.com/macros/s/AKfycbw4heB0YjxHIH31Mn6C_JRGHzdnWdCvrahsgGjZ3D8ZX9CQGDftb1Rmyy-3trQdgyt0/exec';
+
+    let myTrendChart;
+    let tunjukkanAngka = false;
+    const tapSound = new Audio('tap_sound.mp3');
+
+    function playTapSound() {
+        const soundClone = tapSound.cloneNode();
+        soundClone.volume = 0.6;
+        soundClone.play().catch(err => console.log(err));
+    }
+
+    function startDashboard() {
+        const splash = document.getElementById('splash-screen');
+        splash.style.opacity = '0';
+        splash.style.visibility = 'hidden';
+        triggerSequenceAnimations();
+    }
+
+    function initChart() {
+        const ctx = document.getElementById('trendChart').getContext('2d');
+        if (typeof ChartDataLabels !== 'undefined') { Chart.register(ChartDataLabels); }
+
+        myTrendChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: namaBulan,
+                datasets: [
+                    { label: 'Keuangan (%)', data: dataTrendKeuangan, borderColor: '#28a745', backgroundColor: 'rgba(40, 167, 69, 0.05)', borderWidth: 3, tension: 0.2, fill: true },
+                    { label: 'Fisik (%)', data: dataTrendFisik, borderColor: '#ff9800', backgroundColor: 'rgba(255, 152, 0, 0.05)', borderWidth: 3, tension: 0.2, fill: true }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top', labels: { font: { size: 12, family: 'Segoe UI' } } },
+                    tooltip: { callbacks: { label: function (context) { return context.dataset.label + ': ' + context.raw + '%'; } } },
+                    datalabels: {
+                        display: function () { return tunjukkanAngka; },
+                        align: 'top', anchor: 'end',
+                        backgroundColor: function (context) { return context.dataset.borderColor; },
+                        borderRadius: 4, color: 'white', font: { weight: 'bold', size: 10 },
+                        formatter: function (value) { return value + '%'; }
+                    }
+                },
+                scales: { y: { beginAtZero: true, ticks: { callback: function (value) { return value + '%'; } } } }
             }
-        }
-
-        function toggleProgramFromBtn(btn) { toggleProgram(btn.closest('.program-header')); }
-
-        function toggleProgram(header) {
-            playTapSound();
-            const content = header.nextElementSibling;
-            const button = header.querySelector(".toggle-btn");
-            const kegButton = header.querySelector(".kegiatan-btn");
-            const subWrapper = header.parentElement.querySelector(".sub-kegiatan-wrapper");
-
-            if (content.style.display === "block" || subWrapper.style.display === "block") {
-                content.style.display = "none";
-                subWrapper.style.display = "none";
-                button.textContent = "Lihat Detail Realisasi Kegiatan";
-                button.style.background = "#0c6bdc";
-                button.style.borderColor = "#0a56b2";
-                kegButton.style.display = "none";
-                kegButton.innerHTML = "Lihat Detail Realisasi Sub-Kegiatan";
-                kegButton.style.background = "#28a745";
-                kegButton.style.borderColor = "#1e7e34";
-            } else {
-                content.style.display = "block";
-                subWrapper.style.display = "none";
-                button.textContent = "Tutup Kegiatan";
-                button.style.background = "#ff7300";
-                button.style.borderColor = "#ff7300";
-                kegButton.style.display = "block";
-                kegButton.innerHTML = "Lihat Detail Realisasi Sub-Kegiatan";
-                kegButton.style.background = "#28a745";
-                kegButton.style.borderColor = "#1e7e34";
-            }
-        }
-
-        function toggleKegiatanData(button, index) {
-            playTapSound();
-            const programContent = document.getElementById(`keg-${index}`);
-            const subWrapper = document.getElementById(`sub-list-${index}`);
-
-            if (subWrapper.style.display === "block") {
-                subWrapper.style.display = "none";
-                programContent.style.display = "block";
-                button.style.background = "#28a745";
-                button.style.borderColor = "#1e7e34";
-                button.innerHTML = "Lihat Detail Realisasi Sub-Kegiatan";
-            } else {
-                subWrapper.style.display = "block";
-                programContent.style.display = "none";
-                button.style.background = "#ff7300";
-                button.style.borderColor = "#ff7300";
-                button.innerHTML = "Tutup Sub-Kegiatan";
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            renderDashboard();
-            initChart();
-
-            fetch(VISITOR_URL + '?t=' + new Date().getTime())
-                .then(res => res.json()).then(data => {
-                    document.getElementById('visitorCount').innerHTML = `<i class="fa-solid fa-eye"></i> : ${data.visits}`;
-                }).catch(() => { });
         });
-    </script>
+    }
+
+    function toggleAngkaGrafik() {
+        playTapSound();
+        tunjukkanAngka = !tunjukkanAngka;
+        const btn = document.getElementById('btnToggleAngka');
+        if (tunjukkanAngka) {
+            btn.innerHTML = '<i class="fa-solid fa-eye-slash"></i> Tutup'; btn.style.background = '#ff7300';
+        } else {
+            btn.innerHTML = '<i class="fa-solid fa-eye"></i> Lihat Nilai'; btn.style.background = '#0f3c78';
+        }
+        myTrendChart.update();
+    }
+
+    function triggerSequenceAnimations() {
+        const cards = document.querySelectorAll('.animated-card');
+        cards.forEach((card, index) => {
+            const delay = index * 150;
+            card.style.animationDelay = delay + 'ms';
+            card.classList.add('play-anim');
+            setTimeout(() => { playTapSound(); }, delay);
+        });
+    }
+
+    function renderDashboard() {
+        let grandTotalPagu = 0;
+        let grandTotalRealisasi = 0;
+        let totalKegiatanCount = dataBidangInfraswil.length;
+        let totalSubKegiatanCount = 0;
+
+        const mainContainer = document.getElementById('program-list');
+        mainContainer.innerHTML = '';
+
+        dataBidangInfraswil.forEach((item, index) => {
+            const keuPersen = item.pagu > 0 ? ((item.realisasiTot / item.pagu) * 100).toFixed(2) : 0;
+            const sisa = item.pagu - item.realisasiTot;
+
+            grandTotalPagu += item.pagu;
+            grandTotalRealisasi += item.realisasiTot;
+            totalSubKegiatanCount += item.subKegiatan.length;
+
+            const warnaKegiatan = item.realisasiTot > 0 ? '#28a745' : '#e53935';
+
+            const programCard = document.createElement('div');
+            programCard.className = 'card inner-card';
+            programCard.innerHTML = `
+                <div class="program-header" onclick="toggleProgram(this)">
+                    <div style="flex: 1; min-width: 0;">
+                        <h3>${item.namaKegiatan}</h3>
+                        <p style="margin:6px 0 0 0; font-size:15px; color:#0c6bdc; font-weight:700;">Pagu: Rp ${item.pagu.toLocaleString('id-ID')}</p>
+                        
+                        <div style="margin-top: 12px; width: 100%;">
+                            <div class="progress-bar" style="margin-top: 0; height: 12px; background: #eee; border-radius: 6px;">
+                                <div class="progress-fill" style="width: ${keuPersen}%; background: ${warnaKegiatan}; height: 100%;"></div>
+                            </div>
+                            <div style="font-size: 11px; font-weight: bold; color: ${warnaKegiatan}; margin-top: 4px;">
+                                Realisasi Keuangan: ${keuPersen}%
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-container" onclick="event.stopPropagation();">
+                        <button class="toggle-btn" onclick="toggleProgramFromBtn(this)">Lihat Detail Realisasi Kegiatan</button>
+                        <button class="kegiatan-btn" onclick="toggleKegiatanData(this, ${index})">Lihat Detail Realisasi Sub-Kegiatan</button>
+                    </div>
+                </div>
+                
+                <div class="program-content" id="keg-${index}">
+                    <div class="card inner-card">
+                        <div class="card-flex">
+                            <div class="icon-box icon-green"><i class="fa-solid fa-calendar-day"></i></div>
+                            <div>
+                                <h4>Realisasi Bulan Ini (Rp)</h4>
+                                <h2 class="txt-realisasi-bulan">Rp ${item.realisasiBulanIni.toLocaleString('id-ID')}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card inner-card" style="background: #fafafa;">
+                        <div class="wrapper-title">REALISASI TOTAL <span class="badge-hingga">HINGGA</span> BULAN INI</div>
+                        <div class="grid-4">
+                            <div class="card inner-card" style="background: white;"><div class="card-flex"><div class="icon-box icon-green"><i class="fa-solid fa-money-bill"></i></div><div><h4>Total Realisasi</h4><h2>Rp ${item.realisasiTot.toLocaleString('id-ID')}</h2></div></div></div>
+                            <div class="card inner-card" style="background: white;"><div class="card-flex"><div class="icon-box icon-blue"><i class="fa-solid fa-chart-line"></i></div><div><h4>Keuangan (%)</h4><h2>${keuPersen}%</h2></div></div><div class="progress-bar"><div class="progress-fill" style="width: ${keuPersen}%; background:#0c6bdc;"></div></div></div>
+                            <div class="card inner-card" style="background: white;"><div class="card-flex"><div class="icon-box icon-orange"><i class="fa-solid fa-building"></i></div><div><h4>Fisik (%)</h4><h2>${item.fisikPersen}%</h2></div></div><div class="progress-bar"><div class="progress-fill" style="width: ${item.fisikPersen}%; background:#ff9800;"></div></div></div>
+                            <div class="card inner-card" style="background: white;"><div class="card-flex"><div class="icon-box icon-red"><i class="fa-solid fa-hand-holding-dollar"></i></div><div><h4>Sisa Dana</h4><h2>Rp ${sisa.toLocaleString('id-ID')}</h2></div></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sub-kegiatan-wrapper" id="sub-list-${index}">
+                    <div class="sub-kegiatan-title"><i class="fa-solid fa-list-check"></i> Daftar Sub-Kegiatan Dalam Kegiatan</div>
+                    <div class="sub-kegiatan-container"></div>
+                </div>
+            `;
+            mainContainer.appendChild(programCard);
+
+            const subContainer = programCard.querySelector(`#sub-list-${index} .sub-kegiatan-container`);
+
+            if (item.subKegiatan.length === 0) {
+                subContainer.innerHTML = '<div class="no-data-msg"><i class="fa-solid fa-circle-info"></i> Kegiatan ini tidak memiliki rincian sub-kegiatan belanja.</div>';
+            } else {
+                item.subKegiatan.forEach((sub) => {
+                    const subKeuPct = sub.pagu > 0 ? ((sub.realisasi / sub.pagu) * 100).toFixed(2) : 0;
+                    const subSisa = sub.pagu - sub.realisasi;
+                    const warnaSubKegiatan = sub.realisasi > 0 ? '#28a745' : '#e53935';
+                    const warnaFisikSub = sub.fisik > 0 ? '#ff9800' : '#e53935';
+
+                    subContainer.innerHTML += `
+                        <div class="sub-kegiatan-block" style="padding: 12px 15px; border-radius: 12px; margin-bottom: 10px; border-left: 3px solid #ff7300;">
+                            <div class="sub-kegiatan-name-header" style="margin-bottom: 5px;">
+                                <div class="sub-kegiatan-name-text" style="width: 100%;">
+                                    <i class="fa-solid fa-circle-dot" style="color:#ff7300; font-size:9px;"></i> <span style="font-size: 13px; font-weight: 600; color: #2d3748;">${sub.nama}</span>
+                                    <div style="font-size: 12px; color: #0c6bdc; font-weight: 700; margin-top: 4px;"><i class="fa-solid fa-wallet" style="width:15px;"></i> Pagu: Rp ${sub.pagu.toLocaleString('id-ID')}</div>
+                                    
+                                    <div style="margin-top: 12px; width: 100%;">
+                                        <div class="progress-bar" style="margin-top: 0; height: 12px; background: #eee; border-radius: 6px;">
+                                            <div class="progress-fill" style="width: ${subKeuPct}%; background: ${warnaSubKegiatan}; height: 100%;"></div>
+                                        </div>
+                                        <div style="font-size: 11px; font-weight: bold; color: ${warnaSubKegiatan}; margin-top: 4px;">
+                                            Realisasi Keuangan: ${subKeuPct}%
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="sub-detail-btn" onclick="toggleSubDetailCard(this)">Detail</button>
+                            </div>
+                            
+                            <div class="sub-kegiatan-cards-content" style="margin-top: 8px; padding-top: 8px;">
+                                <div style="display: flex; flex-direction: column; gap: 8px; background: #fdfdfd; padding: 10px; border-radius: 8px; border: 1px dashed #e2e8f0; font-size: 12px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #edf2f7; padding-bottom: 4px;">
+                                        <span style="color: #000000; font-weight: 500;"><i class="fa-solid fa-calendar-day" style="color:#28a745; width:15px;"></i> Realisasi Bulan Ini</span>
+                                        <span style="font-weight: 600; color: #28a745;">Rp ${sub.realisasiBulanIni.toLocaleString('id-ID')}</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #edf2f7; padding-bottom: 4px;">
+                                        <span style="color: #000000; font-weight: 700;"><i class="fa-solid fa-chart-pie" style="color:#0c6bdc; width:15px;"></i> Total Realisasi Hingga Bulan Ini</span>
+                                        <span style="font-weight: 700; color: #0c6bdc;">Rp ${sub.realisasi.toLocaleString('id-ID')} (${subKeuPct}%)</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #edf2f7; padding-bottom: 4px;">
+                                        <span style="color: #000000; font-weight: 500; font-size: 12px;"><i class="fa-solid fa-building" style="color: ${warnaFisikSub}; width:15px;"></i> Realisasi Fisik</span>
+                                        <span style="font-weight: 600; color: ${warnaFisikSub}; font-size: 12px;">${sub.fisik}%</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <span style="color: #000000; font-weight: 500;"><i class="fa-solid fa-hand-holding-dollar" style="color:#e53935; width:15px;"></i> Sisa Dana Sub</span>
+                                        <span style="font-weight: 600; color: #e53935;">Rp ${subSisa.toLocaleString('id-ID')}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+        });
+
+        document.getElementById('total-pagu-label').textContent = 'Rp ' + grandTotalPagu.toLocaleString('id-ID');
+        document.getElementById('total-realisasi-label').textContent = 'Rp ' + grandTotalRealisasi.toLocaleString('id-ID');
+        document.getElementById('sisa-pagu-label').textContent = 'Rp ' + (grandTotalPagu - grandTotalRealisasi).toLocaleString('id-ID');
+
+        document.getElementById('total-program-badge').textContent = totalKegiatanCount;
+        document.getElementById('total-kegiatan-badge').textContent = totalSubKegiatanCount;
+        document.getElementById('nama-opd-title').textContent = 'Progres per Kegiatan : Internal Bidang Infraswil';
+    }
+
+    function toggleSubDetailCard(btn) {
+        playTapSound();
+        const cardContent = btn.closest('.sub-kegiatan-block').querySelector('.sub-kegiatan-cards-content');
+        if (cardContent.style.display === "block") {
+            cardContent.style.display = "none"; btn.textContent = "Detail";
+            btn.style.background = "#28a745"; btn.style.borderColor = "#1e7e34";
+        } else {
+            cardContent.style.display = "block"; btn.textContent = "Tutup";
+            btn.style.background = "#ff7300"; btn.style.borderColor = "#ff7300";
+        }
+    }
+
+    function toggleProgramFromBtn(btn) { toggleProgram(btn.closest('.program-header')); }
+
+    function toggleProgram(header) {
+        playTapSound();
+        const content = header.nextElementSibling;
+        const button = header.querySelector(".toggle-btn");
+        const kegButton = header.querySelector(".kegiatan-btn");
+        const subWrapper = header.parentElement.querySelector(".sub-kegiatan-wrapper");
+
+        if (content.style.display === "block" || subWrapper.style.display === "block") {
+            content.style.display = "none";
+            subWrapper.style.display = "none";
+            button.textContent = "Lihat Detail Realisasi Kegiatan";
+            button.style.background = '#0c6bdc'; button.style.borderColor = '#0a56b2';
+            kegButton.style.display = "none";
+        } else {
+            content.style.display = "block";
+            subWrapper.style.display = "none";
+            button.textContent = "Tutup Kegiatan";
+            button.style.background = '#ff7300'; button.style.borderColor = '#ff7300';
+            kegButton.style.display = "block";
+        }
+    }
+
+    function toggleKegiatanData(button, index) {
+        playTapSound();
+        const programContent = document.getElementById('keg-' + index);
+        const subWrapper = document.getElementById('sub-list-' + index);
+
+        if (subWrapper.style.display === "block") {
+            subWrapper.style.display = "none";
+            programContent.style.display = "block";
+            button.style.background = '#28a745'; button.innerHTML = "Lihat Detail Realisasi Sub-Kegiatan";
+        } else {
+            subWrapper.style.display = "block";
+            programContent.style.display = "none";
+            button.style.background = '#ff7300'; button.innerHTML = "Tutup Sub-Kegiatan";
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        renderDashboard();
+        initChart();
+        fetch(VISITOR_URL + '?t=' + new Date().getTime())
+            .then(res => res.json()).then(data => {
+                document.getElementById('visitorCount').innerHTML = '<i class="fa-solid fa-eye"></i> : ' + data.visits;
+            }).catch(() => {});
+    });
+</script>
 </body>
 
 </html>
