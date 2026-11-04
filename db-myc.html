@@ -31,17 +31,27 @@
 
     <!-- Header / Banner Elegan -->
     <header class="gradient-bg text-white shadow-lg pb-6 pt-5 px-4 rounded-b-[2rem]">
-        <div class="max-w-xl mx-auto">
-            <div class="flex justify-between items-center mb-3">
-                <span class="text-[11px] uppercase tracking-wider bg-white/20 px-2.5 py-1 rounded-full font-semibold">MYC 2025-2027</span>
-                <span class="text-xs text-white/90 font-bold bg-black/20 px-2.5 py-1 rounded-lg">Real-time: Oktober 2026</span>
+        <div class="max-w-xl sm:max-w-3xl md:max-w-5xl mx-auto">
+            <!-- Bagian Atas: Logo & Teks Berdampingan -->
+            <div class="flex items-center gap-3 mb-3">
+                <!-- Logo Square Round Corner (Outline Tebal: border-2) -->
+                <div class="w-20 h-20 rounded-xl overflow-hidden shrink-0 shadow-sm border-2 border-white/40 bg-white/10 flex items-center justify-center">
+                    <img src="logo.png" alt="Logo Instansi" class="w-full h-full object-cover">
+                </div>
+                
+                <!-- Teks Header -->
+                <div class="flex-1">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded-full font-semibold">MYC 2025-2027</span>
+                        <span class="text-[10px] text-white/90 font-bold bg-black/20 px-2 py-0.5 rounded-lg">Real-time: Okt 2026</span>
+                    </div>
+                    <h1 class="text-lg sm:text-xl font-bold mt-1 leading-tight">Progres Preservasi Jalan</h1>
+                    <p class="text-[11px] text-white/80">Monitoring & Evaluasi Kinerja Ruas Jalan</p>
+                </div>
             </div>
-            <h1 class="text-xl sm:text-2xl font-bold">Progres Preservasi Jalan</h1>
-            <p class="text-xs text-white/80 mt-0.5">Monitoring & Evaluasi Kinerja Ruas Jalan</p>
 
-            <!-- 4 KARTU RINGKASAN BARU -->
+            <!-- 4 KARTU RINGKASAN -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-4">
-                <!-- Kartu 1: Total Ruas (Warna Biru Tema) + Total KM -->
                 <div class="bg-[#0740aa] p-3 rounded-2xl shadow-md border border-white/20 text-center flex flex-col justify-between">
                     <span class="text-[10px] uppercase font-semibold text-white/90 tracking-wider">Total Ruas</span>
                     <div>
@@ -49,20 +59,14 @@
                         <span class="text-[10px] text-white/80 block mt-0.5" id="totalKmSubtitle">...</span>
                     </div>
                 </div>
-
-                <!-- Kartu 2: Rata-rata Realisasi (Warna Hijau Solid) -->
                 <div class="bg-emerald-600 p-3 rounded-2xl shadow-md border border-white/20 text-center flex flex-col justify-between">
                     <span class="text-[10px] uppercase font-semibold text-white/90 tracking-wider">Rata-rata Realisasi</span>
                     <span class="text-sm sm:text-base font-extrabold text-white mt-1" id="rataRealisasi">...</span>
                 </div>
-
-                <!-- Kartu 3: Ruas Kritis (Warna Orange Solid) -->
                 <div class="bg-amber-600 p-3 rounded-2xl shadow-md border border-white/20 text-center flex flex-col justify-between">
                     <span class="text-[10px] uppercase font-semibold text-white/90 tracking-wider">Ruas Kritis</span>
                     <span class="text-sm sm:text-base font-extrabold text-white mt-1" id="ruasKritis">...</span>
                 </div>
-
-                <!-- Kartu 4: Total Panjang (Warna Ungu Tua Solid) -->
                 <div class="bg-purple-700 p-3 rounded-2xl shadow-md border border-white/20 text-center flex flex-col justify-between">
                     <span class="text-[10px] uppercase font-semibold text-white/90 tracking-wider">Total Panjang</span>
                     <span class="text-sm sm:text-base font-extrabold text-white mt-1" id="totalPanjangCard">...</span>
@@ -72,14 +76,13 @@
     </header>
 
     <!-- Main Container -->
-    <main class="max-w-xl mx-auto px-4 -mt-3 space-y-4">
+    <main class="max-w-xl sm:max-w-3xl md:max-w-5xl mx-auto px-4 -mt-3 space-y-4">
 
-        <!-- Filter & Search Section -->
-        <div class="bg-white p-3.5 rounded-2xl shadow-sm border border-slate-200/60 space-y-2">
+        <!-- Filter & Search Section (Outline Tebal: border-2) -->
+        <div class="bg-white p-3.5 rounded-2xl shadow-sm border-2 border-[#0740aa]/40 space-y-2">
             <div>
                 <label for="paketFilter" class="block text-xs font-bold text-slate-500 uppercase mb-1">Pilih Paket Preservasi</label>
                 <select id="paketFilter" class="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-semibold text-slate-700 focus:outline-none focus:border-primaryLight transition">
-                    <!-- Opsi paket terisi otomatis -->
                 </select>
             </div>
             <div class="relative pt-1">
@@ -89,7 +92,7 @@
         </div>
 
         <!-- Wadah Kartu Ruas Jalan -->
-        <div id="cardContainer" class="space-y-3"></div>
+        <div id="cardContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
 
         <!-- Footer -->
         <footer class="text-center text-xs text-slate-400 pt-4">
@@ -265,7 +268,6 @@
                 const devNum = parseFloat(r.deviasi.replace('%', ''));
                 if (devNum < 0) kritisCount++;
 
-                // Ekstrak angka dari string panjang (contoh: "3,68 km" atau "61,4 km")
                 let cleanPanjang = parseFloat(r.panjang.replace(',', '.').replace(/[^0-9.]/g, '')) || 0;
                 totalKm += cleanPanjang;
             });
@@ -287,7 +289,7 @@
             container.innerHTML = '';
 
             if (roads.length === 0) {
-                container.innerHTML = '<div class="text-center py-8 text-xs text-slate-400">Tidak ada data ruas jalan ditemukan.</div>';
+                container.innerHTML = '<div class="col-span-full text-center py-8 text-xs text-slate-400">Tidak ada data ruas jalan ditemukan.</div>';
                 return;
             }
 
@@ -296,24 +298,27 @@
                 const isNegatif = devNum < 0;
                 const badgeBg = isNegatif ? 'bg-rose-50 text-rose-600 border-rose-100' : 'bg-emerald-50 text-emerald-600 border-emerald-100';
 
+                // Kartu Ruas Jalan dengan Outline Tebal (border-2 border-[#0740aa]/40)
                 const cardHTML = `
-                    <div class="road-card bg-white p-4 rounded-2xl shadow-sm border border-slate-200/60 hover:shadow-md transition">
-                        <div class="flex justify-between items-start gap-2 mb-2">
-                            <div>
-                                <span class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-bold">No. ${road.no} &bull; ${road.panjang}</span>
-                                <h3 class="font-bold text-slate-900 text-base sm:text-lg mt-1">${road.nama}</h3>
-                                <span class="text-sm text-slate-500 font-medium">Kab. ${road.kabupaten}</span>
+                    <div class="road-card bg-white p-4 rounded-2xl shadow-sm border-2 border-[#0740aa]/40 hover:shadow-md transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start gap-2 mb-2">
+                                <div>
+                                    <span class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-bold">No. ${road.no} &bull; ${road.panjang}</span>
+                                    <h3 class="font-bold text-slate-900 text-base sm:text-lg mt-1">${road.nama}</h3>
+                                    <span class="text-sm text-slate-500 font-medium">Kab. ${road.kabupaten}</span>
+                                </div>
+                                <span class="text-sm font-bold px-3 py-1 rounded-full ${badgeBg} border whitespace-nowrap">Dev. ${road.deviasi}</span>
                             </div>
-                            <span class="text-sm font-bold px-3 py-1 rounded-full ${badgeBg} border whitespace-nowrap">Dev. ${road.deviasi}</span>
-                        </div>
 
-                        <div class="mt-3 bg-slate-50 p-3 rounded-xl border border-slate-100">
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="font-semibold text-slate-600">Target Rencana (MYC)</span>
-                                <span class="font-bold text-blue-600">${road.rencana}%</span>
-                            </div>
-                            <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
-                                <div class="bg-blue-600 h-full rounded-full" style="width: ${Math.min(road.rencana, 100)}%;"></div>
+                            <div class="mt-3 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="font-semibold text-slate-600">Target Rencana (MYC)</span>
+                                    <span class="font-bold text-blue-600">${road.rencana}%</span>
+                                </div>
+                                <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
+                                    <div class="bg-blue-600 h-full rounded-full" style="width: ${Math.min(road.rencana, 100)}%;"></div>
+                                </div>
                             </div>
                         </div>
 
@@ -368,7 +373,7 @@
                                     datalabels: {
                                         align: 'top',
                                         anchor: 'end',
-                                        color: '#334155',
+                                           color: '#334155',
                                         font: { size: 9, weight: 'bold' },
                                         formatter: function(value, context) {
                                             return context.dataIndex >= 9 ? value + '%' : '';
