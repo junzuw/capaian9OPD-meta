@@ -7,14 +7,12 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Leaflet CSS untuk Peta -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <meta property="og:title" content="Dashboard Progres Preservasi Jalan Sulsel ( MYC 2025-2027)">
-    <meta property="og:description"
-        content="Monitoring progres pekerjaan jalan periode Oktober 2026 dengan peta interaktif ruas jalan Prov. Sulsel. (Best view via smartphone).">
-    <meta property="og:image" content="https://binfraswilzulsel.my.id/myc.webp">
-    <meta property="og:image:type" content="image/webp">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    
+    <!-- Open Graph Meta Tags untuk Thumbnail WAG -->
+    <meta property="og:title" content="Dashboard Preservasi Jalan MYC Sulsel (2025-2027)">
+    <meta property="og:description" content="Monitoring progres pekerjaan jalan periode Oktober 2026 dengan peta interaktif ruas jalan Prov. Sulsel.">
+    <meta property="og:image" content="https://i.ibb.co/xxxxxx/thumbnail9.png">
     <meta property="og:url" content="https://binfraswilzulsel.my.id/">
     <meta property="og:type" content="website">
 
@@ -34,13 +32,11 @@
         .gradient-bg {
             background: linear-gradient(135deg, #0740aa 0%, #03b3f8 100%);
         }
-
         .road-map {
             height: 380px;
             width: 100%;
             z-index: 1;
         }
-
         .overview-map {
             height: 390px;
             width: 100%;
@@ -48,7 +44,7 @@
         }
 
         /* ======================================================= */
-        /* Splash Screen Estetik & Floating Logo                   */
+        /* SPLASH SCREEN & FLOATING LOGO                           */
         /* ======================================================= */
         .splash-screen {
             position: fixed;
@@ -184,10 +180,9 @@
         }
     </style>
 </head>
-
 <body class="bg-slate-100 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between pb-0">
 
-    <!-- KOMPONEN 1: SPLASH SCREEN -->
+    <!-- SPLASH SCREEN -->
     <div class="splash-screen" id="splashScreen">
         <div class="splash-logo-container">
             <img src="bismillah.png" alt="Bismillah" class="logo-bismillah">
@@ -201,72 +196,63 @@
         <button class="btn-masuk" onclick="bukaDashboard()">Buka Dashboard</button>
     </div>
 
-    <!-- KONTEN UTAMA (TERSEMBUNYI SEBELUM SPLASH SCREEN DIBUKA) -->
+    <!-- KONTEN UTAMA -->
     <div id="appContainer" style="display: none; flex-direction: column; width: 100%;">
-        <!-- Header / Banner Sticky Paling Atas -->
+        <!-- Header / Banner Sticky -->
         <header class="gradient-bg text-white shadow-md pb-3 pt-3 px-4 rounded-b-[1.2rem] sticky top-0 z-50">
             <div class="max-w-xl sm:max-w-3xl md:max-w-5xl mx-auto">
                 <div class="flex items-center gap-3">
-                    <div
-                        class="w-20 h-20 rounded-xl overflow-hidden shrink-0 shadow-sm border-2 border-white/40 bg-white/10 flex items-center justify-center">
+                    <div class="w-16 h-16 rounded-xl overflow-hidden shrink-0 shadow-sm border-2 border-white/40 bg-white/10 flex items-center justify-center">
                         <img src="logo.png" alt="Logo Instansi" class="w-full h-full object-cover">
                     </div>
-
+                    
                     <div class="flex-1">
                         <div class="flex justify-between items-center">
-                            <span
-                                class="text-[9px] uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded-full font-semibold">MYC
-                                2025-2027</span>
-                            <span class="text-[9px] text-white/90 font-bold bg-black/20 px-2 py-0.5 rounded-lg">Periode
-                                : Oktober 2026</span>
+                            <span class="text-[9px] uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded-full font-semibold">MYC 2025-2027</span>
+                            <span class="text-[9px] text-white/90 font-bold bg-black/20 px-2 py-0.5 rounded-lg">Periode : Oktober 2026</span>
                         </div>
                         <h1 class="text-base sm:text-lg font-bold mt-0.5 leading-tight">Progres Preservasi Jalan</h1>
-                        <p class="text-[12px] text-white/80 leading-none mt-0.5">Monitoring & Evaluasi Kinerja Ruas
-                            Jalan</p>
+                        <p class="text-[12px] text-white/80 leading-none mt-0.5">Monitoring & Evaluasi Kinerja Ruas Jalan</p>
                     </div>
                 </div>
             </div>
         </header>
 
         <!-- Main Container -->
-        <main class="max-w-xl sm:max-w-3xl md:max-w-5xl mx-auto px-3 mt-2 space-y-2 w-full">
+        <main class="max-w-xl sm:max-w-3xl md:max-w-5xl mx-auto px-3 mt-2 space-y-2">
 
             <!-- KELOMPOK STICKY: Kartu Pilih Paket & Search -->
-            <div
-                class="sticky top-[5.2rem] z-40 bg-slate-100/95 backdrop-blur-sm pt-1 pb-2 space-y-2 shadow-sm rounded-b-xl">
-                <div id="filterSearchSection"
-                    class="bg-gradient-to-br from-blue-50/80 to-white p-2.5 rounded-xl shadow-sm border-2 border-primaryLight space-y-2">
+            <div class="sticky top-[5.2rem] z-40 bg-slate-100/95 backdrop-blur-sm pt-1 pb-2 space-y-2 shadow-sm rounded-b-xl">
+                <div id="filterSearchSection" class="bg-gradient-to-br from-blue-50/80 to-white p-2.5 rounded-xl shadow-sm border-2 border-primaryLight space-y-2">
                     <div>
-                        <label for="paketFilter"
-                            class="flex items-center gap-1 text-[11px] font-extrabold text-[#0740aa] uppercase tracking-wide mb-0.5">
-                            <svg class="w-3.5 h-3.5 text-primaryLight" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                    d="M4 6h16M4 12h16M4 18h7"></path>
-                            </svg>
+                        <label for="paketFilter" class="flex items-center gap-1 text-[11px] font-extrabold text-[#0740aa] uppercase tracking-wide mb-0.5">
+                            <svg class="w-3.5 h-3.5 text-primaryLight" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h7"></path></svg>
                             Pilih Paket Preservasi Jalan
                         </label>
                         <div class="relative">
-                            <select id="paketFilter"
-                                class="w-full text-xs sm:text-sm bg-white border-2 border-primaryLight/70 rounded-lg px-3 py-2 font-bold text-slate-800 shadow-sm focus:outline-none focus:border-[#0740aa] transition cursor-pointer appearance-none">
+                            <select id="paketFilter" class="w-full text-xs sm:text-sm bg-white border-2 border-primaryLight/70 rounded-lg px-3 py-2 font-bold text-slate-800 shadow-sm focus:outline-none focus:border-[#0740aa] transition cursor-pointer appearance-none">
                             </select>
-                            <div
-                                class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-[#0740aa]">
-                                <svg class="w-4 h-4 font-bold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                        d="M19 9l-7 7-7-7"></path>
-                                </svg>
+                            <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-[#0740aa]">
+                                <svg class="w-4 h-4 font-bold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                             </div>
                         </div>
                     </div>
+
+                    <!-- 2 Kartu Informasi Paket (Biru Kiri, Hijau Kanan, Teks Tengah) -->
+                    <div id="paketSummaryCards" class="grid grid-cols-2 gap-2 pt-0.5 hidden">
+                        <div class="bg-[#0740aa] p-2.5 rounded-xl text-white shadow-sm flex flex-col justify-center text-center">
+                            <span class="text-[9px] uppercase font-bold text-white/90 tracking-wider block">Total Ruas</span>
+                            <span id="paketTotalRuas" class="text-sm sm:text-base font-extrabold mt-0.5 block">0 Ruas</span>
+                        </div>
+                        <div class="bg-emerald-600 p-2.5 rounded-xl text-white shadow-sm flex flex-col justify-center text-center">
+                            <span class="text-[9px] uppercase font-bold text-white/90 tracking-wider block">Total Panjang</span>
+                            <span id="paketTotalPanjang" class="text-sm sm:text-base font-extrabold mt-0.5 block">0.0 Km</span>
+                        </div>
+                    </div>
+
                     <div class="relative" id="searchWrapper">
-                        <input type="text" id="searchInput" placeholder="Cari nama ruas atau kabupaten..."
-                            class="w-full text-xs sm:text-sm bg-white border border-slate-200 rounded-lg pl-8 pr-3 py-1.5 focus:outline-none focus:border-primaryLight transition shadow-sm">
-                        <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" fill="none"
-                            stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
+                        <input type="text" id="searchInput" placeholder="Cari nama ruas atau kabupaten..." class="w-full text-xs sm:text-sm bg-white border border-slate-200 rounded-lg pl-8 pr-3 py-1.5 focus:outline-none focus:border-primaryLight transition shadow-sm">
+                        <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
                 </div>
             </div>
@@ -277,28 +263,23 @@
         </main>
     </div>
 
-    <!-- KOMPONEN 3: VISIT COUNTER & FOOTER -->
+    <!-- FOOTER & VISIT COUNTER -->
     <footer class="gradient-bg text-white text-center text-xs py-3 px-4 shadow-md mt-6 rounded-t-[1.2rem]">
         <div class="max-w-xl sm:max-w-3xl md:max-w-5xl mx-auto flex flex-col items-center">
             <div>MYC Progres 2026 | BINFRASWIL-BAPPELITBANGDA SULSEL © Copyright @zuwlend</div>
-            <!-- Visit Counter Badge -->
             <div class="view-counter">
                 <svg viewBox="0 0 24 24" width="14" height="14">
-                    <path fill="#ffffff"
-                        d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                    <path fill="#ffffff" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
                 </svg>
-                <span>Pengunjung: <strong id="global_visitor_count">...</strong></span>
+                <span>: <strong id="global_visitor_count">...</strong></span>
             </div>
         </div>
     </footer>
 
     <!-- Leaflet JS untuk Peta -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-    <!-- Script Logika, Sound Effects, Google Apps Script Counter, & Data JSON -->
     <script>
-        // Ganti URL di bawah ini dengan URL Web App Google Apps Script Anda
         const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbwPcliHq8fhaG30cxMhzn8sgLwkE6SwT_IDBDZ2aI-DhIRpRWUxxufPT7XsMP9mGW7c/exec";
 
         let globalPaketData = [];
@@ -307,41 +288,45 @@
         let totalPanjangGlobal = 0;
         let totalRuasGlobal = 0;
         let mapsInstances = {};
-        let spotLayersInstances = {};
+        let spotLayersInstances = {}; 
         let spotLinesReferences = {}; 
-        let spotVisibility = {};
+        let spotVisibility = {};     
         let activeCardIndex = null;
 
-        // KOMPONEN 2: SOUND EFFECTS (Audio Tap)
         const tapSound = new Audio("tap_sound.mp3");
         tapSound.preload = "auto";
         tapSound.volume = 0.4;
 
-        // Fungsi saat tombol "Buka Dashboard" pada Splash Screen diklik
         function bukaDashboard() {
             try {
                 tapSound.currentTime = 0;
-                tapSound.play().catch(err => {
-                    console.log("Audio diblokir browser sampai ada interaksi:", err);
-                });
+                tapSound.play().catch(err => {});
             } catch (e) {}
 
             document.getElementById('splashScreen').style.display = 'none';
             document.getElementById('appContainer').style.display = 'flex';
-            
-            // Panggil fungsi muat data JSON & visitor counter via Google Apps Script
             muatDataDanVisitor();
         }
 
-        // Fungsi Ambil Data JSON Ruas Jalan & Visit Counter Google Apps Script
+        function playTapSound() {
+            try {
+                tapSound.currentTime = 0;
+                tapSound.play().catch(() => {});
+            } catch (e) {}
+        }
+
+        document.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+                playTapSound();
+            }
+        });
+
         async function muatDataDanVisitor() {
             try {
-                // 1. Ambil data JSON ruas jalan lokal
                 const response = await fetch('data.json');
                 const embeddedData = await response.json();
                 globalPaketData = embeddedData.paketList;
 
-                // 2. Ambil & update visitor counter dari Google Apps Script
                 fetch(APPSCRIPT_URL + "?action=upViews")
                     .then(res => res.json())
                     .then(data => {
@@ -378,7 +363,6 @@
                     renderOverviewMode();
 
                     paketSelect.addEventListener('change', (e) => {
-                        playTapSound();
                         activePaketId = e.target.value;
                         activeCardIndex = null;
                         if (activePaketId === "all") {
@@ -389,30 +373,15 @@
                     });
                 }
             } catch (error) {
-                console.error('Gagal memuat data:', error);
-                alert('Gagal memuat data ruas jalan. Pastikan file data.json tersedia.');
+                console.error('Gagal memuat file data.json:', error);
+                alert('Gagal memuat data JSON ruas jalan. Pastikan file data.json berada di folder yang sama.');
             }
         }
-
-        // Helper untuk memutar suara klik di tombol-tombol lain
-        function playTapSound() {
-            try {
-                tapSound.currentTime = 0;
-                tapSound.play().catch(() => {});
-            } catch (e) {}
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            document.addEventListener('click', (e) => {
-                if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
-                    playTapSound();
-                }
-            });
-        });
 
         function renderOverviewMode() {
             const container = document.getElementById('contentContainer');
             document.getElementById('searchWrapper').style.display = 'none';
+            document.getElementById('paketSummaryCards').classList.add('hidden');
             mapsInstances = {};
 
             let allCoordinates = [];
@@ -426,8 +395,20 @@
                 });
             });
 
+            // 2 KARTU AKUMULASI (Kiri Biru "Total Ruas", Kanan Hijau "Total Panjang", Posisi Teks Tengah)
             container.innerHTML = `
-                <!-- KARTU PETA KESELURUHAN (OVERVIEW SULSEL) -->
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="bg-[#0740aa] p-3 rounded-xl text-white shadow-sm flex flex-col justify-center text-center">
+                        <span class="text-[9px] uppercase font-bold text-white/90 tracking-wider block">Total Ruas</span>
+                        <span class="text-sm sm:text-base font-extrabold mt-0.5 block">${totalRuasGlobal} Ruas</span>
+                    </div>
+                    <div class="bg-emerald-600 p-3 rounded-xl text-white shadow-sm flex flex-col justify-center text-center">
+                        <span class="text-[9px] uppercase font-bold text-white/90 tracking-wider block">Total Panjang</span>
+                        <span class="text-sm sm:text-base font-extrabold mt-0.5 block">${totalPanjangGlobal.toFixed(1)} Km</span>
+                    </div>
+                </div>
+
+                <!-- PETA KESELURUHAN (OVERVIEW SULSEL) -->
                 <div class="bg-white p-3 rounded-xl shadow-sm border-2 border-[#0740aa]/40 space-y-2">
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-extrabold text-[#0740aa] uppercase tracking-wide flex items-center gap-1">
@@ -438,18 +419,6 @@
                     </div>
                     <div class="rounded-lg overflow-hidden border border-slate-200 shadow-inner">
                         <div id="overviewMap" class="overview-map"></div>
-                    </div>
-                </div>
-
-                <!-- KARTU TOTAL -->
-                <div class="bg-gradient-to-r from-[#0740aa] to-primaryLight p-3.5 rounded-xl shadow-sm text-white flex justify-between items-center">
-                    <div>
-                        <span class="text-[10px] uppercase font-semibold text-white/90 tracking-wider block">Akumulasi Keseluruhan</span>
-                        <span class="text-base sm:text-lg font-extrabold mt-0.5 block">${totalRuasGlobal} Ruas Jalan Provinsi</span>
-                    </div>
-                    <div class="text-right">
-                        <span class="text-[10px] uppercase font-semibold text-white/90 tracking-wider block">Total Panjang</span>
-                        <span class="text-base sm:text-lg font-extrabold mt-0.5 block">${totalPanjangGlobal.toFixed(1)} Km</span>
                     </div>
                 </div>
             `;
@@ -498,6 +467,19 @@
 
             activeRuasJalan = selectedPaket.ruasJalan;
             document.getElementById('searchWrapper').style.display = 'block';
+
+            let paketRuasCount = activeRuasJalan.length;
+            let paketPanjangTotal = 0;
+            activeRuasJalan.forEach(r => {
+                if (r.panjang && r.panjang !== '-') {
+                    let cleanPanjang = parseFloat(r.panjang.replace(',', '.').replace(/[^0-9.]/g, '')) || 0;
+                    paketPanjangTotal += cleanPanjang;
+                }
+            });
+
+            document.getElementById('paketTotalRuas').textContent = `${paketRuasCount} Ruas`;
+            document.getElementById('paketTotalPanjang').textContent = `${paketPanjangTotal.toFixed(1)} Km`;
+            document.getElementById('paketSummaryCards').classList.remove('hidden');
 
             renderCards(activeRuasJalan);
         }
@@ -641,7 +623,7 @@
                         }).addTo(mapInstance);
 
                         const currentRoad = activeRuasJalan[index];
-                        let spotLayerGroup = L.layerGroup();
+                        let spotLayerGroup = L.layerGroup(); 
                         let spotLinesList = []; 
 
                         if (currentRoad.coordinates && currentRoad.coordinates.length > 0) {
@@ -667,7 +649,7 @@
                                 currentRoad.spotPerbaikan.forEach(spot => {
                                     if (spot.coordinates && spot.coordinates.length > 0) {
                                         const spotLatLngs = spot.coordinates.map(c => [c[1], c[0]]);
-
+                                        
                                         const popupContent = `
                                             <div style="font-family: sans-serif; font-size: 11px; line-height: 1.4; min-width: 180px;">
                                                 <b style="color: #0740aa; font-size: 12px; display: block; margin-bottom: 4px;">${spot.keterangan || 'Detail Segmen Penanganan'}</b>
@@ -680,8 +662,8 @@
                                         `;
 
                                         const spotLine = L.polyline(spotLatLngs, {
-                                            color: '#ef4444',
-                                            weight: 8,
+                                            color: '#ef4444', 
+                                            weight: 8,       
                                             opacity: 0.9
                                         }).bindPopup(popupContent);
 
@@ -782,14 +764,16 @@
         }
 
         const searchInput = document.getElementById('searchInput');
-        searchInput.addEventListener('keyup', function (e) {
-            const term = e.target.value.toLowerCase();
-            const filtered = activeRuasJalan.filter(road =>
-                road.nama.toLowerCase().includes(term) ||
-                road.kabupaten.toLowerCase().includes(term)
-            );
-            renderCards(filtered);
-        });
+        if (searchInput) {
+            searchInput.addEventListener('keyup', function(e) {
+                const term = e.target.value.toLowerCase();
+                const filtered = activeRuasJalan.filter(road => 
+                    road.nama.toLowerCase().includes(term) || 
+                    road.kabupaten.toLowerCase().includes(term)
+                );
+                renderCards(filtered);
+            });
+        }
     </script>
 </body>
 </html>
