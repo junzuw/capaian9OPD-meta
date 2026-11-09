@@ -774,6 +774,10 @@
                 renderCards(filtered);
             });
         }
+        fetch("https://script.google.com/macros/s/AKfycbwaGjktHOa3oRFGYCOzWEnmDTPFnrAXUiJfMuCmFRFeLX_LP225Kui9MNmM5yqXhohm/exec?kegiatan=myc")
+        .then(response => response.json())
+        .then(data => console.log("View MYC bertambah:", data.views))
+        .catch(error => console.error("Gagal catat view:", error));
     </script>
 </body>
 </html>
