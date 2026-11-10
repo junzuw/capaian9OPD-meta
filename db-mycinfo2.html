@@ -43,8 +43,60 @@
             z-index: 1;
         }
     </style>
+
+    <style>
+        /* ======================================================= */
+        /* INJECTED: Splash Screen Estetik & Floating Logo        */
+        /* ======================================================= */
+        .splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, #0740aa, #011065);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 10000; color: white; transition: opacity 0.5s ease, visibility 0.5s;
+            text-align: center; padding: 20px; overflow: hidden;
+        }
+        .splash-screen h2 { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+        .splash-screen p { font-size: 14px; opacity: 0.8; margin-bottom: 25px; }
+        .splash-logo-container { display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 15px; position: relative; }
+        .logo-bismillah { width: 175px; height: auto; margin-bottom: 15px; filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.15)); }
+        .logo-character-group { position: relative; width: 220px; height: 160px; display: flex; align-items: center; justify-content: center; }
+        .logo-statis-bg { position: absolute; width: 100%; height: 100%; object-fit: contain; z-index: 1; opacity: 0.9; }
+        .logo-karakter-floating { position: absolute; width: 85%; height: 85%; object-fit: contain; z-index: 3; top: 10px; animation: melayangKarakter 3s ease-in-out infinite; }
+        @keyframes melayangKarakter { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
+        .logo-character-group::after {
+            content: ""; position: absolute; bottom: 0px; left: 15%; width: 70%; height: 12px;
+            background: rgba(0, 0, 0, 0.3); border-radius: 50%; z-index: 2; filter: blur(4px);
+            animation: bayanganBerdenyut 3s ease-in-out infinite;
+        }
+        @keyframes bayanganBerdenyut { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(0.7); opacity: 0.4; } 100% { transform: scale(1); opacity: 1; } }
+        .btn-masuk {
+            background-color: #fc8d05; color: #f7f8fa; font-weight: 700; padding: 14px 32px;
+            border: none; border-radius: 25px; font-size: 16px; cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); transition: all 0.2s;
+        }
+        .btn-masuk:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25); }
+        .view-counter {
+            display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 30px;
+            font-size: 11px; font-weight: 600; color: #ffffff; gap: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.1); margin-top: 8px;
+        }
+    </style>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between pb-0">
+
+    <!-- INJECTED: Splash Screen -->
+    <div class="splash-screen" id="splashScreen">
+        <div class="splash-logo-container">
+            <img src="bismillah.png" alt="Bismillah" class="logo-bismillah">
+            <div class="logo-character-group">
+                <img src="logo-sulsel.png" alt="Logo Background" class="logo-statis-bg">
+                <img src="sappurecca-2.png" alt="Karakter Utama" class="logo-karakter-floating">
+            </div>
+        </div>
+        <h2>Selamat Datang</h2>
+        <p>Di Dashboard Progres Preservasi Jalan<br><b>MYC (Multi-Years Contract) 2025-2027</b></p>
+        <button class="btn-masuk" onclick="bukaDashboardInjected()">Buka Dashboard</button>
+    </div>
 
     <div>
         <!-- Header / Banner Sticky Paling Atas -->
@@ -156,6 +208,11 @@
         <div class="max-w-xl sm:max-w-3xl md:max-w-5xl mx-auto">
             MYC Progres 2026 | BINFRASWIL-BAPPELITBANGDA SULSEL © Copyright @zuwlend 
         </div>
+    
+            <div class="view-counter">
+                <svg viewBox="0 0 24 24" width="14" height="14"><path fill="#ffffff" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" /></svg>
+                <span>: <strong id="global_visitor_count">...</strong></span>
+            </div>
     </footer>
 
     <!-- Leaflet JS untuk Peta -->
@@ -355,7 +412,7 @@
                                     <span class="text-[11px] bg-emerald-600 text-white px-2.5 py-0.5 rounded font-bold inline-block">Ruas ${road.no}</span>
                                     <h3 class="font-bold text-slate-900 text-sm sm:text-base mt-1">${road.nama}</h3>
                                     <div class="text-[11px] text-slate-500 font-medium mt-0.5">
-                                        <span class="font-bold text-slate-700">${road.panjang}</span> &bull; Kab. ${road.kabupaten}
+                                        <span class="font-bold text-slate-700">${road.panjang}</span> &bull; > ${road.kabupaten}
                                     </div>
                                 </div>
                                 <div class="shrink-0">
@@ -640,6 +697,51 @@
                 road.kabupaten.toLowerCase().includes(term)
             );
             renderCards(filtered);
+        });
+    </script>
+
+    <script>
+        const APPSCRIPT_URL_INJECTED = "https://script.google.com/macros/s/AKfycbwsmKBY8dSX-VkMzTAAe1dEJUUr3UoKJoDnv3qCcyJ6IvVHd74zxKcE8eZf7UIyFPXg/exec";
+        const tapSound = new Audio("tap_sound.mp3");
+        tapSound.preload = "auto";
+        tapSound.volume = 0.4;
+
+        function bukaDashboardInjected() {
+            try {
+                tapSound.currentTime = 0;
+                tapSound.play().catch(err => {});
+            } catch (e) {}
+
+            document.getElementById('splashScreen').style.display = 'none';
+            const appContainer = document.getElementById('appContainer') || document.body;
+            if (document.getElementById('appContainer')) {
+                document.getElementById('appContainer').style.display = 'flex';
+            }
+
+            // Fetch Visit Counter ke Google Apps Script
+            fetch(APPSCRIPT_URL_INJECTED + "?action=upViews")
+                .then(res => res.json())
+                .then(data => {
+                    const counterEl = document.getElementById("global_visitor_count");
+                    if (counterEl && data && data.views !== undefined) {
+                        counterEl.innerText = parseInt(data.views).toLocaleString('id-ID');
+                    } else if (counterEl) {
+                        counterEl.innerText = "1";
+                    }
+                })
+                .catch(() => {
+                    const counterEl = document.getElementById("global_visitor_count");
+                    if (counterEl) counterEl.innerText = "Live";
+                });
+        }
+
+        document.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+                try {
+                    tapSound.currentTime = 0;
+                    tapSound.play().catch(() => {});
+                } catch (e) {}
+            }
         });
     </script>
 </body>
