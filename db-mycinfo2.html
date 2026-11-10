@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Progres MYC 2025-2027</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Leaflet CSS untuk Peta -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    
+    <!-- Open Graph Meta Tags untuk Thumbnail WAG -->
+    <meta property="og:title" content="Dashboard Preservasi Jalan MYC Sulsel (2025-2027)">
+    <meta property="og:description" content="Monitoring progres pekerjaan jalan periode Oktober 2026 dengan peta interaktif ruas jalan Prov. Sulsel.">
+    <meta property="og:image" content="https://i.ibb.co/xxxxxx/thumbnail9.png">
+    <meta property="og:url" content="https://binfraswilzulsel.my.id/">
+    <meta property="og:type" content="website">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primaryDark: '#0740aa',
+                        primaryLight: '#03b3f8',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #0740aa 0%, #03b3f8 100%);
+        }
+        .road-map {
+            height: 380px;
+            width: 100%;
+            z-index: 1;
+        }
+        .overview-map {
+            height: 390px;
+            width: 100%;
+            z-index: 1;
+        }
+    </style>
+
+    <style>
+        /* ======================================================= */
+        /* INJECTED: Splash Screen Estetik & Floating Logo        */
+        /* ======================================================= */
+        .splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, #0740aa, #011065);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 10000; color: white; transition: opacity 0.5s ease, visibility 0.5s;
+            text-align: center; padding: 20px; overflow: hidden;
+        }
+        .splash-screen h2 { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+        .splash-screen p { font-size: 14px; opacity: 0.8; margin-bottom: 25px; }
+        .splash-logo-container { display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 15px; position: relative; }
+        .logo-bismillah { width: 175px; height: auto; margin-bottom: 15px; filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.15)); }
+        .logo-character-group { position: relative; width: 220px; height: 160px; display: flex; align-items: center; justify-content: center; }
+        .logo-statis-bg { position: absolute; width: 100%; height: 100%; object-fit: contain; z-index: 1; opacity: 0.9; }
+        .logo-karakter-floating { position: absolute; width: 85%; height: 85%; object-fit: contain; z-index: 3; top: 10px; animation: melayangKarakter 3s ease-in-out infinite; }
+        @keyframes melayangKarakter { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
+        .logo-character-group::after {
+            content: ""; position: absolute; bottom: 0px; left: 15%; width: 70%; height: 12px;
+            background: rgba(0, 0, 0, 0.3); border-radius: 50%; z-index: 2; filter: blur(4px);
+            animation: bayanganBerdenyut 3s ease-in-out infinite;
+        }
+        @keyframes bayanganBerdenyut { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(0.7); opacity: 0.4; } 100% { transform: scale(1); opacity: 1; } }
+        .btn-masuk {
+            background-color: #fc8d05; color: #f7f8fa; font-weight: 700; padding: 14px 32px;
+            border: none; border-radius: 25px; font-size: 16px; cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); transition: all 0.2s;
+        }
+        .btn-masuk:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25); }
+        .view-counter {
+            display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 30px;
+            font-size: 11px; font-weight: 600; color: #ffffff; gap: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.1); margin-top: 8px;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between pb-0">
+
+    <!-- INJECTED: Splash Screen -->
+    <div class="splash-screen" id="splashScreen">
+        <div class="splash-logo-container">
+            <img src="bismillah.png" alt="Bismillah" class="logo-bismillah">
+            <div class="logo-character-group">
+                <img src="logo-sulsel.png" alt="Logo Background" class="logo-statis-bg">
+                <img src="sappurecca-2.png" alt="Karakter Utama" class="logo-karakter-floating">
+            </div>
+        </div>
+        <h2>Selamat Datang</h2>
+        <p>Di Dashboard Progres Preservasi Jalan<br><b>MYC (Multi-Years Contract) 2025-2027</b></p>
+        <button class="btn-masuk" onclick="bukaDashboardInjected()">Buka Dashboard</button>
+    </div>
+
+    <div>
+        <!-- Header / Banner Sticky Paling Atas -->
+        <header class="gradient-bg text-white shadow-md pb-3 pt-3 px-4 rounded-b-[1.2rem] sticky top-0 z-50">
+            <div class="max-w-xl sm:max-w-3xl md:max-w-5xl mx-auto">
+                <div class="flex items-center gap-3">
+                    <div class="w-20 h-20 rounded-xl overflow-hidden shrink-0 shadow-sm border-2 border-white/40 bg-white/10 flex items-center justify-center">
+                        <img src="logo.png" alt="Logo Instansi" class="w-full h-full object-cover">
+                    </div>
+                    
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[9px] uppercase tracking-wider bg-white/20 px-2 py-0.5 rounded-full font-semibold">MYC 2025-2027</span>
+                            <span class="text-[9px] text-white/90 font-bold bg-black/20 px-2 py-0.5 rounded-lg">Periode : Oktober 2026</span>
+                        </div>
+                        <h1 class="text-base sm:text-lg font-bold mt-0.5 leading-tight">Progres Preservasi Jalan</h1>
+                        <p class="text-[12px] text-white/80 leading-none mt-0.5">Monitoring & Evaluasi Kinerja Ruas Jalan</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Container -->
+        <main class="max-w-xl sm:max-w-3xl md:max-w-5xl mx-auto px-3 mt-2 space-y-2">
+
+            <!-- KELOMPOK STICKY: Kartu Pilih Paket & Search -->
+            <div class="sticky top-[5.2rem] z-40 bg-slate-100/95 backdrop-blur-sm pt-1 pb-2 space-y-2 shadow-sm rounded-b-xl">
+                <div id="filterSearchSection" class="bg-gradient-to-br from-blue-50/80 to-white p-2.5 rounded-xl shadow-sm border-2 border-primaryLight space-y-2">
+                    <div>
+                        <label for="paketFilter" class="flex items-center gap-1 text-[11px] font-extrabold text-[#0740aa] uppercase tracking-wide mb-0.5">
+                            <svg class="w-3.5 h-3.5 text-primaryLight" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+                            Pilih Paket Preservasi Jalan
+                        </label>
+                        <div class="relative">
+                            <select id="paketFilter" class="w-full text-xs sm:text-sm bg-white border-2 border-primaryLight/70 rounded-lg px-3 py-2 font-bold text-slate-800 shadow-sm focus:outline-none focus:border-[#0740aa] transition cursor-pointer appearance-none">
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-[#0740aa]">
+                                <svg class="w-4 h-4 font-bold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2 Kartu Tambahan Informasi Paket (Teks di Tengah) -->
+                    <div id="paketSummaryCards" class="grid grid-cols-2 gap-2 pt-0.5 hidden">
+                        <div class="bg-[#0740aa] p-2.5 rounded-xl text-white shadow-sm flex flex-col justify-center text-center">
+                            <span class="text-[9px] uppercase font-bold text-white/90 tracking-wider block">Total Ruas Paket</span>
+                            <span id="paketTotalRuas" class="text-sm sm:text-base font-extrabold mt-0.5 block">0 Ruas</span>
+                        </div>
+                        <div class="bg-emerald-600 p-2.5 rounded-xl text-white shadow-sm flex flex-col justify-center text-center">
+                            <span class="text-[9px] uppercase font-bold text-white/90 tracking-wider block">Total Panjang Paket</span>
+                            <span id="paketTotalPanjang" class="text-sm sm:text-base font-extrabold mt-0.5 block">0.0 Km</span>
+                        </div>
+                    </div>
+
+                    <div class="relative" id="searchWrapper">
+                        <input type="text" id="searchInput" placeholder="Cari nama ruas atau kabupaten..." class="w-full text-xs sm:text-sm bg-white border border-slate-200 rounded-lg pl-8 pr-3 py-1.5 focus:outline-none focus:border-primaryLight transition shadow-sm">
+                        <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wadah Konten Utama -->
+            <div id="contentContainer" class="space-y-2"></div>
+
+        </main>
+    </div>
+
+    <!-- MODAL POP-UP GALERI FOTO -->
+    <div id="photoModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 hidden transition-opacity">
+        <div class="bg-white rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl border border-slate-200 flex flex-col max-h-[90vh]">
+            <!-- Modal Header -->
+            <div class="gradient-bg text-white px-3.5 py-2.5 flex justify-between items-center shrink-0">
+                <div class="flex items-center gap-1.5">
+                    <svg class="w-4 h-4 text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path></svg>
+                    <span id="modalTitle" class="text-xs sm:text-sm font-bold truncate">Dokumentasi Progres Lapangan</span>
+                </div>
+                <button onclick="closePhotoModal()" class="text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-1 rounded-lg transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="p-3 bg-slate-900 overflow-y-auto flex flex-col sm:grid sm:grid-cols-2 gap-3">
+                <div class="bg-slate-800 p-2.5 rounded-xl flex flex-col justify-between border border-slate-700 shadow-sm">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400 mb-2 text-center bg-black/40 py-1 px-2 rounded">Kondisi Sebelum (Before)</span>
+                    <div class="flex items-center justify-center flex-1 bg-black/20 rounded-lg p-1">
+                        <img id="modalImgBefore" src="" alt="Foto Sebelum Perbaikan" class="max-h-[35vh] sm:max-h-[45vh] w-full object-contain rounded">
+                    </div>
+                </div>
+                <div class="bg-slate-800 p-2.5 rounded-xl flex flex-col justify-between border border-slate-700 shadow-sm">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400 mb-2 text-center bg-black/40 py-1 px-2 rounded">Kondisi Sesudah (After)</span>
+                    <div class="flex items-center justify-center flex-1 bg-black/20 rounded-lg p-1">
+                        <img id="modalImgAfter" src="" alt="Foto Sesudah Perbaikan" class="max-h-[35vh] sm:max-h-[45vh] w-full object-contain rounded">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="bg-slate-100 px-3 py-2 text-right shrink-0">
+                <button onclick="closePhotoModal()" class="bg-slate-700 hover:bg-slate-800 text-white text-xs font-bold px-4 py-1.5 rounded-lg transition shadow-sm">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Lebar Penuh -->
+    <footer class="gradient-bg text-white text-center text-xs py-3 px-4 shadow-md mt-6 rounded-t-[1.2rem]">
+        <div class="max-w-xl sm:max-w-3xl md:max-w-5xl mx-auto">
+            MYC Progres 2026 | BINFRASWIL-BAPPELITBANGDA SULSEL © Copyright @zuwlend 
+        </div>
+    
+            <div class="view-counter">
+                <svg viewBox="0 0 24 24" width="14" height="14"><path fill="#ffffff" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" /></svg>
+                <span>: <strong id="global_visitor_count">...</strong></span>
+            </div>
+    </footer>
+
+    <!-- Leaflet JS untuk Peta -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Script Logika & Pengambilan data.json secara Async -->
+    <script>
+        let globalPaketData = [];
+        let activePaketId = "all";
+        let activeRuasJalan = [];
+        let totalPanjangGlobal = 0;
+        let totalRuasGlobal = 0;
+        let mapsInstances = {};
+        let spotLayersInstances = {}; 
+        let spotLinesReferences = {}; 
+        let spotVisibility = {};    
+        let activeCardIndex = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch('data.json');
+                const embeddedData = await response.json();
+                globalPaketData = embeddedData.paketList;
+
+                globalPaketData.forEach(paket => {
+                    totalRuasGlobal += paket.ruasJalan.length;
+                    paket.ruasJalan.forEach(r => {
+                        if (r.panjang && r.panjang !== '-') {
+                            let cleanPanjang = parseFloat(r.panjang.replace(',', '.').replace(/[^0-9.]/g, '')) || 0;
+                            totalPanjangGlobal += cleanPanjang;
+                        }
+                    });
+                });
+
+                const paketSelect = document.getElementById('paketFilter');
+                if (paketSelect) {
+                    paketSelect.innerHTML = '<option value="all">-- Semua Paket / Peta Overview Sulsel --</option>';
+                    globalPaketData.forEach(paket => {
+                        const opt = document.createElement('option');
+                        opt.value = paket.id;
+                        opt.textContent = paket.namaPaket;
+                        paketSelect.appendChild(opt);
+                    });
+
+                    renderOverviewMode();
+
+                    paketSelect.addEventListener('change', (e) => {
+                        activePaketId = e.target.value;
+                        activeCardIndex = null;
+                        if (activePaketId === "all") {
+                            renderOverviewMode();
+                        } else {
+                            loadPaketData(activePaketId);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Gagal memuat file data.json:', error);
+                alert('Gagal memuat data JSON ruas jalan. Pastikan file data.json berada di folder yang sama.');
+            }
+        });
+
+        function renderOverviewMode() {
+            const container = document.getElementById('contentContainer');
+            document.getElementById('searchWrapper').style.display = 'none';
+            document.getElementById('paketSummaryCards').classList.add('hidden');
+            mapsInstances = {};
+
+            let allCoordinates = [];
+            globalPaketData.forEach(paket => {
+                paket.ruasJalan.forEach(r => {
+                    if (r.coordinates && r.coordinates.length > 0) {
+                        r.coordinates.forEach(coord => {
+                            allCoordinates.push([coord[1], coord[0]]);
+                        });
+                    }
+                });
+            });
+
+            container.innerHTML = `
+                <!-- Terbagi Menjadi 2 Kartu Berdampingan (Grid 2 Kolom) -->
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="bg-[#0740aa] p-3 rounded-xl shadow-sm text-white flex flex-col justify-center text-center">
+                        <span class="text-[9px] uppercase font-bold text-white/90 tracking-wider block">Total Ruas Jalan</span>
+                        <span class="text-base sm:text-lg font-extrabold mt-0.5 block">${totalRuasGlobal} Ruas</span>
+                    </div>
+                    <div class="bg-emerald-600 p-3 rounded-xl shadow-sm text-white flex flex-col justify-center text-center">
+                        <span class="text-[9px] uppercase font-bold text-white/90 tracking-wider block">Total Panjang</span>
+                        <span class="text-base sm:text-lg font-extrabold mt-0.5 block">${totalPanjangGlobal.toFixed(1)} Km</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-3 rounded-xl shadow-sm border-2 border-[#0740aa]/40 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-extrabold text-[#0740aa] uppercase tracking-wide flex items-center gap-1">
+                            <svg class="w-4 h-4 text-primaryLight" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+                            Jaringan Jalan Prov. Sulsel
+                        </span>
+                        <span class="text-[10px] bg-blue-100 text-[#0740aa] px-2 py-0.5 rounded font-bold">Overview MYC 2025-2027</span>
+                    </div>
+                    <div class="rounded-lg overflow-hidden border border-slate-200 shadow-inner">
+                        <div id="overviewMap" class="overview-map"></div>
+                    </div>
+                </div>
+            `;
+
+            setTimeout(() => {
+                const overviewMap = L.map('overviewMap').setView([-3.668, 119.974], 8);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; OpenStreetMap'
+                }).addTo(overviewMap);
+
+                let boundsGroup = new L.FeatureGroup();
+                globalPaketData.forEach(paket => {
+                    paket.ruasJalan.forEach(r => {
+                        if (r.coordinates && r.coordinates.length > 0) {
+                            const roadGeoJSON = {
+                                "type": "Feature",
+                                "geometry": {
+                                    "type": "LineString",
+                                    "coordinates": r.coordinates
+                                }
+                            };
+                            const layer = L.geoJSON(roadGeoJSON, {
+                                style: { color: '#0740aa', weight: 4, opacity: 0.8 }
+                            }).addTo(overviewMap);
+                            layer.bindPopup(`<b>${r.nama}</b><br>Kab. ${r.kabupaten} (${r.panjang})`);
+                            boundsGroup.addLayer(layer);
+                        }
+                    });
+                });
+
+                if (allCoordinates.length > 0) {
+                    overviewMap.fitBounds(boundsGroup.getBounds(), {
+                        padding: [35, 35],
+                        maxZoom: 11
+                    });
+                }
+
+                mapsInstances['overview'] = overviewMap;
+            }, 100);
+        }
+
+        function loadPaketData(paketId) {
+            const selectedPaket = globalPaketData.find(p => p.id === paketId);
+            if (!selectedPaket) return;
+
+            activeRuasJalan = selectedPaket.ruasJalan;
+            document.getElementById('searchWrapper').style.display = 'block';
+
+            let paketRuasCount = activeRuasJalan.length;
+            let paketPanjangTotal = 0;
+            activeRuasJalan.forEach(r => {
+                if (r.panjang && r.panjang !== '-') {
+                    let cleanPanjang = parseFloat(r.panjang.replace(',', '.').replace(/[^0-9.]/g, '')) || 0;
+                    paketPanjangTotal += cleanPanjang;
+                }
+            });
+
+            document.getElementById('paketTotalRuas').textContent = `${paketRuasCount} Ruas`;
+            document.getElementById('paketTotalPanjang').textContent = `${paketPanjangTotal.toFixed(1)} Km`;
+            document.getElementById('paketSummaryCards').classList.remove('hidden');
+
+            renderCards(activeRuasJalan);
+        }
+
+        function renderCards(roads) {
+            const container = document.getElementById('contentContainer');
+            container.innerHTML = '';
+            mapsInstances = {};
+            spotLayersInstances = {};
+            spotLinesReferences = {};
+            spotVisibility = {};
+
+            if (roads.length === 0) {
+                container.innerHTML = '<div class="text-center py-6 text-xs text-slate-400">Tidak ada data ruas jalan ditemukan.</div>';
+                return;
+            }
+
+            roads.forEach((road, index) => {
+                spotVisibility[index] = false; 
+
+                // Tombol Foto (Tanpa angka (2), diposisikan di tengah)
+                const fotoButtonHTML = (road.fotoSebelum || road.fotoSesudah) ? `
+                    <button onclick="openPhotoModal('${road.fotoSebelum || ''}', '${road.fotoSesudah || ''}', '${road.nama.replace(/'/g, "\\'")}')" class="bg-indigo-600 hover:bg-indigo-700 text-white text-[9px] font-bold px-2.5 py-0.5 rounded transition shadow-sm flex items-center gap-1">
+                        <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path></svg>
+                        Foto
+                    </button>
+                ` : '';
+
+                const cardHTML = `
+                    <div id="card-wrapper-${index}" class="road-card bg-white p-3 rounded-xl shadow-sm border-2 border-[#0740aa]/40 hover:shadow-md transition flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center gap-2">
+                                <div class="flex-1">
+                                    <!-- Nomor Ruas Diubah Menjadi "Ruas [No]" -->
+                                    <span class="text-[11px] bg-emerald-600 text-white px-2.5 py-0.5 rounded font-bold inline-block">Ruas ${road.no}</span>
+                                    <h3 class="font-bold text-slate-900 text-sm sm:text-base mt-1">${road.nama}</h3>
+                                    <div class="text-[11px] text-slate-500 font-medium mt-0.5">
+                                        <span class="font-bold text-slate-700">${road.panjang}</span> &bull; > ${road.kabupaten}
+                                    </div>
+                                </div>
+                                <div class="shrink-0">
+                                    <button onclick="toggleDetail(${index}, ${road.lat}, ${road.lng}, '${road.nama.replace(/'/g, "\\'")}')" id="btn-${index}" class="gradient-bg text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-sm transition flex items-center gap-1 opacity-95 hover:opacity-100">
+                                        <span>Detail</span>
+                                        <svg id="icon-${index}" class="w-3.5 h-3.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Bagian Rincian -->
+                            <div id="detail-${index}" class="hidden mt-2.5 pt-2.5 border-t border-slate-100 space-y-2.5">
+                                <div class="grid grid-cols-3 gap-2">
+                                    <div class="bg-blue-600 p-2 rounded-lg text-center shadow-sm">
+                                        <span class="text-[8px] uppercase font-bold text-white/90 tracking-wider block">Target Rencana</span>
+                                        <span class="text-xs sm:text-sm font-extrabold text-white mt-0.5 block">${road.rencana}%</span>
+                                    </div>
+                                    <div class="bg-emerald-600 p-2 rounded-lg text-center shadow-sm">
+                                        <span class="text-[8px] uppercase font-bold text-white/90 tracking-wider block">Realisasi</span>
+                                        <span class="text-xs sm:text-sm font-extrabold text-white mt-0.5 block">${road.realisasi}%</span>
+                                    </div>
+                                    <div class="bg-amber-500 text-white p-2 rounded-lg text-center shadow-sm flex flex-col justify-center">
+                                        <span class="text-[8px] uppercase font-bold tracking-wider block opacity-90">Deviasi</span>
+                                        <span class="text-xs sm:text-sm font-extrabold mt-0.5 block">${road.deviasi}</span>
+                                    </div>
+                                </div>
+
+                                <!-- Peta Lokasi di Dalam Kartu -->
+                                <div class="rounded-lg overflow-hidden border border-slate-200 shadow-inner">
+                                    <div class="bg-slate-50 px-2.5 py-1.5 text-[10px] font-bold text-[#0740aa] border-b border-slate-200 flex items-center justify-between">
+                                        <span class="flex items-center gap-1">
+                                            <svg class="w-3.5 h-3.5 text-primaryLight" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                                            Lokasi Pengerjaan Ruas
+                                        </span>
+                                        <!-- Urutan Tombol: Info (Kiri) | Foto (Tengah) | Show Spot (Kanan) -->
+                                        <div class="flex items-center gap-1.5">
+                                            <button onclick="triggerMapInfoCallout(${index})" class="bg-blue-600 hover:bg-blue-700 text-white text-[9px] font-bold px-2.5 py-0.5 rounded transition shadow-sm flex items-center gap-1">
+                                                <span class="w-3 h-3 rounded-full bg-white text-blue-600 flex items-center justify-center font-extrabold text-[8px]">i</span>
+                                                Info
+                                            </button>
+                                            ${fotoButtonHTML}
+                                            <button onclick="toggleSpotsVisibility(${index})" id="spotToggleBtn-${index}" class="bg-slate-400 hover:bg-slate-500 text-white text-[9px] font-bold px-2.5 py-0.5 rounded transition shadow-sm">
+                                                Show Spot
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div id="map-${index}" class="road-map"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', cardHTML);
+            });
+        }
+
+        function openPhotoModal(urlBefore, urlAfter, roadName) {
+            const modal = document.getElementById('photoModal');
+            const modalImgBefore = document.getElementById('modalImgBefore');
+            const modalImgAfter = document.getElementById('modalImgAfter');
+            const modalTitle = document.getElementById('modalTitle');
+
+            modalImgBefore.src = urlBefore ? urlBefore : 'https://via.placeholder.com/600x400?text=Foto+Sebelum+Belum+Ada';
+            modalImgAfter.src = urlAfter ? urlAfter : 'https://via.placeholder.com/600x400?text=Foto+Sesudah+Belum+Ada';
+            
+            modalTitle.textContent = `Dokumentasi: ${roadName}`;
+            modal.classList.remove('hidden');
+        }
+
+        function closePhotoModal() {
+            const modal = document.getElementById('photoModal');
+            modal.classList.add('hidden');
+            document.getElementById('modalImgBefore').src = '';
+            document.getElementById('modalImgAfter').src = '';
+        }
+
+        function toggleDetail(index, lat, lng, roadName) {
+            const detailEl = document.getElementById(`detail-${index}`);
+            const iconEl = document.getElementById(`icon-${index}`);
+            const btnEl = document.getElementById(`btn-${index}`);
+            const targetCard = document.getElementById(`card-wrapper-${index}`);
+            const container = document.getElementById('contentContainer');
+
+            const filterSearchEl = document.getElementById('filterSearchSection');
+            const isOpening = detailEl.classList.contains('hidden');
+
+            if (isOpening) {
+                activeCardIndex = index;
+                filterSearchEl.classList.add('hidden');
+
+                activeRuasJalan.forEach((_, idx) => {
+                    const otherDetail = document.getElementById(`detail-${idx}`);
+                    const otherCard = document.getElementById(`card-wrapper-${idx}`);
+                    const otherBtn = document.getElementById(`btn-${idx}`);
+                    const otherIcon = document.getElementById(`icon-${idx}`);
+
+                    otherCard.classList.remove('hidden');
+
+                    if (idx !== index) {
+                        otherDetail.classList.add('hidden');
+                        if (otherBtn) {
+                            otherBtn.classList.remove('bg-slate-700');
+                            otherBtn.classList.add('gradient-bg');
+                            otherBtn.querySelector('span').textContent = 'Detail';
+                        }
+                        if (otherIcon) {
+                            otherIcon.classList.remove('rotate-180');
+                        }
+                    }
+                });
+
+                detailEl.classList.remove('hidden');
+                iconEl.classList.add('rotate-180');
+                btnEl.classList.remove('gradient-bg');
+                btnEl.classList.add('bg-slate-700');
+                btnEl.querySelector('span').textContent = 'Tutup';
+
+                container.prepend(targetCard);
+
+                activeRuasJalan.forEach((_, idx) => {
+                    if (idx !== index) {
+                        document.getElementById(`card-wrapper-${idx}`).classList.add('hidden');
+                    }
+                });
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                setTimeout(() => {
+                    if (!mapsInstances[index]) {
+                        const mapInstance = L.map(`map-${index}`).setView([lat, lng], 14);
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            maxZoom: 19,
+                            attribution: '&copy; OpenStreetMap'
+                        }).addTo(mapInstance);
+
+                        const currentRoad = activeRuasJalan[index];
+                        let spotLayerGroup = L.layerGroup(); 
+                        let spotLinesList = []; 
+
+                        if (currentRoad.coordinates && currentRoad.coordinates.length > 0) {
+                            const roadGeoJSON = {
+                                "type": "Feature",
+                                "geometry": {
+                                    "type": "LineString",
+                                    "coordinates": currentRoad.coordinates
+                                }
+                            };
+
+                            const geoJsonLayer = L.geoJSON(roadGeoJSON, {
+                                style: { color: '#0740aa', weight: 6, opacity: 0.9 }
+                            }).addTo(mapInstance);
+
+                            geoJsonLayer.bindPopup(`<b>${roadName}</b>`);
+
+                            const coords = currentRoad.coordinates;
+                            L.marker([coords[0][1], coords[0][0]]).addTo(mapInstance).bindPopup(`<b>${roadName}</b><br>Titik Awal (Start)`);
+                            L.marker([coords[coords.length - 1][1], coords[coords.length - 1][0]]).addTo(mapInstance).bindPopup(`<b>${roadName}</b><br>Titik Akhir (End)`);
+
+                            if (currentRoad.spotPerbaikan && currentRoad.spotPerbaikan.length > 0) {
+                                currentRoad.spotPerbaikan.forEach(spot => {
+                                    if (spot.coordinates && spot.coordinates.length > 0) {
+                                        const spotLatLngs = spot.coordinates.map(c => [c[1], c[0]]);
+                                        
+                                        const popupContent = `
+                                            <div style="font-family: sans-serif; font-size: 11px; line-height: 1.4; min-width: 180px;">
+                                                <b style="color: #0740aa; font-size: 12px; display: block; margin-bottom: 4px;">${spot.keterangan || 'Detail Segmen Penanganan'}</b>
+                                                <hr style="border: 0; border-top: 1px solid #cbd5e1; margin: 4px 0;">
+                                                <b>Panjang:</b> ${spot.panjangSpot || '-'}<br>
+                                                <b>Kontraktor:</b> ${spot.kontraktor || '-'}<br>
+                                                <b>Target Selesai:</b> ${spot.targetSelesai || '-'}<br>
+                                                <b>Anggaran:</b> ${spot.anggaran || '-'}
+                                            </div>
+                                        `;
+
+                                        const spotLine = L.polyline(spotLatLngs, {
+                                            color: '#ef4444', 
+                                            weight: 8,       
+                                            opacity: 0.9
+                                        }).bindPopup(popupContent);
+
+                                        spotLayerGroup.addLayer(spotLine);
+                                        spotLinesList.push(spotLine);
+                                    }
+                                });
+                            }
+
+                            spotLayersInstances[index] = spotLayerGroup;
+                            spotLinesReferences[index] = spotLinesList;
+
+                            mapInstance.fitBounds(geoJsonLayer.getBounds(), {
+                                padding: [30, 30],
+                                maxZoom: 16
+                            });
+                        } else {
+                            L.marker([lat, lng]).addTo(mapInstance).bindPopup(`<b>${roadName}</b>`).openPopup();
+                        }
+
+                        mapsInstances[index] = mapInstance;
+                    } else {
+                        mapsInstances[index].invalidateSize();
+                    }
+                }, 100);
+
+            } else {
+                filterSearchEl.classList.remove('hidden');
+
+                detailEl.classList.add('hidden');
+                iconEl.classList.remove('rotate-180');
+                btnEl.classList.remove('bg-slate-700');
+                btnEl.classList.add('gradient-bg');
+                btnEl.querySelector('span').textContent = 'Detail';
+
+                const savedIndex = activeCardIndex;
+                activeCardIndex = null;
+
+                renderCards(activeRuasJalan);
+
+                if (savedIndex !== null) {
+                    setTimeout(() => {
+                        const closedCard = document.getElementById(`card-wrapper-${savedIndex}`);
+                        if (closedCard) {
+                            closedCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }, 50);
+                }
+            }
+        }
+
+        function toggleSpotsVisibility(index) {
+            const mapInstance = mapsInstances[index];
+            const spotGroup = spotLayersInstances[index];
+            const toggleBtn = document.getElementById(`spotToggleBtn-${index}`);
+
+            if (!mapInstance || !spotGroup) return;
+
+            if (spotVisibility[index]) {
+                mapInstance.removeLayer(spotGroup);
+                spotVisibility[index] = false;
+                toggleBtn.textContent = "Show Spot";
+                toggleBtn.classList.remove('bg-amber-500', 'hover:bg-amber-600');
+                toggleBtn.classList.add('bg-slate-400', 'hover:bg-slate-500');
+            } else {
+                mapInstance.addLayer(spotGroup);
+                spotVisibility[index] = true;
+                toggleBtn.textContent = "Hide Spot";
+                toggleBtn.classList.remove('bg-slate-400', 'hover:bg-slate-500');
+                toggleBtn.classList.add('bg-amber-500', 'hover:bg-amber-600');
+            }
+        }
+
+        function triggerMapInfoCallout(index) {
+            const mapInstance = mapsInstances[index];
+            const spotGroup = spotLayersInstances[index];
+            const spotLines = spotLinesReferences[index];
+            const toggleBtn = document.getElementById(`spotToggleBtn-${index}`);
+
+            if (!mapInstance || !spotLines || spotLines.length === 0) {
+                alert('Belum ada data segmen spot perbaikan pada ruas jalan ini.');
+                return;
+            }
+
+            if (!spotVisibility[index]) {
+                mapInstance.addLayer(spotGroup);
+                spotVisibility[index] = true;
+                toggleBtn.textContent = "Hide Spot";
+                toggleBtn.classList.remove('bg-slate-400', 'hover:bg-slate-500');
+                toggleBtn.classList.add('bg-amber-500', 'hover:bg-amber-600');
+            }
+
+            const targetLine = spotLines[0];
+            const centerLatLng = targetLine.getBounds().getCenter();
+
+            mapInstance.setView(centerLatLng, 16, { animate: true });
+            targetLine.openPopup(centerLatLng);
+        }
+
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('keyup', function(e) {
+            const term = e.target.value.toLowerCase();
+            const filtered = activeRuasJalan.filter(road => 
+                road.nama.toLowerCase().includes(term) || 
+                road.kabupaten.toLowerCase().includes(term)
+            );
+            renderCards(filtered);
+        });
+    </script>
+
+    <script>
+        const APPSCRIPT_URL_INJECTED = "https://script.google.com/macros/s/AKfycbwsmKBY8dSX-VkMzTAAe1dEJUUr3UoKJoDnv3qCcyJ6IvVHd74zxKcE8eZf7UIyFPXg/exec";
+        const tapSound = new Audio("tap_sound.mp3");
+        tapSound.preload = "auto";
+        tapSound.volume = 0.4;
+
+        function bukaDashboardInjected() {
+            try {
+                tapSound.currentTime = 0;
+                tapSound.play().catch(err => {});
+            } catch (e) {}
+
+            document.getElementById('splashScreen').style.display = 'none';
+            const appContainer = document.getElementById('appContainer') || document.body;
+            if (document.getElementById('appContainer')) {
+                document.getElementById('appContainer').style.display = 'flex';
+            }
+
+            // Fetch Visit Counter ke Google Apps Script
+            fetch(APPSCRIPT_URL_INJECTED + "?action=upViews")
+                .then(res => res.json())
+                .then(data => {
+                    const counterEl = document.getElementById("global_visitor_count");
+                    if (counterEl && data && data.views !== undefined) {
+                        counterEl.innerText = parseInt(data.views).toLocaleString('id-ID');
+                    } else if (counterEl) {
+                        counterEl.innerText = "1";
+                    }
+                })
+                .catch(() => {
+                    const counterEl = document.getElementById("global_visitor_count");
+                    if (counterEl) counterEl.innerText = "Live";
+                });
+        }
+
+        document.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+                try {
+                    tapSound.currentTime = 0;
+                    tapSound.play().catch(() => {});
+                } catch (e) {}
+            }
+        });
+    </script>
+</body>
+</html>
