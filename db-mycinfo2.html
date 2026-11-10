@@ -293,13 +293,14 @@
             });
 
             container.innerHTML = `
-                <div class="bg-gradient-to-r from-[#0740aa] to-primaryLight p-3.5 rounded-xl shadow-sm text-white flex justify-between items-center">
-                    <div>
-                        <span class="text-[10px] uppercase font-semibold text-white/90 tracking-wider block">Akumulasi Keseluruhan</span>
-                        <span class="text-base sm:text-lg font-extrabold mt-0.5 block">${totalRuasGlobal} Ruas Jalan Provinsi</span>
+                <!-- Terbagi Menjadi 2 Kartu Berdampingan (Grid 2 Kolom) -->
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="bg-[#0740aa] p-3 rounded-xl shadow-sm text-white flex flex-col justify-center text-center">
+                        <span class="text-[9px] uppercase font-bold text-white/90 tracking-wider block">Total Ruas Jalan</span>
+                        <span class="text-base sm:text-lg font-extrabold mt-0.5 block">${totalRuasGlobal} Ruas</span>
                     </div>
-                    <div class="text-right">
-                        <span class="text-[10px] uppercase font-semibold text-white/90 tracking-wider block">Total Panjang</span>
+                    <div class="bg-emerald-600 p-3 rounded-xl shadow-sm text-white flex flex-col justify-center text-center">
+                        <span class="text-[9px] uppercase font-bold text-white/90 tracking-wider block">Total Panjang</span>
                         <span class="text-base sm:text-lg font-extrabold mt-0.5 block">${totalPanjangGlobal.toFixed(1)} Km</span>
                     </div>
                 </div>
@@ -308,7 +309,7 @@
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-extrabold text-[#0740aa] uppercase tracking-wide flex items-center gap-1">
                             <svg class="w-4 h-4 text-primaryLight" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
-                            Peta Jaringan Jalan Provinsi Sulsel
+                            Jaringan Jalan Prov. Sulsel
                         </span>
                         <span class="text-[10px] bg-blue-100 text-[#0740aa] px-2 py-0.5 rounded font-bold">Overview MYC 2025-2027</span>
                     </div>
