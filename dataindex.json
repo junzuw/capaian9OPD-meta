@@ -1,0 +1,28 @@
+{
+    "paketListSummary": [
+        {
+            "id": "1",
+            "namaPaket": "Paket 1 - Preservasi Jalan"
+        },
+        {
+            "id": "2",
+            "namaPaket": "Paket 2 - Preservasi Jalan"
+        },
+        {
+            "id": "3",
+            "namaPaket": "Paket 3 - Preservasi Jalan"
+        },
+        {
+            "id": "4",
+            "namaPaket": "Paket 4 - Preservasi Jalan"
+        },
+        {
+            "id": "5",
+            "namaPaket": "Paket 5 - Preservasi Jalan"
+        },
+        {
+            "id": "6",
+            "namaPaket": "Paket 6 - Preservasi Jalan"
+        }
+    ]
+}
