@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Kontrol Perjalanan Dinas - Bidang Infraswil</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <meta property="og:title" content="Dashboard Kontrol Perjalanan Dinas Pegawai Bidang Infraswil" />
+    <meta property="og:description" content="Alat kontrol rekap pegawai yang sudah dan belum melakukan perjalanan dinas untuk Kabid." />
+    <meta property="og:type" content="website" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: radial-gradient(circle, #0740aa, #012d7e);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #0740aa, #011065);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            color: white;
+            transition: opacity 0.5s ease, visibility 0.5s;
+            text-align: center;
+            padding: 15px;
+        }
+
+        .logo-container {
+            width: 100%;
+            max-width: 200px;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+            padding: 0;
+            background-image: url('logo-sulsel.png');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .floating-logo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            animation: floatAnimation 3s ease-in-out infinite;
+            margin-bottom: 0 !important;
+        }
+
+        .static-bismillah-img {
+            width: 65%;
+            max-width: 180px;
+            height: auto;
+            object-fit: contain;
+            margin-top: 10px;
+            margin-bottom: 30px;
+            filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.6));
+        }
+
+        @keyframes floatAnimation {
+            0% {
+                transform: translateY(0px);
+                filter: drop-shadow(0px 5px 8px rgba(0, 0, 0, 0.7));
+            }
+            50% {
+                transform: translateY(-15px);
+                filter: drop-shadow(0px 20px 15px rgba(0, 0, 0, 0.25));
+            }
+            100% {
+                transform: translateY(0px);
+                filter: drop-shadow(0px 5px 8px rgba(0, 0, 0, 0.4));
+            }
+        }
+
+        #splash-screen h1 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        #splash-screen p {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 24px;
+        }
+
+        .btn-start {
+            background: #ff7300;
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 115, 0, 0.4);
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .btn-start:hover {
+            background: #ff8522;
+            transform: scale(1.05);
+        }
+
+        .header {
+            background: linear-gradient(180deg, #012d7e, #0740aa);
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            min-width: 0;
+        }
+
+        .header-logo {
+            width: 72px;
+            height: 72px;
+            object-fit: contain;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            flex-shrink: 0;
+        }
+
+        .header-text h1 {
+            margin: 0;
+            font-size: 17px;
+            line-height: 1.25;
+        }
+
+        .header-text p {
+            margin: 5px 0 0 0;
+            opacity: 0.9;
+            font-size: 12px;
+        }
+
+        .btn-admin-open {
+            background: #ff7300;
+            color: white;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-admin-open:hover {
+            background: #ff8522;
+        }
+
+        .container {
+            padding: 15px;
+            flex: 1;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 15px;
+        }
+
+        .animated-card {
+            opacity: 0;
+            transform: translateY(-50px) scale(0.9);
+        }
+
+        .animated-card.play-anim {
+            animation: fallBounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes fallBounce {
+            0% {
+                opacity: 0;
+                transform: translateY(-80px) scale(0.8);
+            }
+            60% {
+                opacity: 1;
+                transform: translateY(10px) scale(1.02);
+            }
+            80% {
+                transform: translateY(-5px) scale(0.99);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .inner-card {
+            border: 1.5px solid #07aefc;
+            box-shadow: none;
+            transition: border-color 0.2s;
+        }
+
+        .inner-card:hover {
+            border-color: #0c6bdc;
+        }
+
+        .card h4 {
+            margin: 0;
+            font-size: 11px;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card h2 {
+            margin: 8px 0 0 0;
+            font-size: 22px;
+            color: #1a1a1a;
+            font-weight: 700;
+        }
+
+        .card-flex {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .icon-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .icon-blue { background: #0c6bdc; }
+        .icon-green { background: #28a745; }
+        .icon-orange { background: #ff9800; }
+        .icon-red { background: #e53935; }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #0f3c78;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e3e6f0;
+            padding-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-view-data {
+            background: #0f3c78;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            font-size: 11px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .btn-view-data:hover {
+            background: #0c6bdc;
+        }
+
+        .badge-hingga {
+            background-color: #ff7300;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 11px;
+            display: inline-block;
+        }
+
+        .badge-status {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 700;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        .badge-sudah {
+            background: #e8f7ee;
+            color: #1e7e34;
+            border: 1px solid #28a745;
+        }
+
+        .badge-belum {
+            background: #fdecec;
+            color: #b71c1c;
+            border: 1px solid #e53935;
+        }
+
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 14px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .filter-btn {
+            background: #eef3fa;
+            color: #0f3c78;
+            border: 1px solid #cbd5e1;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn.active {
+            background: #0c6bdc;
+            color: white;
+            border-color: #0a56b2;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            max-width: 320px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 9px 12px 9px 34px;
+            border-radius: 10px;
+            border: 1.5px solid #cbd5e1;
+            font-size: 12px;
+            outline: none;
+        }
+
+        .search-box input:focus {
+            border-color: #0c6bdc;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 11px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        /* Baris Pegawai di dalam Satu Kartu Utama */
+        .pegawai-row-item {
+            padding: 12px 4px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .pegawai-row-item:last-child {
+            border-bottom: none;
+            padding-bottom: 4px;
+        }
+
+        .pegawai-row-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .pegawai-identity {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .pegawai-name-line {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #0f3c78;
+            line-height: 1.35;
+            word-break: break-word;
+        }
+
+        .pegawai-right-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .freq-progress-group {
+            width: 126px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .freq-progress-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .freq-progress-track {
+            width: 100%;
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .freq-progress-fill {
+            height: 100%;
+            border-radius: 999px;
+            transition: width 0.3s ease;
+        }
+
+        .toggle-btn {
+            background: #0c6bdc;
+            color: white;
+            border: 1px solid #0a56b2;
+            padding: 7px 12px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 11.5px;
+            font-weight: 600;
+            transition: background 0.2s, color 0.2s;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .program-content {
+            display: none;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #cbd5e1;
+        }
+
+        .pegawai-bar-box {
+            background: #ffffff;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 12px;
+        }
+
+        .pegawai-bar-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #0f3c78;
+            margin-bottom: 8px;
+        }
+
+        .pegawai-bar-canvas-wrap {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+            height: 170px;
+            margin: 0 auto;
+        }
+
+        .sub-kegiatan-wrapper {
+            padding: 12px 14px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border-left: 4px solid #28a745;
+        }
+
+        .sub-kegiatan-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: #1e7e34;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sub-kegiatan-block {
+            background: #ffffff;
+            padding: 11px 13px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            border-left: 3px solid #ff7300;
+            margin-bottom: 10px;
+        }
+
+        .sub-kegiatan-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .no-data-msg {
+            color: #64748b;
+            font-style: italic;
+            font-size: 12px;
+            padding: 6px 2px;
+        }
+
+        /* Modal Admin Update */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(1, 16, 101, 0.72);
+            z-index: 20000;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .modal-box {
+            background: #ffffff;
+            width: 100%;
+            max-width: 480px;
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #e3e6f0;
+            padding-bottom: 10px;
+            margin-bottom: 14px;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 16px;
+            color: #0f3c78;
+        }
+
+        .btn-close-modal {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 9px 11px;
+            border-radius: 10px;
+            border: 1.5px solid #cbd5e1;
+            font-size: 12px;
+            font-family: inherit;
+        }
+
+        .btn-submit-admin {
+            width: 100%;
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 11px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-submit-admin:hover {
+            background: #218838;
+        }
+
+        .sync-status {
+            font-size: 11px;
+            margin-top: 10px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            background: #f1f5f9;
+            color: #334155;
+        }
+
+        .footer {
+            background: linear-gradient(0deg, #012d7e, #0740aa);
+            color: white;
+            text-align: center;
+            padding: 12px 10px;
+            font-size: 11px;
+            margin-top: auto;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 360px;
+            height: 260px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 640px) {
+            .header {
+                flex-wrap: wrap;
+            }
+
+            .btn-admin-open {
+                width: 100%;
+            }
+
+            .pegawai-row-top {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+
+            .pegawai-right-controls {
+                justify-content: space-between;
+                width: 100%;
+            }
+
+            .freq-progress-group {
+                flex: 1;
+                width: auto;
+                max-width: 190px;
+            }
+
+            .search-box {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .pegawai-bar-canvas-wrap {
+                max-width: 100%;
+                height: 165px;
+            }
+
+            .chart-container {
+                max-width: 300px;
+                height: 240px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="splash-screen">
+        <img src="bismillah.png" alt="Bismillaah" class="static-bismillah-img">
+        <div class="logo-container">
+            <img src="sappurecca-2.png" alt="Logo" class="floating-logo">
+        </div>
+        <p style="margin-top: 8px; margin-bottom: 20px; line-height: 1.5;">
+            <b>Selamat Datang,</b> di Halaman Dashboard<br>
+            Kontrol Perjadin Pegawai Bidang <b>INFRASWIL</b>.<br>
+            Klik tombol di bawah untuk melanjutkan.
+        </p>
+        <button class="btn-start" onclick="startDashboard()">Masuk Dashboard</button>
+    </div>
+
+    <div class="header">
+        <div class="header-left">
+            <img src="deepblueori.png" alt="Logo" class="header-logo">
+            <div class="header-text">
+                <h1>Dashboard Kontrol Perjalanan Dinas Pegawai</h1>
+                <p id="sync-subtitle"><i class="fa-regular fa-calendar-check"></i> Bidang Infraswil &bull; Memuat data...</p>
+            </div>
+        </div>
+        <button class="btn-admin-open" onclick="openAdminModal()">
+            <i class="fa-solid fa-user-gear"></i> Admin Update Data
+        </button>
+    </div>
+
+    <div class="container">
+        <div class="card inner-card animated-card" id="main-card-1">
+            <div class="card-flex">
+                <div class="icon-box icon-blue"><i class="fa-solid fa-users"></i></div>
+                <div class="card-text">
+                    <h4>Total Pegawai Binfraswil</h4>
+                    <h2 id="total-pegawai-label">0 Orang</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="card inner-card animated-card" id="main-card-2">
+            <div class="card-flex">
+                <div class="icon-box icon-green"><i class="fa-solid fa-plane-departure"></i></div>
+                <div class="card-text" style="flex: 1;">
+                    <h4>Sudah PERJADIN <span class="badge-hingga">Hingga</span> Saat Ini</h4>
+                    <h2 id="sudah-perjadin-label">0 Orang (0%)</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="card inner-card animated-card" id="main-card-3">
+            <div class="card-flex">
+                <div class="icon-box icon-red"><i class="fa-solid fa-user-clock"></i></div>
+                <div class="card-text" style="flex: 1;">
+                    <h4>Belum PERJADIN</h4>
+                    <h2 id="belum-perjadin-label">0 Orang (0%)</h2>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: flex; flex-direction: row; gap: 15px; width: 100%; margin-bottom: 15px;">
+            <div class="card inner-card animated-card" id="main-card-4" style="flex: 1; margin-bottom: 0; padding: 15px;">
+                <div class="card-flex">
+                    <div class="icon-box icon-orange"><i class="fa-solid fa-route"></i></div>
+                    <div class="card-text" style="min-width: 0;">
+                        <h4>TOTAL FREKUENSI PERJADIN</h4>
+                        <h2 id="total-frekuensi-badge" style="margin: 1px 0 0 0; font-size: 20px; color: #1a1a1a; font-weight: 700;">0x</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="card inner-card animated-card" id="main-card-5" style="flex: 1; margin-bottom: 0; padding: 15px;">
+                <div class="card-flex">
+                    <div class="icon-box icon-blue"><i class="fa-solid fa-calendar-days"></i></div>
+                    <div class="card-text" style="min-width: 0;">
+                        <h4>TOTAL HARI PENUGASAN</h4>
+                        <h2 id="total-hari-badge" style="margin: 1px 0 0 0; font-size: 20px; color: #1a1a1a; font-weight: 700;">0 Hari</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card animated-card" id="main-card-6">
+            <div class="section-title">
+                <span><i class="fa-solid fa-chart-pie"></i> Perbandingan Pegawai Sudah vs Belum Perjadin</span>
+                <button class="btn-view-data" id="btnToggleAngka" onclick="toggleAngkaGrafik()"><i class="fa-solid fa-eye"></i> Lihat Nilai</button>
+            </div>
+            <div class="chart-container">
+                <canvas id="perjadinDoughnutChart"></canvas>
+            </div>
+        </div>
+
+        <!-- SATU KARTU UTAMA UNTUK SELURUH DAFTAR PEGAWAI -->
+        <div class="card animated-card" id="main-card-7">
+            <div class="section-title" id="judul-daftar-pegawai">
+                <span><i class="fa-solid fa-id-badge"></i> Rekap Frekuensi Perjalanan Dinas Pegawai</span>
+                <button class="btn-view-data" onclick="loadFromGoogleSheets(true)"><i class="fa-solid fa-rotate"></i> Refresh Data</button>
+            </div>
+
+            <div class="filter-bar">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="ALL" onclick="setFilter('ALL', this)">Semua</button>
+                    <button class="filter-btn" data-filter="SUDAH" onclick="setFilter('SUDAH', this)">Sudah</button>
+                    <button class="filter-btn" data-filter="BELUM" onclick="setFilter('BELUM', this)">Belum</button>
+                </div>
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="searchPegawai" placeholder="Cari nama pegawai..." oninput="renderPegawaiList()">
+                </div>
+            </div>
+
+            <div id="pegawai-list"></div>
+        </div>
+    </div>
+
+    <!-- Modal Admin Update Data -->
+    <div class="modal-backdrop" id="adminModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-user-gear"></i> Panel Admin Input Perjadin</h3>
+                <button class="btn-close-modal" onclick="closeAdminModal()">&times;</button>
+            </div>
+
+            <div id="adminPinStep">
+                <div class="form-group">
+                    <label for="adminPinInput">Masukkan PIN Admin</label>
+                    <input type="password" id="adminPinInput" placeholder="Masukkan PIN...">
+                </div>
+                <button class="btn-submit-admin" onclick="verifyAdminPin()">Masuk Form Input</button>
+            </div>
+
+            <form id="adminFormStep" style="display: none;" onsubmit="submitPerjadinData(event)">
+                <div class="form-group">
+                    <label for="inputNamaPegawai">Nama Pegawai</label>
+                    <select id="inputNamaPegawai" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="inputTujuan">Tujuan</label>
+                    <input type="text" id="inputTujuan" placeholder="Contoh: Kab. Bone" required>
+                </div>
+                <div class="form-group">
+                    <label for="inputTanggal">Tanggal</label>
+                    <input type="text" id="inputTanggal" placeholder="Contoh: 10–12 Nov 2026" required>
+                </div>
+                <div class="form-group">
+                    <label for="inputHari">Lama Hari</label>
+                    <input type="number" id="inputHari" min="1" placeholder="Contoh: 3" required>
+                </div>
+                <div class="form-group">
+                    <label for="inputKegiatan">Kegiatan/Tugas</label>
+                    <textarea id="inputKegiatan" rows="2" placeholder="Uraian singkat kegiatan/tugas..." required></textarea>
+                </div>
+                <button type="submit" class="btn-submit-admin" id="btnSubmitPerjadin">
+                    <i class="fa-solid fa-paper-plane"></i> Simpan ke Server
+                </button>
+            </form>
+
+            <div class="sync-status" id="adminFeedback">
+                Data terhubung ke Server.
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        Bidang Infraswil | 2026 Dashboard Kontrol Perjadin
+        &copy; Copyright @zuwlend
+    </div>
+
+    <script id="app-data" type="application/json">
+    {
+        "dataPegawaiPerjadin": [
+            { "nama": "Ishak Amin Rusly, ST, MT", "riwayat": [] },
+            { "nama": "Ir. H. Andi Bakti Haruni, C.E.S.", "riwayat": [] },
+            { "nama": "Ariany Rofaidah, ST, M.Si", "riwayat": [] },
+            { "nama": "Debia Arida, SP, MP", "riwayat": [] },
+            { "nama": "Anna Buana Syamson, S.Hut, M.Si", "riwayat": [] },
+            { "nama": "Aryanti Sayadi, SP", "riwayat": [] },
+            { "nama": "Nurwira Rahayu Mubar, ST, M.Si", "riwayat": [] },
+            { "nama": "A. Amrul, S.Sos", "riwayat": [] },
+            { "nama": "Zulkarnain, S.A.P", "riwayat": [] },
+            { "nama": "Sri Agustiati Bachtiar, S.Pi, M.Si", "riwayat": [] },
+            { "nama": "Ince Abdullah Yusuf, SH", "riwayat": [] },
+            { "nama": "Ika Mariescha M. Tanro, ST, M.Si", "riwayat": [] },
+            { "nama": "Abd. Kadir", "riwayat": [] },
+            { "nama": "Evi Silviana Putri, S.E.,M.M", "riwayat": [] },
+            { "nama": "Suahir, SE.,MM", "riwayat": [] },
+            { "nama": "Ratu Beatris, S.Pd., M.M", "riwayat": [] },
+            { "nama": "Mohammad Nazar Akbar, ST, M.Si", "riwayat": [] },
+            { "nama": "M. Taufik Akmal Arsam, ST, MT", "riwayat": [] },
+            { "nama": "Firmansyah Imbang", "riwayat": [] },
+            { "nama": "Fikri Alqian N, S.Tr.IP", "riwayat": [] },
+            { "nama": "Kurniati, SP, MM", "riwayat": [] },
+            { "nama": "Harbiah Tahir, SE", "riwayat": [] },
+            { "nama": "Andi Muhammad Kadir S, SH", "riwayat": [] },
+            { "nama": "Ega Yusraningsih Yunus, S.Pt", "riwayat": [] },
+            { "nama": "Ditha Hadiyanti Kiraman, S.Si", "riwayat": [] },
+            { "nama": "Fawuziah, S.PWK", "riwayat": [] },
+            { "nama": "Rizaldi", "riwayat": [] },
+            { "nama": "Achmad Harry Darmawan Hasrullah, S.H", "riwayat": [] }
+        ]
+    }
+    </script>
+
+    <script>
+        // GANTI DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxiyai1VcTH1FdLAsUZgP2hiKCauxk_HWZCILaVms9MdFLFDihuaPUs2_RCPiHf48M8QA/exec';
+        const ADMIN_PIN = '1234';
+
+        if (typeof ChartDataLabels !== 'undefined') {
+            Chart.register(ChartDataLabels);
+        }
+
+        const fallbackJsonData = JSON.parse(document.getElementById('app-data').textContent);
+        const masterDaftarPegawai = fallbackJsonData.dataPegawaiPerjadin.map(p => p.nama);
+        let dataPegawai = fallbackJsonData.dataPegawaiPerjadin;
+
+        let currentFilter = 'ALL';
+        let myPerjadinDoughnutChart;
+        let pegawaiBarCharts = {};
+        let tunjukkanAngkaDoughnut = false;
+        const tapSound = new Audio('tap_sound.mp3');
+
+        function getTargetFrekuensi(nama) {
+            const clean = String(nama || '').toLowerCase().trim();
+            if (clean.includes('ishak amin rusly')) {
+                return 20;
+            }
+            return 10;
+        }
+
+        function playTapSound() {
+            try {
+                const soundClone = tapSound.cloneNode();
+                soundClone.volume = 0.5;
+                soundClone.play().catch(() => {});
+            } catch (e) {}
+        }
+
+        function startDashboard() {
+            const splash = document.getElementById('splash-screen');
+            splash.style.opacity = '0';
+            splash.style.visibility = 'hidden';
+            triggerSequenceAnimations();
+        }
+
+        function triggerSequenceAnimations() {
+            const cards = document.querySelectorAll('.animated-card');
+            cards.forEach((card, index) => {
+                const delay = index * 120;
+                card.style.animationDelay = delay + 'ms';
+                card.classList.add('play-anim');
+                setTimeout(() => { playTapSound(); }, delay);
+            });
+        }
+
+        function populatePegawaiSelect() {
+            const select = document.getElementById('inputNamaPegawai');
+            select.innerHTML = masterDaftarPegawai
+                .map(nama => `<option value="${nama.replace(/"/g, '&quot;')}">${nama}</option>`)
+                .join('');
+        }
+
+        function mergeWithMasterPegawai(sheetPegawaiList) {
+            const sheetMap = new Map();
+            (sheetPegawaiList || []).forEach(item => {
+                if (item && item.nama) {
+                    sheetMap.set(String(item.nama).trim(), Array.isArray(item.riwayat) ? item.riwayat : []);
+                }
+            });
+
+            const merged = masterDaftarPegawai.map(nama => ({
+                nama: nama,
+                riwayat: sheetMap.get(nama) || []
+            }));
+
+            sheetMap.forEach((riwayat, nama) => {
+                if (!masterDaftarPegawai.includes(nama)) {
+                    merged.push({ nama: nama, riwayat: riwayat });
+                }
+            });
+
+            return merged;
+        }
+
+        async function loadFromGoogleSheets(showToast = false) {
+            const subtitle = document.getElementById('sync-subtitle');
+            if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('GANTI_DENGAN_DEPLOYMENT_ID_ANDA')) {
+                subtitle.innerHTML = '<i class="fa-regular fa-calendar-check"></i> Bidang Infraswil &bull; Mode Lokal (Belum pasang URL Apps Script)';
+                refreshAllViews();
+                return;
+            }
+
+            try {
+                subtitle.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Bidang Infraswil';
+                const res = await fetch(`${APPS_SCRIPT_URL}?t=${Date.now()}`);
+                const json = await res.json();
+                if (json.status === 'ok' && Array.isArray(json.dataPegawaiPerjadin)) {
+                    dataPegawai = mergeWithMasterPegawai(json.dataPegawaiPerjadin);
+                    subtitle.innerHTML = '<i class="fa-solid fa-circle-check"></i> Bidang Infraswil &bull;';
+                    refreshAllViews();
+                    if (showToast) {
+                        document.getElementById('adminFeedback').textContent = 'Data berhasil diperbarui dari Server.';
+                    }
+                } else {
+                    throw new Error(json.message || 'Respon tidak valid');
+                }
+            } catch (err) {
+                subtitle.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Bidang Infraswil &bull; Gagal ambil data Sheets (pakai data lokal)';
+                refreshAllViews();
+            }
+        }
+
+        function getPegawaiStats() {
+            const totalPegawai = dataPegawai.length;
+            let sudahCount = 0;
+            let totalFrekuensi = 0;
+            let totalHari = 0;
+
+            dataPegawai.forEach(p => {
+                const freq = p.riwayat.length;
+                const hari = p.riwayat.reduce((acc, r) => acc + (Number(r.hari) || 0), 0);
+                if (freq > 0) sudahCount++;
+                totalFrekuensi += freq;
+                totalHari += hari;
+            });
+
+            const belumCount = totalPegawai - sudahCount;
+            const sudahPct = totalPegawai > 0 ? ((sudahCount / totalPegawai) * 100).toFixed(1) : 0;
+            const belumPct = totalPegawai > 0 ? ((belumCount / totalPegawai) * 100).toFixed(1) : 0;
+
+            return {
+                totalPegawai,
+                sudahCount,
+                belumCount,
+                sudahPct,
+                belumPct,
+                totalFrekuensi,
+                totalHari
+            };
+        }
+
+        function renderSummaryCards() {
+            const stats = getPegawaiStats();
+            document.getElementById('total-pegawai-label').textContent = stats.totalPegawai + ' Orang';
+            document.getElementById('sudah-perjadin-label').textContent = `${stats.sudahCount} Orang (${stats.sudahPct}%)`;
+            document.getElementById('belum-perjadin-label').textContent = `${stats.belumCount} Orang (${stats.belumPct}%)`;
+            document.getElementById('total-frekuensi-badge').textContent = stats.totalFrekuensi + 'x';
+            document.getElementById('total-hari-badge').textContent = stats.totalHari + ' Hari';
+        }
+
+        function initOrUpdateChart() {
+            const ctx = document.getElementById('perjadinDoughnutChart').getContext('2d');
+            const stats = getPegawaiStats();
+            const labels = [
+                `Sudah Perjadin (${stats.sudahPct}%)`,
+                `Belum Perjadin (${stats.belumPct}%)`
+            ];
+            const values = [stats.sudahCount, stats.belumCount];
+
+            if (myPerjadinDoughnutChart) {
+                myPerjadinDoughnutChart.data.labels = labels;
+                myPerjadinDoughnutChart.data.datasets[0].data = values;
+                myPerjadinDoughnutChart.update();
+                return;
+            }
+
+            myPerjadinDoughnutChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: values,
+                        backgroundColor: ['#28a745', '#e53935'],
+                        borderColor: ['#ffffff', '#ffffff'],
+                        borderWidth: 2,
+                        hoverOffset: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '62%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { size: 12, family: 'Segoe UI', weight: '600' },
+                                padding: 14
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    const currentStats = getPegawaiStats();
+                                    const val = Number(context.raw) || 0;
+                                    const pct = currentStats.totalPegawai > 0 ? ((val / currentStats.totalPegawai) * 100).toFixed(1) : 0;
+                                    return `${context.label.split(' (')[0]}: ${val} Orang (${pct}%)`;
+                                }
+                            }
+                        },
+                        datalabels: {
+                            display: function () { return tunjukkanAngkaDoughnut; },
+                            color: '#ffffff',
+                            font: { weight: 'bold', size: 12 },
+                            formatter: function (value) {
+                                return value + ' Org';
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function toggleAngkaGrafik() {
+            playTapSound();
+            tunjukkanAngkaDoughnut = !tunjukkanAngkaDoughnut;
+            const btn = document.getElementById('btnToggleAngka');
+            if (tunjukkanAngkaDoughnut) {
+                btn.innerHTML = '<i class="fa-solid fa-eye-slash"></i> Tutup';
+                btn.style.background = '#ff7300';
+            } else {
+                btn.innerHTML = '<i class="fa-solid fa-eye"></i> Lihat Nilai';
+                btn.style.background = '#0f3c78';
+            }
+            if (myPerjadinDoughnutChart) myPerjadinDoughnutChart.update();
+        }
+
+        function setFilter(filterType, btnElement) {
+            playTapSound();
+            currentFilter = filterType;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            if (btnElement) btnElement.classList.add('active');
+            renderPegawaiList();
+        }
+
+        function destroyAllPegawaiCharts() {
+            Object.values(pegawaiBarCharts).forEach(ch => {
+                try { ch.destroy(); } catch (e) {}
+            });
+            pegawaiBarCharts = {};
+        }
+
+        function createPegawaiBarChart(canvasId, freq, totalHari, sudah) {
+            if (pegawaiBarCharts[canvasId]) {
+                pegawaiBarCharts[canvasId].destroy();
+            }
+
+            const canvasEl = document.getElementById(canvasId);
+            if (!canvasEl) return;
+
+            const barCtx = canvasEl.getContext('2d');
+            pegawaiBarCharts[canvasId] = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Frekuensi (Kali)', 'Total Hari'],
+                    datasets: [{
+                        data: [freq, totalHari],
+                        backgroundColor: sudah ? ['#0c6bdc', '#ff7300'] : ['#e53935', '#e53935'],
+                        borderRadius: 6,
+                        barThickness: 38
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: { top: 20 }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    const unit = context.dataIndex === 0 ? ' Kali' : ' Hari';
+                                    return context.raw + unit;
+                                }
+                            }
+                        },
+                        datalabels: {
+                            display: true,
+                            anchor: 'end',
+                            align: 'top',
+                            offset: 2,
+                            color: '#0f172a',
+                            font: { weight: 'bold', size: 11 },
+                            formatter: function (value, context) {
+                                return value + (context.dataIndex === 0 ? 'x' : ' hari');
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { font: { size: 11, family: 'Segoe UI', weight: '600' } },
+                            grid: { display: false }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            suggestedMax: Math.max(3, freq, totalHari) + 1,
+                            ticks: { stepSize: 1, font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderPegawaiList() {
+            destroyAllPegawaiCharts();
+
+            const keyword = (document.getElementById('searchPegawai').value || '').toLowerCase().trim();
+            const listContainer = document.getElementById('pegawai-list');
+            listContainer.innerHTML = '';
+
+            const filtered = dataPegawai.filter(p => {
+                const sudah = p.riwayat.length > 0;
+                if (currentFilter === 'SUDAH' && !sudah) return false;
+                if (currentFilter === 'BELUM' && sudah) return false;
+
+                if (keyword) {
+                    return p.nama.toLowerCase().includes(keyword);
+                }
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                listContainer.innerHTML = '<div class="no-data-msg"><i class="fa-solid fa-circle-info"></i> Tidak ada nama pegawai yang sesuai dengan filter atau pencarian.</div>';
+                return;
+            }
+
+            filtered.forEach((pegawai, idx) => {
+                const freq = pegawai.riwayat.length;
+                const targetFreq = getTargetFrekuensi(pegawai.nama);
+                const totalHari = pegawai.riwayat.reduce((acc, r) => acc + (Number(r.hari) || 0), 0);
+                const sudah = freq > 0;
+
+                const pctWidth = Math.min(100, Math.round((freq / targetFreq) * 100));
+                const barColor = freq === 0 ? '#e53935' : (freq >= targetFreq ? '#28a745' : '#0c6bdc');
+
+                const statusBadge = sudah
+                    ? `<span class="badge-status badge-sudah"><i class="fa-solid fa-check"></i> Sudah</span>`
+                    : `<span class="badge-status badge-belum"><i class="fa-solid fa-hourglass-half"></i> Belum</span>`;
+
+                let riwayatHtml = '';
+                if (!sudah) {
+                    riwayatHtml = `
+                        <div class="no-data-msg">
+                            <i class="fa-solid fa-user-check" style="color:#e53935;"></i>
+                            Pegawai ini <b>belum tercatat</b> melakukan perjalanan dinas (Target: ${targetFreq}x).
+                        </div>
+                    `;
+                } else {
+                    riwayatHtml = pegawai.riwayat.map((item, rIdx) => `
+                        <div class="sub-kegiatan-block">
+                            <div style="font-size: 13px; font-weight: 700; color: #0f3c78;">
+                                #${rIdx + 1} &bull; Tujuan: ${item.tujuan}
+                            </div>
+                            <div style="font-size: 12px; color: #334155; margin-top: 4px;">
+                                <b>Tanggal:</b> ${item.tanggal} &bull; <b>Lama Hari:</b> ${item.hari} Hari
+                            </div>
+                            <div style="font-size: 12px; color: #334155; margin-top: 4px;">
+                                <b>Kegiatan/Tugas:</b> ${item.kegiatan}
+                            </div>
+                        </div>
+                    `).join('');
+                }
+
+                const canvasId = `bar-pegawai-${idx}`;
+                const row = document.createElement('div');
+                row.className = 'pegawai-row-item';
+                row.innerHTML = `
+                    <div class="pegawai-row-top">
+                        <div class="pegawai-identity">
+                            <div class="pegawai-name-line">
+                                ${pegawai.nama}
+                                ${statusBadge}
+                            </div>
+                        </div>
+
+                        <div class="pegawai-right-controls">
+                            <div class="freq-progress-group" title="Frekuensi ${freq}x dari target ${targetFreq}x">
+                                <div class="freq-progress-label">
+                                    <span>${freq}x</span>
+                                    <span style="color:#64748b; font-weight:600;">/ ${targetFreq}x</span>
+                                </div>
+                                <div class="freq-progress-track">
+                                    <div class="freq-progress-fill" style="width: ${pctWidth}%; background: ${barColor};"></div>
+                                </div>
+                            </div>
+
+                            <button class="toggle-btn" onclick="togglePegawaiDetail(this, '${canvasId}', ${freq}, ${totalHari}, ${sudah})">Detail</button>
+                        </div>
+                    </div>
+
+                    <div class="program-content" id="pegawai-detail-${idx}">
+                        <div class="pegawai-bar-box">
+                            <div class="pegawai-bar-title">
+                                <i class="fa-solid fa-chart-column"></i> Grafik Frekuensi &amp; Total Hari (Target: ${targetFreq}x)
+                            </div>
+                            <div class="pegawai-bar-canvas-wrap">
+                                <canvas id="${canvasId}"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="sub-kegiatan-wrapper">
+                            <div class="sub-kegiatan-title">
+                                <i class="fa-solid fa-list-ul"></i> Rincian Riwayat Perjalanan Dinas (${pegawai.nama})
+                            </div>
+                            ${riwayatHtml}
+                        </div>
+                    </div>
+                `;
+                listContainer.appendChild(row);
+            });
+        }
+
+        function togglePegawaiDetail(button, canvasId, freq, totalHari, sudah) {
+            playTapSound();
+            const rowItem = button.closest('.pegawai-row-item');
+            const content = rowItem.querySelector('.program-content');
+
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+                button.textContent = 'Detail';
+                button.style.background = '#0c6bdc';
+                button.style.borderColor = '#0a56b2';
+            } else {
+                content.style.display = 'block';
+                button.textContent = 'Tutup';
+                button.style.background = '#ff7300';
+                button.style.borderColor = '#ff7300';
+                createPegawaiBarChart(canvasId, freq, totalHari, sudah);
+            }
+        }
+
+        function refreshAllViews() {
+            renderSummaryCards();
+            initOrUpdateChart();
+            renderPegawaiList();
+        }
+
+        function openAdminModal() {
+            playTapSound();
+            document.getElementById('adminModal').style.display = 'flex';
+            document.getElementById('adminPinInput').value = '';
+            document.getElementById('adminFeedback').textContent = 'Masukkan PIN admin untuk membuka form input perjalanan dinas.';
+        }
+
+        function closeAdminModal() {
+            playTapSound();
+            document.getElementById('adminModal').style.display = 'none';
+        }
+
+        function verifyAdminPin() {
+            const pin = document.getElementById('adminPinInput').value.trim();
+            if (pin === ADMIN_PIN) {
+                document.getElementById('adminPinStep').style.display = 'none';
+                document.getElementById('adminFormStep').style.display = 'block';
+                document.getElementById('adminFeedback').textContent = 'PIN valid. Silakan isi data perjalanan dinas lalu simpan.';
+            } else {
+                document.getElementById('adminFeedback').textContent = 'PIN salah. Coba periksa kembali.';
+            }
+        }
+
+        async function submitPerjadinData(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnSubmitPerjadin');
+            const feedback = document.getElementById('adminFeedback');
+
+            const payload = {
+                action: 'add',
+                nama: document.getElementById('inputNamaPegawai').value,
+                tujuan: document.getElementById('inputTujuan').value.trim(),
+                tanggal: document.getElementById('inputTanggal').value.trim(),
+                hari: Number(document.getElementById('inputHari').value) || 0,
+                kegiatan: document.getElementById('inputKegiatan').value.trim()
+            };
+
+            if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('GANTI_DENGAN_DEPLOYMENT_ID_ANDA')) {
+                feedback.textContent = 'Isi dulu APPS_SCRIPT_URL di kode HTML sebelum menyimpan ke Google Sheets.';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Menyimpan...';
+            feedback.textContent = 'Mengirim data ke Server...';
+
+            try {
+                const res = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+                const json = await res.json();
+                if (json.status !== 'ok') throw new Error(json.message || 'Gagal menyimpan');
+
+                document.getElementById('inputTujuan').value = '';
+                document.getElementById('inputTanggal').value = '';
+                document.getElementById('inputHari').value = '';
+                document.getElementById('inputKegiatan').value = '';
+                feedback.textContent = 'Tersimpan ke Server! Memperbarui tampilan dashboard...';
+                await loadFromGoogleSheets(false);
+                feedback.textContent = 'Data berhasil disimpan dan tampilan dashboard sudah diperbarui.';
+            } catch (err) {
+                feedback.textContent = 'Gagal menyimpan: ' + err.message;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Simpan ke Server';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            populatePegawaiSelect();
+            loadFromGoogleSheets(false);
+        });
+    </script>
+</body>
+
+</html>
