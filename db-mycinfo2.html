@@ -181,28 +181,38 @@
     </footer>
 
     <script>
-        const APPSCRIPT_URL_INJECTED = "https://script.google.com/macros/s/AKfycbwsmKBY8dSX-VkMzTAAe1dEJUUr3UoKJoDnv3qCcyJ6IvVHd74zxKcE8eZf7UIyFPXg/exec";
+        const VISITOR_URL = "https://script.google.com/macros/s/AKfycbwKlisePJIa-gz545dRnzU_w7Cm9hC7XPS68_yXcP_50y66hCHFrxqr_pNheOkH1AEB/exec";
+        const DASHBOARD_ID = "myc";
+        let counterMYCDimuat = false;
 
         function muatUlangHalaman() {
             window.location.reload();
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            fetch(APPSCRIPT_URL_INJECTED + "?action=upViews")
-                .then(res => res.json())
+        function loadVisitorCounter() {
+            if (counterMYCDimuat) return;
+            counterMYCDimuat = true;
+
+            const counterEl = document.getElementById("global_visitor_count");
+            if (!counterEl) return;
+
+            const url = `${VISITOR_URL}?id=${encodeURIComponent(DASHBOARD_ID)}&action=upViews&t=${Date.now()}`;
+
+            fetch(url, { method: "GET" })
+                .then(res => {
+                    if (!res.ok) throw new Error("Respon gagal");
+                    return res.json();
+                })
                 .then(data => {
-                    const counterEl = document.getElementById("global_visitor_count");
-                    if (counterEl && data && data.views !== undefined) {
-                        counterEl.innerText = parseInt(data.views).toLocaleString('id-ID');
-                    } else if (counterEl) {
-                        counterEl.innerText = "1";
-                    }
+                    const totalViews = Number(data.views ?? data.visits ?? data.count ?? data.total ?? 0);
+                    counterEl.innerText = totalViews.toLocaleString("id-ID");
                 })
                 .catch(() => {
-                    const counterEl = document.getElementById("global_visitor_count");
-                    if (counterEl) counterEl.innerText = "Maintenance";
+                    counterEl.innerText = "-";
                 });
-        });
+        }
+
+        document.addEventListener("DOMContentLoaded", loadVisitorCounter);
     </script>
 </body>
 </html>
