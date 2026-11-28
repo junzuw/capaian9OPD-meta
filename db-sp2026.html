@@ -388,35 +388,6 @@
             font-size: 14.5px;
         }
 
-        .progress-container {
-            margin-top: 6px;
-            width: 100%;
-        }
-
-        .progress-label-wrap {
-            display: flex;
-            justify-content: space-between;
-            font-size: 11px;
-            font-weight: 600;
-            color: #64748b;
-            margin-bottom: 2px;
-        }
-
-        .progress-bar-bg {
-            width: 100%;
-            height: 6px;
-            background-color: #e2e8f0;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            background-color: #f97316;
-            border-radius: 10px;
-            transition: width 0.6s ease;
-        }
-
         .opd-action-cell {
             display: table-cell;
             vertical-align: middle;
@@ -466,16 +437,6 @@
             margin-bottom: 12px;
         }
 
-        .kegiatan-main-info {
-            display: table;
-            width: 100%;
-        }
-
-        .kegiatan-text-cell {
-            display: table-cell;
-            vertical-align: middle;
-        }
-
         .kegiatan-title {
             font-size: 15.5px;
             font-weight: 700;
@@ -487,13 +448,6 @@
             font-size: 13.5px;
             color: #64748b;
             font-weight: 500;
-        }
-
-        .kegiatan-action-cell {
-            display: table-cell;
-            vertical-align: middle;
-            text-align: right;
-            width: 70px;
         }
 
         .kegiatan-sub-detail {
@@ -558,7 +512,6 @@
 
             main {
                 display: block;
-                /* Memastikan elemen tetap berderet 1 kolom ke bawah */
                 padding: 10px 20px 0px 20px;
             }
 
@@ -595,7 +548,6 @@
             margin-top: 12px;
             padding: 9px 12px;
             background-color: #0740aa;
-            /* Warna biru sesuai tema utama */
             color: #ffffff;
             font-family: inherit;
             font-size: 12.5px;
@@ -654,7 +606,7 @@
                 </div>
                 <div class="header-text-cell">
                     <h1>Progres Strong Point<br>Triwulan IV Mitra Bidang INFRASWIL 2026</h1>
-                    <p>Sistem Monitoring & Evaluasi (SIMONEV) BINFRASWIL</p>
+                    <p>Sistem Monitoring &amp; Evaluasi (SIMONEV) BINFRASWIL</p>
                 </div>
             </div>
         </header>
@@ -691,12 +643,43 @@
     </div>
 
     <script>
-        const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbxcDHB2OrA5O4uG8Q9kNkUasKko8oRT_vq8xqVGm66sKmjnod5QK_pdWKkMvm-es_pD/exec";
+        // Ganti URL di bawah ini dengan Web App khusus data proyek Strong Point Anda
+        const APPSCRIPT_URL = "https://script.google.com/macros/s/AKfycbwM93w3fYEjPMPgYHGqzI_UZcdBZJmLGEC71_VV8vj3CM0zK4LR31a5RKDa4zOpJmio/exec";
+
+        // Master Script terpusat untuk visitor counter dashboard Strong Point
+        const VISITOR_URL = "https://script.google.com/macros/s/AKfycbwKlisePJIa-gz545dRnzU_w7Cm9hC7XPS68_yXcP_50y66hCHFrxqr_pNheOkH1AEB/exec";
+        const DASHBOARD_ID = "strongpoint";
+
         let proyekData = [];
         let kategoriAktif = 'semua';
+        let counterSudahDimuat = false;
+
         const tapSound = new Audio("tap_sound.mp3");
         tapSound.preload = "auto";
         tapSound.volume = 0.4;
+
+        function loadVisitorCounter() {
+            if (counterSudahDimuat) return;
+            counterSudahDimuat = true;
+
+            const elVisitor = document.getElementById("global_visitor_count");
+            if (!elVisitor) return;
+
+            const url = `${VISITOR_URL}?id=${encodeURIComponent(DASHBOARD_ID)}&action=upViews&t=${Date.now()}`;
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) throw new Error("Gagal mengambil visitor count");
+                    return response.json();
+                })
+                .then(data => {
+                    const totalViews = Number(data.views ?? data.visits ?? data.count ?? data.total ?? 0);
+                    elVisitor.innerText = totalViews.toLocaleString("id-ID");
+                })
+                .catch(err => {
+                    console.error("Visitor counter error:", err);
+                    elVisitor.innerText = "-";
+                });
+        }
 
         function bukaDashboard() {
             tapSound.currentTime = 0;
@@ -705,17 +688,19 @@
             });
             document.getElementById('splashScreen').style.display = 'none';
             document.getElementById('appContainer').style.display = 'flex';
+            loadVisitorCounter();
             muatDataDariGoogleSheets();
         }
 
         function muatDataDariGoogleSheets() {
-            fetch(APPSCRIPT_URL + "?action=getProyek")
+            if (!APPSCRIPT_URL || !APPSCRIPT_URL.startsWith("https://script.google.com/")) {
+                document.getElementById('mainContent').innerHTML = `<p style="text-align:center; padding:30px; color:#ef4444; font-weight:700;">APPSCRIPT_URL data proyek belum diatur.</p>`;
+                return;
+            }
+
+            fetch(APPSCRIPT_URL + "?action=getProyek&t=" + Date.now())
                 .then(response => response.json())
                 .then(data => {
-                    if (data && data.views !== undefined) {
-                        document.getElementById("global_visitor_count").innerText = parseInt(data.views).toLocaleString('id-ID');
-                    }
-
                     let listMentah = Array.isArray(data) ? data : (data && data.proyek ? data.proyek : []);
                     if (listMentah.length === 0) {
                         document.getElementById('mainContent').innerHTML = `<p style="text-align:center; padding:20px; color:#f59e0b; font-weight:700;">Data kosong.</p>`;
@@ -763,7 +748,6 @@
             return "Rp " + angka.toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
         }
 
-        // Fungsi untuk mencocokkan nama OPD dengan file logo berawalan "logo-"
         function getLogoFilename(namaOPD) {
             let nama = namaOPD ? namaOPD.toString().toLowerCase().trim() : "";
 
@@ -775,7 +759,6 @@
             if (nama.includes("sdacktr") || nama.includes("sda") || nama.includes("cktr")) return "logo-sdacktr.png";
             if (nama.includes("bpbd")) return "logo-bpbd.png";
 
-            // Fallback default jika ada nama lain
             return "logo.png";
         }
 
@@ -878,7 +861,6 @@
             return Math.min(Math.max(Math.round(val), 0), 100);
         }
 
-        // Fungsi untuk membaca data mingguan dari Kolom F sampai N (Okt - Des)
         function parseMingguanData(keg) {
             return [
                 { label: "Mg IV Okt", nilai: parseNilaiFisik(keg.mg_iv_okt || keg.f || "0%") },
@@ -982,7 +964,6 @@
                     }
                     let fisikStr = progresTerakhir + "%";
 
-                    // KONFIGURASI GRAFIK KEGIATAN (Dengan Padding Aman)
                     let lebarSVG = 320;
                     let tinggiSVG = 80;
                     let paddingX = 12;
@@ -993,7 +974,7 @@
                             <div style="font-size: 11px; font-weight: 700; color: #0740aa; margin-bottom: 6px; text-align: left; padding-left: 6px;">📈 Tren Peningkatan Progres Mingguan (Okt - Des):</div>
                             <svg viewBox="0 0 ${lebarSVG} ${tinggiSVG}" style="width: 100%; height: auto; max-height: 120px; overflow: visible; display: block;">
                                 <defs>
-                                    <linearGradient id="gradasiOranye_${idx}" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <linearGradient id="gradasiOranye_${index}_${idx}" x1="0%" y1="0%" x2="0%" y2="100%">
                                         <stop offset="0%" stop-color="#f97316" stop-opacity="0.45" />
                                         <stop offset="100%" stop-color="#f97316" stop-opacity="0.0" />
                                     </linearGradient>
@@ -1012,7 +993,7 @@
                     let pointsString = titikKordinat.map(pt => `${pt.x},${pt.y}`).join(' ');
                     let areaPointsString = `${paddingX},65 ${pointsString} ${lebarSVG - paddingX},65`;
 
-                    grafikHtml += `<polygon points="${areaPointsString}" fill="url(#gradasiOranye_${idx})" />`;
+                    grafikHtml += `<polygon points="${areaPointsString}" fill="url(#gradasiOranye_${index}_${idx})" />`;
                     grafikHtml += `<polyline fill="none" stroke="#f97316" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="${pointsString}" />`;
 
                     titikKordinat.forEach((pt, ti) => {
@@ -1028,15 +1009,12 @@
                     });
                     grafikHtml += `</svg></div>`;
 
-                    // Ganti bagian pembentukan kegiatanHtml di Bagian 2 dengan kode ini:
-
                     kegiatanHtml += `
     <div class="kegiatan-card" data-nama="${uraian.toLowerCase()}" data-kategori="${warnaKat}">
         <div class="kegiatan-main-flex">
             <div>
                 <div class="kegiatan-title">${nomorUrut}. ${uraian}</div>
                 <div class="kegiatan-pagu" style="margin-bottom: 4px;">Alokasi: ${alokasi}</div>
-                <!-- Grafik Garis Tren Mingguan -->
                 ${grafikHtml}
             </div>
             <div class="kegiatan-bottom-action">
@@ -1071,7 +1049,6 @@
     </div>`;
                 });
 
-                // PERHITUNGAN GRAFIK AKUMULASI OPD (Dengan Padding Aman yang Sama)
                 let akumulasiMingguanOPD = [0, 0, 0, 0, 0, 0, 0, 0, 0];
                 let jumlahKegiatanAktif = listKegiatan.length;
                 listKegiatan.forEach(keg => {
@@ -1164,20 +1141,16 @@
             semuaKartu.forEach((kartu, index) => {
                 setTimeout(() => {
                     kartu.classList.add('mulai-animasi');
-
-                    // Mainkan suara secara berurutan seiring jatuhnya kartu
                     try {
-                        let cloneSound = tapSound.cloneNode(); // Clone agar bisa bunyi bertumpuk cepat
+                        let cloneSound = tapSound.cloneNode();
                         cloneSound.volume = 0.3;
                         cloneSound.play().catch(() => { });
                     } catch (e) { }
-
                 }, index * 100);
             });
         }
 
         function filterKategori(kategori, btnElement) {
-            // Mainkan suara saat tombol filter diklik
             try {
                 tapSound.currentTime = 0;
                 tapSound.play().catch(() => { });
@@ -1203,19 +1176,18 @@
 
             if (container.style.display === "block") {
                 container.style.display = "none";
-                if (grafikAkumulasi) grafikAkumulasi.style.display = "block"; // Munculkan kembali grafik saat ditutup
+                if (grafikAkumulasi) grafikAkumulasi.style.display = "block";
                 button.textContent = "Detail";
                 button.className = "btn btn-primary";
             } else {
                 container.style.display = "block";
-                if (grafikAkumulasi) grafikAkumulasi.style.display = "none";  // Sembunyikan grafik saat tombol detail diklik
+                if (grafikAkumulasi) grafikAkumulasi.style.display = "none";
                 button.textContent = "Tutup";
                 button.className = "btn btn-success";
             }
         }
 
         function toggleSubDetail(button) {
-            // Mainkan suara saat tombol Detail/Tutup Kegiatan diklik
             try {
                 tapSound.currentTime = 0;
                 tapSound.play().catch(() => { });
@@ -1285,24 +1257,6 @@
             });
         }
 
-        function bukaFormEdit(namaOPD, uraianKegiatan, statusLama, fisikLama, ketLama) {
-            try {
-                tapSound.currentTime = 0;
-                tapSound.play().catch(() => { });
-            } catch (e) { }
-
-            let statusBaru = prompt(`[EDIT STATUS SAAT INI]\nOPD: ${namaOPD}\nKegiatan: ${uraianKegiatan}\n\nMasukkan status baru:`, statusLama);
-            if (statusBaru === null) return; // Batal jika tombol cancel ditekan
-
-            let fisikBaru = prompt(`[EDIT PROGRES FISIK (%)]\nMasukkan persentase fisik baru (contoh: 75% atau 75):`, fisikLama);
-            if (fisikBaru === null) return;
-
-            let ketBaru = prompt(`[EDIT KETERANGAN]\nMasukkan keterangan baru:`, ketLama);
-            if (ketBaru === null) return;
-
-            alert(`Simulasi Perubahan Berhasil!\n\nOPD: ${namaOPD}\nKegiatan: ${uraianKegiatan}\n- Status Baru: ${statusBaru}\n- Fisik Baru: ${fisikBaru}\n- Keterangan Baru: ${ketBaru}\n\n*Catatan: Nilai ini baru simulasi di browser. Jika ingin permanen, data ini nantinya dikirim menggunakan fetch() ke Google Apps Script.*`);
-        }
-        // Fungsi saat tombol Edit diklik (mengubah tampilan menjadi kotak isian)
         function aktifkanModeEdit(button) {
             try { tapSound.currentTime = 0; tapSound.play().catch(() => { }); } catch (e) { }
 
@@ -1311,7 +1265,6 @@
             subDetail.querySelector('.edit-mode').style.display = 'block';
         }
 
-        // Fungsi saat tombol Batal diklik
         function batalModeEdit(button) {
             try { tapSound.currentTime = 0; tapSound.play().catch(() => { }); } catch (e) { }
 
@@ -1320,16 +1273,18 @@
             subDetail.querySelector('.view-mode').style.display = 'block';
         }
 
-        // Fungsi saat tombol Simpan diklik
         function simpanDataEditable(button, namaOPD, uraianKegiatan) {
             try { tapSound.currentTime = 0; tapSound.play().catch(() => { }); } catch (e) { }
 
-            let subDetail = button.closest('.kegiatan-sub-detail');
+            if (!APPSCRIPT_URL || !APPSCRIPT_URL.startsWith("https://script.google.com/")) {
+                alert("⚠️ APPSCRIPT_URL data proyek belum diatur.");
+                return;
+            }
 
+            let subDetail = button.closest('.kegiatan-sub-detail');
             let statusBaru = subDetail.querySelector('.edit-input-status').value;
             let ketBaru = subDetail.querySelector('.edit-input-ket').value;
 
-            // Kumpulkan nilai mingguan dari form edit jika ada
             let mgInputs = subDetail.querySelectorAll('.edit-input-mg');
             let mgParams = "";
             mgInputs.forEach((input, idx) => {
@@ -1357,7 +1312,6 @@
                         subDetail.querySelector('.view-mode').style.display = 'block';
 
                         alert("✅ Data mingguan berhasil disimpan secara permanen ke Google Spreadsheet!");
-                        // Muat ulang data agar grafik langsung ter-refresh
                         muatDataDariGoogleSheets();
                     } else {
                         alert("⚠️ Gagal menyimpan: " + (result.message || "Terjadi kesalahan pada server."));
